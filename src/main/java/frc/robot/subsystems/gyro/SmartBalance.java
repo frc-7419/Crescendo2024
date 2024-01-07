@@ -5,11 +5,11 @@
 package frc.robot.subsystems.gyro;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.BalanceConstants;
 import frc.robot.subsystems.drive.DriveBaseSubsystem;
 
-public class SmartBalance extends CommandBase {
+public class SmartBalance extends Command {
   private GyroSubsystem gyroSubsystem;
   private DriveBaseSubsystem driveBaseSubsystem;
   private double robotPitch;

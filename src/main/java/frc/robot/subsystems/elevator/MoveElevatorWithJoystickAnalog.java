@@ -5,10 +5,10 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ElevatorConstants;
 
-public class MoveElevatorWithJoystickAnalog extends CommandBase {
+public class MoveElevatorWithJoystickAnalog extends Command {
   /** Creates a new MoveElevatorWithJoystick. */
   private ElevatorSubsystem elevatorSubsystem;
 

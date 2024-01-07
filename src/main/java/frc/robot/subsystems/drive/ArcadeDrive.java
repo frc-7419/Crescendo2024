@@ -2,7 +2,7 @@ package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.DriveConstants;
 import frc.robot.subsystems.led.LedSubsystem;
 
@@ -10,7 +10,7 @@ import frc.robot.subsystems.led.LedSubsystem;
  * Command to arcade drive the robot (left joystick corresponds to straight, right joystick
  * corresponds to turn)
  */
-public class ArcadeDrive extends CommandBase {
+public class ArcadeDrive extends Command {
 
   private DriveBaseSubsystem driveBaseSubsystem;
   private LedSubsystem ledSubsystem;

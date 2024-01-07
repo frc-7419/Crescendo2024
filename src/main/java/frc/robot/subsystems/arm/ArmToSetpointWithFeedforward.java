@@ -9,13 +9,13 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.NodeConstants.NodeState;
 import frc.robot.subsystems.gripper.GripperSubsystem;
 import frc.robot.constants.PIDConstants;
 
-public class ArmToSetpointWithFeedforward extends CommandBase {
+public class ArmToSetpointWithFeedforward extends Command {
   /** Creates a new ArmToSetpointWithFeedforward. */
   private ArmSubsystem armSubsystem;
 

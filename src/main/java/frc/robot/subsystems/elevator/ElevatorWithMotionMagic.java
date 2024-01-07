@@ -5,9 +5,9 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class ElevatorWithMotionMagic extends CommandBase {
+public class ElevatorWithMotionMagic extends Command {
   ElevatorSubsystem elevatorSubsystem;
   private double setpoint;
 

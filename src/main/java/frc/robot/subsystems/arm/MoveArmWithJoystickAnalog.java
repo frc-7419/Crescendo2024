@@ -3,11 +3,11 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.wrist.WristSubsystem;
 
-public class MoveArmWithJoystickAnalog extends CommandBase {
+public class MoveArmWithJoystickAnalog extends Command {
 
   private ArmSubsystem armSubsystem;
   private XboxController joystick;

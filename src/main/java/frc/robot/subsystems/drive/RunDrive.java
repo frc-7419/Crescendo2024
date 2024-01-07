@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunDrive extends CommandBase {
+public class RunDrive extends Command {
   /** Creates a new RunDrive. */
   private double leftPower;
   private double rightPower;

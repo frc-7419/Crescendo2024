@@ -7,12 +7,12 @@ package frc.robot.subsystems.gyro;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.GyroConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.drive.DriveBaseSubsystem;
 
-public class TurnWithGyro extends CommandBase {
+public class TurnWithGyro extends Command {
   /** Creates a new TurnWithGyro. */
   private DriveBaseSubsystem driveBaseSubsystem;
   private GyroSubsystem gyroSubsystem;

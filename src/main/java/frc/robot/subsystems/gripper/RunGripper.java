@@ -4,10 +4,10 @@
 
 package frc.robot.subsystems.gripper;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.GripperConstants.GripperState;
 
-public class RunGripper extends CommandBase {
+public class RunGripper extends Command {
 
   /** Creates a new RunGripper. */
   private GripperState mode;

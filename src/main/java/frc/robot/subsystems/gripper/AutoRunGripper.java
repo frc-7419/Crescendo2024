@@ -5,12 +5,12 @@
 package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.GripperConstants;
 import frc.robot.constants.GripperConstants.GripperState;
 import frc.robot.subsystems.led.LedSubsystem;
 
-public class AutoRunGripper extends CommandBase {
+public class AutoRunGripper extends Command {
   /** Creates a new SmartRunGripper. */
   GripperSubsystem gripperSubsystem;
 

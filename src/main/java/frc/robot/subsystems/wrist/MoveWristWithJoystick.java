@@ -1,11 +1,11 @@
 package frc.robot.subsystems.wrist;
 import frc.robot.constants.WristConstants;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.WristConstants;
 
 /** Moves wrist up and down with joystick left Y axis */
-public class MoveWristWithJoystick extends CommandBase {
+public class MoveWristWithJoystick extends Command {
   private WristSubsystem wristSubsystem;
   private XboxController joystick;
   private double power;

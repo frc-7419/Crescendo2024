@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems.arm;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
-public class ArmWithMotionMagic extends CommandBase {
+public class ArmWithMotionMagic extends Command {
   /** Creates a new ArmWithMotionMagic. */
   public ArmWithMotionMagic() {
     // Use addRequirements() here to declare subsystem dependencies.

@@ -6,11 +6,11 @@ package frc.robot.subsystems.gripper;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.GripperConstants;
 import frc.robot.subsystems.led.LedSubsystem;
 
-public class RunGripperWithJoystick extends CommandBase {
+public class RunGripperWithJoystick extends Command {
   private GripperSubsystem gripperSubsystem;
   private XboxController joystick;
   private LedSubsystem ledSubsystem;
