@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 
 public class Robot extends TimedRobot {
@@ -31,7 +31,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
-    PathPlannerServer.startServer(5811);
     DataLogManager.start();
     DataLog log = DataLogManager.getLog();
     odometryLog = new DoubleArrayLogEntry(log, "/odometry");
@@ -50,9 +49,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    robotContainer.zeroSensor(getAllianceColor(), allianceSide);
+    robotContainer.zeroSensor(); //TODO
     robotContainer.getAutonomousCommand().schedule();
-    allianceColor = DriverStation.getAlliance();
+    allianceColor = DriverStation.getAlliance().get();
     Map<Integer, String> locationMap = new HashMap<Integer, String>();
     locationMap.put(1, "Left");
     locationMap.put(2, "Mid");
