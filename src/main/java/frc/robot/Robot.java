@@ -1,44 +1,26 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleArrayLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 
 public class Robot extends TimedRobot {
+  private Command m_autonomousCommand;
 
-  private RobotContainer robotContainer;
-  private static Alliance allianceColor;
-  private static String allianceSide;
-  public DoubleArrayLogEntry odometryLog;
+  private RobotContainer m_robotContainer;
+
   @Override
   public void robotInit() {
-    robotContainer = new RobotContainer();
-    // CameraServer.startAutomaticCapture();
-    DataLogManager.start();
-    DataLog log = DataLogManager.getLog();
-    odometryLog = new DoubleArrayLogEntry(log, "/odometry");
+    m_robotContainer = new RobotContainer();
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    CommandScheduler.getInstance().run(); 
   }
 
   @Override
@@ -48,46 +30,35 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
+  public void disabledExit() {}
+
+  @Override
   public void autonomousInit() {
-    robotContainer.zeroSensor(); //TODO
-    robotContainer.getAutonomousCommand().schedule();
-    allianceColor = DriverStation.getAlliance().get();
-    Map<Integer, String> locationMap = new HashMap<Integer, String>();
-    locationMap.put(1, "Left");
-    locationMap.put(2, "Mid");
-    locationMap.put(3, "Right");
-    allianceSide = locationMap.get(DriverStation.getLocation()); // 1 - left 2 - mid 3 - right
-    SmartDashboard.putString("currentAllianceColor", getAllianceColor());
-  }
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-  public static String getAllianceColor() {
-    if (allianceColor == DriverStation.Alliance.Blue) {
-      return "Blue";
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
     }
-    return "Red";
-  }
-
-  public static Alliance getAlliance() {
-    return allianceColor;
-  }
-
-  public static String getAllianceSide() {
-    return allianceSide;
   }
 
   @Override
   public void autonomousPeriodic() {}
 
   @Override
+  public void autonomousExit() {}
+
+  @Override
   public void teleopInit() {
-    robotContainer.setDefaultCommands();
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
   }
 
   @Override
-  public void teleopPeriodic() {
-    CommandScheduler.getInstance().run();
-    odometryLog.append(SmartDashboard.getNumberArray("Odometry", new double[]{0,0,0}));
-  }
+  public void teleopPeriodic() {}
+
+  @Override
+  public void teleopExit() {}
 
   @Override
   public void testInit() {
@@ -96,4 +67,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {}
+
+  @Override
+  public void testExit() {}
+
+  @Override
+  public void simulationPeriodic() {}
 }
