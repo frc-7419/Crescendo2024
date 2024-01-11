@@ -19,7 +19,8 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.constants.PIDConstants;
+//import frc.robot.constants.PIDConstants;
+import com.pathplanner.lib.util.PIDConstants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -66,7 +67,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     * Sets the individual swerve module states from chassis speed
     * @param moduleStates
     */
-    public void setModuleStates(ChassisSpeeds chassisSpeeds) {\
+    public void setModuleStates(ChassisSpeeds chassisSpeeds) {
         //TODO: we need to convert this chassispeed to robot thingy or something
         setModuleStates(chassisSpeeds);
     }
@@ -89,7 +90,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return;
     }
 
-    public void driveRobotRelative() {
+    public void driveRobotRelative(ChassisSpeeds speeds) {
         return;
     }
 
