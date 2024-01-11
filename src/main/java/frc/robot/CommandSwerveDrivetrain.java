@@ -7,18 +7,19 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.ReplanningConfig;
+import frc.robot.constants.PIDConstants;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -59,6 +60,37 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+
+    /**
+    * Sets the individual swerve module states from chassis speed
+    * @param moduleStates
+    */
+    public void setModuleStates(ChassisSpeeds chassisSpeeds) {\
+        //TODO: we need to convert this chassispeed to robot thingy or something
+        setModuleStates(chassisSpeeds);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return new ChassisSpeeds();
+    }
+
+    /**
+    * Returns the currently-estimated pose of the robot.
+    *
+    * @return The pose.
+    */
+    public Pose2d getPose() {
+        // TODO: Fix later
+        return new Pose2d();
+    }
+
+    public void resetPose() {
+        return;
+    }
+
+    public void driveRobotRelative() {
+        return;
     }
 
     public Command followPathCommand(String pathName) {
