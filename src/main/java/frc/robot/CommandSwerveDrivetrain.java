@@ -1,6 +1,9 @@
 package frc.robot;
 
+import java.io.IOException;
 import java.util.function.Supplier;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -13,6 +16,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -25,14 +30,16 @@ import frc.robot.constants.TunerConstants;
  * so it can be used in command-based projects easily.
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
+    
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-
+    final VisionWrapper visionWrapper;
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
+        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -40,6 +47,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
+        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -78,6 +86,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
+
+
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -91,5 +101,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+    public void periodic() {
+
+        if(visionWrapper.getVisionUpdate()!=null) {
+            this.addVisionMeasurement(visionWrapper.getVisionUpdate(), visionWrapper.getTimestampSeconds());
+        }
+        
     }
 }
