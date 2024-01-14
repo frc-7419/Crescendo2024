@@ -1,9 +1,8 @@
 package frc.robot;
 
-import java.io.IOException;
 import java.util.function.Supplier;
 
-import org.photonvision.EstimatedRobotPose;
+
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -16,8 +15,6 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -103,10 +100,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
     public void periodic() {
-
-        if(visionWrapper.getVisionUpdate()!=null) {
-            this.addVisionMeasurement(visionWrapper.getVisionUpdate(), visionWrapper.getTimestampSeconds());
-        }
-        
-    }
+       if(visionWrapper.updatePoseEstimate() != null) {
+        this.addVisionMeasurement(visionWrapper.updatePoseEstimate(), visionWrapper.getLatestTimeStamp());
+       }
+    }   
 }
