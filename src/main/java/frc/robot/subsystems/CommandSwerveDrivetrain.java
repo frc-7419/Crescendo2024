@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.TunerConstants;
+import frc.robot.wrapper.VisionWrapper;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
