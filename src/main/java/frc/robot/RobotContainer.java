@@ -13,19 +13,24 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 
 public class RobotContainer {
-  private double MaxSpeed = 3; // 6 meters per second desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
- 
+
+  /*
+   * Prebuilt Swerve Stuff
+   */
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
+  private double MaxSpeed = 3; // 6 meters per second desired top speed
+  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
+ 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -34,10 +39,15 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private final Command testPath = new PathPlannerAuto("Test Auto");
-  private final Command squarePath = new PathPlannerAuto("Square Auto");
+  /*
+   * Autonomous Stuff
+   */
+  private final SendableChooser<Command> autonChooser = new SendableChooser();
+  private final Command testAuto = new PathPlannerAuto("Test Auto");
+  private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");
+  ;
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -60,14 +70,20 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
+  public void configAutonSelection() {
+    autonChooser.setDefaultOption("Test Auto", testAuto);
+    autonChooser.addOption("Square Auto", squareAuto);
+    autonChooser.addOption("Two Note Auto", twoNoteAuto);
+    autonChooser.addOption("Circle Auto", circleAuto);
+
+  }
+  
   public RobotContainer() {
     configureBindings();
+    configAutonSelection();
   }
-
+  
   public Command getAutonomousCommand() {
-    // return testPath;
-    // return squarePath;
-    // return twoNoteAuto;
-    return circleAuto;
+    return autonChooser.getSelected();
   }
 }
