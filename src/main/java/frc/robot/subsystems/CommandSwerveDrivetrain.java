@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
-
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.TunerConstants;
+import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
 
 /**
@@ -38,6 +39,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         visionWrapper = new VisionWrapper();
+        this.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -46,6 +48,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         visionWrapper = new VisionWrapper();
+        this.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -101,8 +104,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
     public void periodic() {
-       if(visionWrapper.updatePoseEstimate() != null) {
-        this.addVisionMeasurement(visionWrapper.updatePoseEstimate(), visionWrapper.getLatestTimeStamp());
+       EstimatedRobotPose[] estimates = visionWrapper.updatePoseEstimate();
+       for (EstimatedRobotPose estimate:estimates) {
+        if (estimate != null) {
+            addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
+        }
        }
     }   
 }

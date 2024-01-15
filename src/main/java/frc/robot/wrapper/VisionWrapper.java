@@ -4,45 +4,51 @@
 
 package frc.robot.wrapper;
 
+import java.util.Optional;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import frc.robot.constants.VisionConstants;
 
 public class VisionWrapper {
-  /** Creates a new VisionSubsystem. */
   
   PhotonCamera camera = new PhotonCamera("testCamera");
+  PhotonCamera keshav = new PhotonCamera("keshavCamera");
   PhotonPipelineResult result;
-  PhotonPoseEstimator visionPoseEstimator;
-  EstimatedRobotPose currentPoseEstimate;
+  //pos estmatos
+  PhotonPoseEstimator forwardPoseEstimator;
+  PhotonPoseEstimator backPoseEstimator;
+  PhotonPoseEstimator leftPoseEstimator;
+  PhotonPoseEstimator rightPoseEstimator;
  
 
   public VisionWrapper() {
-    visionPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.ROBOT_TO_CAM);
+    forwardPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.ROBOT_TO_FRONT);
+    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.ROBOT_TO_BACK);
   }
-  public PhotonPipelineResult getLatestResult() {
-    return camera.getLatestResult();
+  public PhotonPipelineResult[] getLatestResults() {
+    PhotonPipelineResult result1 = camera.getLatestResult();
+    PhotonPipelineResult result2 = keshav.getLatestResult();
+    return new PhotonPipelineResult[] {result1,result2,null,null};
   }
-  public Pose3d getCurrentPoseEstimate() {
-    return currentPoseEstimate.estimatedPose;
-  }
-  public double getLatestTimeStamp() {
-    return getLatestResult().getTimestampSeconds();
-  }
-  public Pose2d updatePoseEstimate() {
-    try{
-      currentPoseEstimate = visionPoseEstimator.update(getLatestResult()).get();
-      return getCurrentPoseEstimate().toPose2d();
+  public EstimatedRobotPose[] updatePoseEstimate() {
+    EstimatedRobotPose[] out = new EstimatedRobotPose[4];
+    Optional<EstimatedRobotPose> frontPose = forwardPoseEstimator.update();
+    Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
+    //Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
+    //Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
+    if (frontPose.isPresent()) {
+      out[0] = frontPose.get();
     }
-    catch (Exception NoSuchElementException) {
-      return null;
+    if (backPose.isPresent()) {
+      out[1] = backPose.get();
     }
+    return out;
+
   }
   
 }
