@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -101,8 +102,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
     public void periodic() {
-       if(visionWrapper.updatePoseEstimate() != null) {
-        this.addVisionMeasurement(visionWrapper.updatePoseEstimate(), visionWrapper.getLatestTimeStamp());
+        Pose2d currentPoseEstimate = visionWrapper.updatePoseEstimate();
+        double latestTimeStamp = visionWrapper.getLatestTimeStamp();
+       if(currentPoseEstimate != null) {
+        this.addVisionMeasurement(currentPoseEstimate, latestTimeStamp);
        }
     }   
 }
