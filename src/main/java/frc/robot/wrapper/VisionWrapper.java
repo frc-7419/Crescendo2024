@@ -27,8 +27,8 @@ public class VisionWrapper {
  
 
   public VisionWrapper() {
-    forwardPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.ROBOT_TO_FRONT);
-    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, VisionConstants.ROBOT_TO_BACK);
+    forwardPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, VisionConstants.ROBOT_TO_FRONT);
+    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, keshav, VisionConstants.ROBOT_TO_BACK);
   }
   public PhotonPipelineResult[] getLatestResults() {
     PhotonPipelineResult result1 = camera.getLatestResult();
