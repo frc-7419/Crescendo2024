@@ -12,35 +12,30 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.constants.VisionConstants;
 
 public class VisionWrapper {
-  
-  PhotonCamera camera = new PhotonCamera("testCamera");
-  PhotonCamera keshav = new PhotonCamera("keshavCamera");
+
+  PhotonCamera frontCam = new PhotonCamera("frontCam");
+  PhotonCamera backCam = new PhotonCamera("backCam");
+  PhotonPoseEstimator frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
+      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCam, VisionConstants.ROBOT_TO_FRONT);
+  PhotonPoseEstimator backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
+      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCam, VisionConstants.ROBOT_TO_BACK);
   PhotonPipelineResult result;
-  //pos estmatos
-  PhotonPoseEstimator forwardPoseEstimator;
-  PhotonPoseEstimator backPoseEstimator;
-  PhotonPoseEstimator leftPoseEstimator;
-  PhotonPoseEstimator rightPoseEstimator;
- 
 
   public VisionWrapper() {
-    forwardPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, camera, VisionConstants.ROBOT_TO_FRONT);
-    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, keshav, VisionConstants.ROBOT_TO_BACK);
   }
-  public PhotonPipelineResult[] getLatestResults() {
-    PhotonPipelineResult result1 = camera.getLatestResult();
-    PhotonPipelineResult result2 = keshav.getLatestResult();
-    return new PhotonPipelineResult[] {result1,result2,null,null};
-  }
+
   public EstimatedRobotPose[] updatePoseEstimate() {
-    EstimatedRobotPose[] out = new EstimatedRobotPose[4];
-    Optional<EstimatedRobotPose> frontPose = forwardPoseEstimator.update();
+    EstimatedRobotPose[] out = new EstimatedRobotPose[2];
+    Optional<EstimatedRobotPose> frontPose = frontPoseEstimator.update();
     Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
-    //Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
-    //Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
+    // Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
+    // Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
     if (frontPose.isPresent()) {
       out[0] = frontPose.get();
     }
@@ -48,9 +43,6 @@ public class VisionWrapper {
       out[1] = backPose.get();
     }
     return out;
-
   }
-  
+
 }
-
-

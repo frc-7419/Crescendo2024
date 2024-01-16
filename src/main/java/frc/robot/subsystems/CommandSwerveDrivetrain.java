@@ -88,8 +88,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
-
-
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
 
@@ -111,5 +109,5 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
         }
        }
-    }   
+    }
 }
