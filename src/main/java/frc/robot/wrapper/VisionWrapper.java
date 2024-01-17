@@ -12,36 +12,36 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.constants.VisionConstants;
-
+/**
+ * PhotonVision is handled in this class
+ */
 public class VisionWrapper {
 
-  PhotonCamera frontCam = new PhotonCamera("frontCam");
-  PhotonCamera backCam = new PhotonCamera("backCam");
-  PhotonPoseEstimator frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCam, VisionConstants.ROBOT_TO_FRONT);
-  PhotonPoseEstimator backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCam, VisionConstants.ROBOT_TO_BACK);
-  PhotonPipelineResult result;
+  private final PhotonCamera frontCam;
+  private final PhotonCamera backCam;
+  private final PhotonPoseEstimator frontPoseEstimator;
+  private final PhotonPoseEstimator backPoseEstimator;
+  private PhotonPipelineResult result;
 
   public VisionWrapper() {
+    frontCam = new PhotonCamera("frontCam");
+    backCam = new PhotonCamera("backCam");
+    frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCam, VisionConstants.ROBOT_TO_FRONT);
+    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCam, VisionConstants.ROBOT_TO_BACK);
   }
-
+  /**
+   * Uses the cameras to estimate the pose of the robot ont he field
+   * @return The poses esimated by the two cameras
+   */
   public EstimatedRobotPose[] updatePoseEstimate() {
     EstimatedRobotPose[] out = new EstimatedRobotPose[2];
     Optional<EstimatedRobotPose> frontPose = frontPoseEstimator.update();
     Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
     // Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
     // Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
-    if (frontPose.isPresent()) {
-      out[0] = frontPose.get();
-    }
-    if (backPose.isPresent()) {
-      out[1] = backPose.get();
-    }
+    frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
+    backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
     return out;
   }
 

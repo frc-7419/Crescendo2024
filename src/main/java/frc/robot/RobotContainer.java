@@ -60,6 +60,9 @@ public class RobotContainer {
   // new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
   );
 
+  /**
+   * This will configure the drive joystick bindings
+   */
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
@@ -88,6 +91,9 @@ public class RobotContainer {
     
   }
 
+  /**
+   * Configures the sendable chooser for auton
+   */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
@@ -95,12 +101,17 @@ public class RobotContainer {
     autonChooser.addOption("Circle Auto", circleAuto);
 
   }
-
+  /**
+  * Creates a new RobotContainer
+   */
   public RobotContainer() {
     configureBindings();
     configAutonSelection();
   }
-
+  /**
+   * Gets the auton command selected by the user
+   * @return selected autonomous command
+   */
   public Command getAutonomousCommand() {
     return autonChooser.getSelected();
   }
