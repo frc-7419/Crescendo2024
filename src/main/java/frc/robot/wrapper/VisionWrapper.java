@@ -27,8 +27,8 @@ public class VisionWrapper {
   public VisionWrapper() {
     frontCam = new PhotonCamera("frontCam");
     backCam = new PhotonCamera("backCam");
-    frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, frontCam, VisionConstants.ROBOT_TO_FRONT);
-    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, backCam, VisionConstants.ROBOT_TO_BACK);
+    frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCam, VisionConstants.ROBOT_TO_FRONT);
+    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCam, VisionConstants.ROBOT_TO_BACK);
   }
   /**
    * Uses the cameras to estimate the pose of the robot ont he field
