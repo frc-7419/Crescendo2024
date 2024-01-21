@@ -23,6 +23,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+
 
 
 public class RobotContainer {
@@ -33,6 +37,9 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, joystick);
 
   private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -114,5 +121,9 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return autonChooser.getSelected();
+  }
+
+  public void setDefaultCommands(){
+    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
   }
 }
