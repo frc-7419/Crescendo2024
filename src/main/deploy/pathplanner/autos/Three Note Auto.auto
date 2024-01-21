@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.9714414058457749,
-      "y": 7.442644098251161
+      "x": 1.3983141750744656,
+      "y": 4.732175880391861
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "Three Note"
           }
         }
       ]
