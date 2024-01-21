@@ -4,11 +4,16 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,8 +24,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.RunIntake;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+
+
 
 public class RobotContainer {
 
@@ -32,9 +40,12 @@ public class RobotContainer {
   private final CommandXboxController joystick1 = new CommandXboxController(1);
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private double MaxSpeed = 4; // 6 meters per second desired top speed
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, joystick);
+
+  private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
- 
+
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -50,16 +61,17 @@ public class RobotContainer {
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
-  private final Command threeNoteAuto = new PathPlannerAuto("Three Note Auto");
-  private final Command circleAuto = new PathPlannerAuto("Circle Auto");
-  ;
+  private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  // Subsystems
-  private final Intake intake = new Intake();
+  List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0))
+  // new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
+  // new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
+  );
 
-  // Commmands
-  private final RunIntake runIntake = new RunIntake(intake, joystick1);
-
+  /**
+   * This will configure the drive joystick bindings
+   */
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
@@ -79,9 +91,18 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
-    intake.setDefaultCommand(runIntake);
+
+    joystick.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
+      bezierPoints, 
+      new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+      new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    )));
+    
   }
 
+  /**
+   * Configures the sendable chooser for auton
+   */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
@@ -89,15 +110,24 @@ public class RobotContainer {
     autonChooser.addOption("Three Note Auto", threeNoteAuto);
     autonChooser.addOption("Circle Auto", circleAuto);
   }
-  
+  /**
+  * Creates a new RobotContainer
+   */
   public RobotContainer() {
     configureBindings();
     configAutonSelection();
   }
-  
+  /**
+   * Gets the auton command selected by the user
+   * @return selected autonomous command
+   */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
     return threeNoteAuto;
     // return squareAuto;
+  }
+
+  public void setDefaultCommands(){
+    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
   }
 }
