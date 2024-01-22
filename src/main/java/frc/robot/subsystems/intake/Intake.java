@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
 
-public class IntakeSubsystem extends SubsystemBase {
+public class Intake extends SubsystemBase {
   private CANSparkMax intakeMotor;
   
-  public IntakeSubsystem() {
+  public Intake() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
   }
   //add voltage compensation and trapezoidal motion later

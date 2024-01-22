@@ -5,24 +5,38 @@
 package frc.robot.subsystems.wrist;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RunWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
-  public RunWristWithJoystick() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private Wrist wrist;
+  private CommandXboxController joystick;
+  public RunWristWithJoystick(Wrist wrist, CommandXboxController joystick) {
+    this.wrist = wrist;
+    this.joystick = joystick;
+    addRequirements(wrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    wrist.coast();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if(Math.abs(joystick.getRightY()) > 0.05){
+      wrist.setSpeed(joystick.getRightY());
+    }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    wrist.setVoltage(0);
+    wrist.brake();
+  }
 
   // Returns true when the command should end.
   @Override
