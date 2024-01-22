@@ -21,8 +21,7 @@ public final class DeviceIDs {
     pigeon(16),
     extendedPigeon(51),
 
-    wristSpark(14), 
-    intakeMotor(17), // unknown
+    wristSpark(14), // unknown
     ;
 
     public final int id;
