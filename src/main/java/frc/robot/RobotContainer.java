@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.RunIntake;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -43,11 +42,11 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, joystick);
 
-  private double MaxSpeed = 3; // 6 meters per second desired top speed
+  private double MaxSpeed = 4.5; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
+      .withDeadband(MaxSpeed * 0.01).withRotationalDeadband(MaxAngularRate * 0.01) // Add a 1% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -63,11 +62,11 @@ public class RobotContainer {
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0))
+  // List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+  //     new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0))
   // new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
   // new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
-  );
+  // );
 
   /**
    * This will configure the drive joystick bindings
@@ -91,12 +90,13 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
+    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
 
-    joystick.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-      bezierPoints, 
-      new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));
+    // joystick.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
+    //   bezierPoints, 
+    //   new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+    //   new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    // )));
     
   }
 
@@ -107,7 +107,7 @@ public class RobotContainer {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
     autonChooser.addOption("Two Note Auto", twoNoteAuto);
-    autonChooser.addOption("Three Note Auto", threeNoteAuto);
+    // autonChooser.addOption("Three Note Auto", threeNoteAuto);
     autonChooser.addOption("Circle Auto", circleAuto);
   }
   /**
@@ -123,11 +123,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return threeNoteAuto;
-    // return squareAuto;
+    // return threeNoteAuto;
+    return squareAuto;
   }
 
   public void setDefaultCommands(){
-    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
+   
   }
 }
