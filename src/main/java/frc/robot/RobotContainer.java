@@ -22,11 +22,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.RunIntake;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+import frc.robot.subsystems.wrist.RunWristWithJoystick;
+import frc.robot.subsystems.wrist.Wrist;
 
 
 
@@ -36,12 +37,16 @@ public class RobotContainer {
    * Prebuilt Swerve Stuff
    */
   /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
-  private final CommandXboxController joystick1 = new CommandXboxController(1);
+  private final CommandXboxController driver = new CommandXboxController(0); // My joystick
+  private final CommandXboxController operator = new CommandXboxController(1);
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, joystick);
+  private final Intake intakeSubsystem = new Intake();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, driver);
+
+  private final Wrist wrist = new Wrist();
+  private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
+  
 
   private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -74,25 +79,25 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.b().whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
+    driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    driver.b().whileTrue(drivetrain
+        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
 
-    joystick.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
+    driver.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
       bezierPoints, 
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
@@ -107,7 +112,7 @@ public class RobotContainer {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
     autonChooser.addOption("Two Note Auto", twoNoteAuto);
-    autonChooser.addOption("Three Note Auto", threeNoteAuto);
+    //autonChooser.addOption("Three Note Auto", threeNoteAuto);
     autonChooser.addOption("Circle Auto", circleAuto);
   }
   /**
@@ -123,11 +128,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return threeNoteAuto;
+    return twoNoteAuto;
     // return squareAuto;
   }
 
   public void setDefaultCommands(){
     intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
+    wrist.setDefaultCommand(runWristWithJoystick);
   }
 }
