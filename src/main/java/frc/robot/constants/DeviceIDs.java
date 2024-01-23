@@ -22,7 +22,10 @@ public final class DeviceIDs {
     extendedPigeon(51),
 
     wrist(17), //unknown
-    intakeMotor(18) // unknown
+    intakeMotor(18), // unknown
+
+    topShooter(100),
+    bottomShooter(101)
     ;
 
     public final int id;

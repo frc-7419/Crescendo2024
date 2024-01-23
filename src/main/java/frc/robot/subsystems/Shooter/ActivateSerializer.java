@@ -6,10 +6,11 @@ package frc.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ShootNotes extends Command {
-  /** Creates a new ShootNotes. */
-  public ShootNote() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ActivateSerializer extends Command {
+  /** Creates a new ActivateSerializer. */
+  public ActivateSerializer() {
+    Shooter shooter = new Shooter();
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.

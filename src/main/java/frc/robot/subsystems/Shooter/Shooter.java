@@ -2,47 +2,95 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Shooter;
+
+import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.constants.DeviceIDs.CanIds;
+import frc.robot.constants.RobotConstants.ShooterConstants;
+
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
-  private CANSparkMax shooterMotor;
+  private CANSparkFlex shooterMotorTop;
+  private CANSparkFlex shooterMotorBottom;
+  private CANSparkFlex shooterSerial;
   private TrapezoidProfile.Constraints constraints;
+  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
 
   public Shooter() {
-    shooterMotor = new CANSparkMax(CanIds.shooter.id, MotorType.kBrushless);
+    shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
+    shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
+    shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushed);
     constraints = 
       new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
-    zeroEncoder();
   }
   
-  public void setSpeed(double speed){
-    shooterMotor.set(speed);
+  public void setTopSpeed(double speed){
+    shooterMotorTop.set(speed);
+  }
+  public void setBottomSpeed(double speed){
+    shooterMotorBottom.set(speed);
   }
 
-  public void setVoltage(double voltage){
-    shooterMotor.setVoltage(voltage);
+  public void setSerialSpeed(double speed){
+    shooterSerial.set(speed);
   }
 
+  public void setBothSpeed(double speed){
+    setTopSpeed(speed);
+    setBottomSpeed(speed);
+  }
 
-  public double getVelocity() {
-    return shooterMotor.getEncoder().getVelocity();
+  public void setTopVoltage(double voltage){
+    shooterMotorTop.setVoltage(voltage);
+  }
+
+  public void setBottomVoltage(double voltage){
+    shooterMotorBottom.setVoltage(voltage);
+  }
+
+  public void setSerialVelocity() {
+    shooterSerial.setVoltage(getBottomVelocity());
+  }
+  
+  public double getTopVelocity() {
+    return shooterMotorTop.getEncoder().getVelocity();
+  }
+  public double getBottomVelocity() {
+    return shooterMotorBottom.getEncoder().getVelocity();
   }
 
   public void brake(){
-    shooterMotor.setIdleMode(IdleMode.kBrake);
+    shooterMotorTop.setIdleMode(IdleMode.kBrake);
+    shooterMotorBottom.setIdleMode(IdleMode.kBrake);
   }
 
   public void coast(){
-    shooterMotor.setIdleMode(IdleMode.kCoast);
+    shooterMotorTop.setIdleMode(IdleMode.kCoast);
+    shooterMotorBottom.setIdleMode(IdleMode.kCoast);
+  }
+  public void setGoal(double goalState) {
+    goal = new TrapezoidProfile.State(goalState, 0);
+  }
+
+  public TrapezoidProfile.State getGoal() {
+    return goal;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Shooter Velocity", getVelocity());
+    SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
+    SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
   }
   public Constraints getConstraints() {
       return constraints;
