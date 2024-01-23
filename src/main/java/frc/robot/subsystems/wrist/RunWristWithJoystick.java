@@ -28,8 +28,9 @@ public class RunWristWithJoystick extends Command {
   @Override
   public void execute() {
     if(Math.abs(joystick.getRightY()) > 0.05){
-      double joystickArmPower = joystick.getLeftY() * RobotConstants.WristConstants.wristPower;
-      wrist.setSpeed(joystick.getRightY());
+      wrist.coast();
+      double joystickArmPower = joystick.getRightY() * RobotConstants.WristConstants.wristPower;
+      wrist.setSpeed(joystickArmPower);
     }
     else{
       wrist.setVoltage(0);

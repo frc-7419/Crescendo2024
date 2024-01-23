@@ -26,6 +26,7 @@ public class Wrist extends SubsystemBase {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
     constraints = 
       new TrapezoidProfile.Constraints(WristConstants.maxVelocity, WristConstants.maxAcceleration);
+    zeroEncoder();
   }
   
   public void setSpeed(double speed){
@@ -37,14 +38,12 @@ public class Wrist extends SubsystemBase {
   }
 
 
-  double getVelocity() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getVelocity'");
+  public double getVelocity() {
+    return wristMotor.getEncoder().getVelocity();
   }
 
-  double getPosition() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+  public double getPosition() {
+    return wristMotor.getEncoder().getPosition()*2*Math.PI;
   }
 
   public void brake(){
@@ -53,6 +52,10 @@ public class Wrist extends SubsystemBase {
 
   public void coast(){
     wristMotor.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void zeroEncoder() {
+    wristMotor.getEncoder().setPosition(0);
   }
 
   @Override
