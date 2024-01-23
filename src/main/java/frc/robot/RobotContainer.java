@@ -41,8 +41,8 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final Intake intakeSubsystem = new Intake();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, driver);
+  private final Intake intake = new Intake();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intake, driver);
 
   private final Wrist wrist = new Wrist();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
@@ -101,8 +101,7 @@ public class RobotContainer {
       bezierPoints, 
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));
-    
+    )));    
   }
 
   /**
@@ -132,8 +131,9 @@ public class RobotContainer {
     // return squareAuto;
   }
 
-  public void setDefaultCommands(){
-    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
+  public void setDefaultCommands() {
+    intake.setDefaultCommand(runIntakeWithJoystick);
     wrist.setDefaultCommand(runWristWithJoystick);
   }
+
 }

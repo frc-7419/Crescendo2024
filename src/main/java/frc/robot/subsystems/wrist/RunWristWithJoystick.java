@@ -6,6 +6,7 @@ package frc.robot.subsystems.wrist;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.RobotConstants;
 
 public class RunWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
@@ -27,7 +28,12 @@ public class RunWristWithJoystick extends Command {
   @Override
   public void execute() {
     if(Math.abs(joystick.getRightY()) > 0.05){
+      double joystickArmPower = joystick.getLeftY() * RobotConstants.WristConstants.wristPower;
       wrist.setSpeed(joystick.getRightY());
+    }
+    else{
+      wrist.setVoltage(0);
+      wrist.brake();
     }
   }
 
