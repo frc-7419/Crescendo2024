@@ -8,14 +8,24 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.constants.DeviceIDs.CanIds;
 //TODO: add setpoints
+import frc.robot.constants.RobotConstants.WristConstants;
 
 public class Wrist extends SubsystemBase {
   private CANSparkMax wristMotor;
+  private TrapezoidProfile.Constraints constraints;
+
   public Wrist() {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
+    constraints = 
+      new TrapezoidProfile.Constraints(WristConstants.maxVelocity, WristConstants.maxAcceleration);
   }
   
   public void setSpeed(double speed){
@@ -24,6 +34,17 @@ public class Wrist extends SubsystemBase {
 
   public void setVoltage(double voltage){
     wristMotor.setVoltage(voltage);
+  }
+
+
+  double getVelocity() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getVelocity'");
+  }
+
+  double getPosition() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
   }
 
   public void brake(){
@@ -37,5 +58,8 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+  public Constraints getConstraints() {
+      return constraints;
   }
 }
