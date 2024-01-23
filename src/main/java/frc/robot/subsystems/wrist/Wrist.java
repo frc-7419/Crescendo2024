@@ -17,9 +17,11 @@ public class Wrist extends SubsystemBase {
   public Wrist() {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
   }
+  
   public void setSpeed(double speed){
     wristMotor.set(speed);
   }
+
   public void setVoltage(double voltage){
     wristMotor.setVoltage(voltage);
   }
@@ -27,6 +29,7 @@ public class Wrist extends SubsystemBase {
   public void brake(){
     wristMotor.setIdleMode(IdleMode.kBrake);
   }
+
   public void coast(){
     wristMotor.setIdleMode(IdleMode.kCoast);
   }

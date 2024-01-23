@@ -29,10 +29,7 @@ import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.wrist.RunWristWithJoystick;
 import frc.robot.subsystems.wrist.Wrist;
 
-
-
 public class RobotContainer {
-
   /*
    * Prebuilt Swerve Stuff
    */
@@ -41,19 +38,18 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final Intake intakeSubsystem = new Intake();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, driver);
+  private final Intake intake = new Intake();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intake, driver);
 
   private final Wrist wrist = new Wrist();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
   
-
   private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
-      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05); // Add a 10% deadband
+      // .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -69,9 +65,9 @@ public class RobotContainer {
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
   List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0))
-  // new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-  // new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
+      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
+  new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
+  new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
   );
 
   /**
@@ -133,7 +129,7 @@ public class RobotContainer {
   }
 
   public void setDefaultCommands(){
-    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
+    intake.setDefaultCommand(runIntakeWithJoystick);
     wrist.setDefaultCommand(runWristWithJoystick);
   }
 }
