@@ -78,6 +78,15 @@ public class Shooter extends SubsystemBase {
     shooterMotorTop.setIdleMode(IdleMode.kCoast);
     shooterMotorBottom.setIdleMode(IdleMode.kCoast);
   }
+
+  public void brakeSerializer(){
+    shooterSerial.setIdleMode(IdleMode.kBrake);
+  }
+
+  public void coastSerializer(){
+    shooterSerial.setIdleMode(IdleMode.kCoast);
+  }
+
   public void setGoal(double goalState) {
     goal = new TrapezoidProfile.State(goalState, 0);
   }

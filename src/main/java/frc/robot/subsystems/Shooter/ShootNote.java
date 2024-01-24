@@ -25,7 +25,7 @@ public class ShootNote extends Command {
   private double velocitySetpoint;
 
   /** Creates a new ShootNotes. */
-  public ShootNote(Shooter shooter) {
+  public ShootNote() {
     // Use addRequirements() here to declare subsystem dependencies.
     shooter = new Shooter();
     SmartDashboard.putNumber("kP", kP);
@@ -40,11 +40,11 @@ public class ShootNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    kP = SmartDashboard.getNumber(getName(), kP);
-    kI = SmartDashboard.getNumber(getName(), kI);
-    kD = SmartDashboard.getNumber(getName(), kD);
-    kS = SmartDashboard.getNumber(getName(), kS);
-    kV = SmartDashboard.getNumber(getName(), kV);
+    kP = SmartDashboard.getNumber("kP", kP);
+    kI = SmartDashboard.getNumber("kI", kI);
+    kD = SmartDashboard.getNumber("kD", kD);
+    kS = SmartDashboard.getNumber("kS", kS);
+    kV = SmartDashboard.getNumber("kV", kV);
     velocitySetpoint = SmartDashboard.getNumber("ShooterVelocity", velocitySetpoint);
     feedForwardTop = new SimpleMotorFeedforward(kS, kV);
     feedForwardBottom = new SimpleMotorFeedforward(kS, kV);
