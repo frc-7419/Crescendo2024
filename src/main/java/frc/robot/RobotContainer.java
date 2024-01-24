@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.Shooter.ActivateSerializer;
+import frc.robot.subsystems.Shooter.ShootNote;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
@@ -97,7 +99,10 @@ public class RobotContainer {
       bezierPoints, 
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));    
+    )));  
+    
+    operator.leftBumper().whileTrue(new ActivateSerializer());
+    operator.a().whileTrue(new ShootNote());
   }
 
   /**

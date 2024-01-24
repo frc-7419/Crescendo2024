@@ -42,11 +42,12 @@ public class ShootNoteAmp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    kP = SmartDashboard.getNumber("kP",0);
-    kI = SmartDashboard.getNumber("kI",0);
-    kD = SmartDashboard.getNumber("kD",0);
-    kS = SmartDashboard.getNumber("kS",0);
-    kV = SmartDashboard.getNumber("kV",0);
+    kP = SmartDashboard.getNumber("kP", kP);
+    kI = SmartDashboard.getNumber("kI", kI);
+    kD = SmartDashboard.getNumber("kD", kD);
+    kS = SmartDashboard.getNumber("kS", kS);
+    kV = SmartDashboard.getNumber("kV", kV);
+    velocitySetpoint = SmartDashboard.getNumber("ShooterVelocity", velocitySetpoint);
     feedForwardTop = new SimpleMotorFeedforward(kS, kV);
     feedForwardBottom = new SimpleMotorFeedforward(kS, kV);
     shooterPIDTop = new PIDController(kP, kI, kD);
