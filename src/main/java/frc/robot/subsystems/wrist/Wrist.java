@@ -38,7 +38,6 @@ public class Wrist extends SubsystemBase {
     wristMotor.setVoltage(voltage);
   }
 
-
   public double getVelocity() {
     return wristMotor.getEncoder().getVelocity();
   }

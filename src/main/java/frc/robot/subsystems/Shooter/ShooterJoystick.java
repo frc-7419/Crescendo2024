@@ -6,10 +6,11 @@ package frc.robot.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ActivateSerializer extends Command {
-  /** Creates a new ActivateSerializer. */
-  public ActivateSerializer() {
-    ShooterSubsystem shooter = new ShooterSubsystem();
+public class ShooterJoystick extends Command {
+  ShooterSubsystem shooter;
+  /** Creates a new ShooterJoystick. */
+  public ShooterJoystick(ShooterSubsystem shooter) {
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
 

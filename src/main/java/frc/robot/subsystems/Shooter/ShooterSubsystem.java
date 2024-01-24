@@ -17,26 +17,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.DeviceIDs.CanIds;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
-public class Shooter extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
   private CANSparkFlex shooterSerial;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
+  // setpoint needs to be set
   private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
 
-  public Shooter() {
+  public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushed);
-    constraints = 
-      new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
+    constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
   }
   
   public void setTopSpeed(double speed){
     shooterMotorTop.set(speed);
   }
+
   public void setBottomSpeed(double speed){
     shooterMotorBottom.set(speed);
   }
@@ -58,26 +59,28 @@ public class Shooter extends SubsystemBase {
     shooterMotorBottom.setVoltage(voltage);
   }
 
-  public void setSerialVelocity() {
-    shooterSerial.setVoltage(getBottomVelocity());
+  public void setSerialVelocity(double voltage) {
+    shooterSerial.setVoltage(voltage);
   }
   
   public double getTopVelocity() {
     return shooterMotorTop.getEncoder().getVelocity();
   }
+
   public double getBottomVelocity() {
     return shooterMotorBottom.getEncoder().getVelocity();
   }
 
-  public void brake(){
+  public void brake() {
     shooterMotorTop.setIdleMode(IdleMode.kBrake);
     shooterMotorBottom.setIdleMode(IdleMode.kBrake);
   }
 
-  public void coast(){
+  public void coast() {
     shooterMotorTop.setIdleMode(IdleMode.kCoast);
     shooterMotorBottom.setIdleMode(IdleMode.kCoast);
   }
+
   public void setGoal(double goalState) {
     goal = new TrapezoidProfile.State(goalState, 0);
   }
