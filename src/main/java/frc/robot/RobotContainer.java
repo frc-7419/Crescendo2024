@@ -62,10 +62,11 @@ public class RobotContainer {
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
-  new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-  new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
+  private final List<Translation2d> toAmpBezierPoints = PathPlannerPath.bezierFromPoses(
+      new Pose2d(1.9, 7.11, Rotation2d.fromDegrees(90))
+  );
+  private final List<Translation2d> toSpeakerBezierPoints = PathPlannerPath.bezierFromPoses(
+      new Pose2d(1.9, 5.51, Rotation2d.fromDegrees(180))
   );
 
   /**
@@ -92,10 +93,15 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     driver.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-      bezierPoints, 
+      toAmpBezierPoints, 
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));    
+      new GoalEndState(0.0, Rotation2d.fromDegrees(90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    )));
+    driver.x().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
+      toSpeakerBezierPoints, 
+      new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+      new GoalEndState(0.0, Rotation2d.fromDegrees(180)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    )));
   }
 
   /**
