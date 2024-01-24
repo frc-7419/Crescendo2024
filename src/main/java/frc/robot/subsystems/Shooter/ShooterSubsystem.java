@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
@@ -79,6 +79,14 @@ public class ShooterSubsystem extends SubsystemBase {
   public void coast() {
     shooterMotorTop.setIdleMode(IdleMode.kCoast);
     shooterMotorBottom.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void coastSerializer() {
+    shooterSerial.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void brakeSerializer() {
+    shooterSerial.setIdleMode(IdleMode.kBrake);
   }
 
   public void setGoal(double goalState) {

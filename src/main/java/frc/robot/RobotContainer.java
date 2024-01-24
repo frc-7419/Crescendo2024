@@ -23,11 +23,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.Shooter.ActivateSerializer;
-import frc.robot.subsystems.Shooter.ShootNote;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+import frc.robot.subsystems.shooter.ActivateSerializer;
+import frc.robot.subsystems.shooter.ShootSpeaker;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.RunWristWithJoystick;
 import frc.robot.subsystems.wrist.Wrist;
 
@@ -45,6 +46,8 @@ public class RobotContainer {
 
   private final Wrist wrist = new Wrist();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
+
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   
   private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -101,8 +104,8 @@ public class RobotContainer {
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
     
-    operator.leftBumper().whileTrue(new ActivateSerializer());
-    operator.a().whileTrue(new ShootNote());
+    operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
+    operator.a().whileTrue(new ShootSpeaker(shooterSubsystem));
   }
 
   /**

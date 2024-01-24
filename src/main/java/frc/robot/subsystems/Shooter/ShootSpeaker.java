@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -26,19 +26,7 @@ public class ShootSpeaker extends Command {
 
   /** Creates a new ShootSpeaker. */
   public ShootSpeaker(ShooterSubsystem shooterSubsystem) {
-    // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
-    kP = 0.1; 
-    kI = 0;
-    kD = 0;
-    kS = 0;
-    kV = 0;
-    // SmartDashboard.putNumber("kP", kP);
-    // SmartDashboard.putNumber("kI", kI);
-    // SmartDashboard.putNumber("kD", kD);
-    // SmartDashboard.putNumber("kS", kS);
-    // SmartDashboard.putNumber("kV", kV);
-    // SmartDashboard.putNumber("ShooterVelocity", velocitySetpoint);
     addRequirements(shooterSubsystem);
   }
 
@@ -50,7 +38,8 @@ public class ShootSpeaker extends Command {
     kD = SmartDashboard.getNumber("kD",0);
     kS = SmartDashboard.getNumber("kS",0);
     kV = SmartDashboard.getNumber("kV",0);
-    velocitySetpoint = SmartDashboard.getNumber("ShooterVelocity", velocitySetpoint);
+    velocitySetpoint = SmartDashboard.getNumber("ShooterVelocity", 0);
+
     feedForwardTop = new SimpleMotorFeedforward(kS, kV);
     feedForwardBottom = new SimpleMotorFeedforward(kS, kV);
     shooterPIDTop = new PIDController(kP, kI, kD);
@@ -62,8 +51,12 @@ public class ShootSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setTopSpeed(feedForwardTop.calculate(velocitySetpoint) + shooterPIDTop.calculate(shooterSubsystem.getTopVelocity(), velocitySetpoint));
-    shooterSubsystem.setBottomSpeed(feedForwardBottom.calculate(velocitySetpoint) + shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint));
+    double ffTop = feedForwardTop.calculate(velocitySetpoint);
+    double ffBottom = feedForwardBottom.calculate(velocitySetpoint);
+    double PIDTop = shooterPIDTop.calculate(shooterSubsystem.getTopVelocity(), velocitySetpoint);
+    double PIDBottom = shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint);
+    shooterSubsystem.setTopSpeed(ffTop + PIDTop);
+    shooterSubsystem.setBottomSpeed(ffBottom + PIDBottom);
   }
 
   // Called once the command ends or is interrupted.
