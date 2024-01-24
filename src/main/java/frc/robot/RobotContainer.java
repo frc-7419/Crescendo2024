@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
-import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
@@ -20,7 +19,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
@@ -58,13 +56,13 @@ public class RobotContainer {
   /*
    * Autonomous Stuff
    */
-  private final SendableChooser<Command> autonChooser = new SendableChooser();
+  private final SendableChooser<Command> autonChooser = new SendableChooser<>();
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+  private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
       new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
   new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
   new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
