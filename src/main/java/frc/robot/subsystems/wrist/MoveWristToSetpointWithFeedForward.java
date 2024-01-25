@@ -5,7 +5,6 @@
 package frc.robot.subsystems.wrist;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -13,9 +12,9 @@ import frc.robot.constants.RobotConstants.WristConstants;
 
 public class MoveWristToSetpointWithFeedForward extends Command {
   /** Creates a new MoveWristToSetpointWithFeedForward. */
-  private ArmFeedforward feedforward;
+  private final ArmFeedforward feedforward;
   private TrapezoidProfile wristMotorTrapezoidProfile;
-  private ProfiledPIDController wristPIDController;
+  private final ProfiledPIDController wristPIDController;
 
   private double setpoint;
 

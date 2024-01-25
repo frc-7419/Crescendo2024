@@ -4,13 +4,12 @@
 
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RunIntakeWithJoystick extends Command {
-  private Intake intakeSubsystem;
-  private CommandXboxController joystick;
+  private final Intake intakeSubsystem;
+  private final CommandXboxController joystick;
   public RunIntakeWithJoystick(Intake intakeSubsystem, CommandXboxController joystick) {
     this.intakeSubsystem = intakeSubsystem;
     this.joystick = joystick;
@@ -27,13 +26,8 @@ public class RunIntakeWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Math.abs(joystick.getRightTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(joystick.getRightTriggerAxis());
-    }
-    else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(-joystick.getLeftTriggerAxis());
-    }
-
+    if(Math.abs(joystick.getRightTriggerAxis()) > 0.05) intakeSubsystem.setSpeed(joystick.getRightTriggerAxis());
+    else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05) intakeSubsystem.setSpeed(-joystick.getLeftTriggerAxis());
   }
 
   // Called once the command ends or is interrupted.

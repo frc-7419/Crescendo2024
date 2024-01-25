@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import org.photonvision.*;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -22,6 +23,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.constants.DeviceIDs;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
@@ -38,6 +40,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     final VisionWrapper visionWrapper;
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
+    private Pigeon2 gyro;
+
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         visionWrapper = new VisionWrapper();
@@ -46,6 +50,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        gyro = new Pigeon2(DeviceIDs.CanIds.pigeon.id);
     }
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
@@ -55,6 +60,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        gyro = new Pigeon2(DeviceIDs.CanIds.pigeon.id);
     }
 
     private void configurePathPlanner() {
@@ -118,5 +124,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
         }
        }
+    }
+    public double gyroAngle() {
+        return gyro.getAngle();
     }
 }
