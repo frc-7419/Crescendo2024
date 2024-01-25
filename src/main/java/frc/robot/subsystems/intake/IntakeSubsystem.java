@@ -19,7 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public IntakeSubsystem() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    serializer = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushless);
+    serializer = new CANSparkFlex(CanIds.serialShooter2.id, MotorType.kBrushless);
   }
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {
