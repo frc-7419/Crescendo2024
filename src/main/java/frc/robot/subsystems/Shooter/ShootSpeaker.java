@@ -68,6 +68,6 @@ public class ShootSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return shooterPIDTop.atSetpoint() && shooterPIDBottom.atSetpoint();
   }
 }
