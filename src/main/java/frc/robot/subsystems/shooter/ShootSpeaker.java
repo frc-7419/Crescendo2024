@@ -57,8 +57,8 @@ public class ShootSpeaker extends Command {
     double PIDBottom = shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint);
     // shooterSubsystem.setTopSpeed((ffTop + PIDTop)*0.1);
     // shooterSubsystem.setBottomSpeed((ffBottom + PIDBottom)*0.1);
-    shooterSubsystem.setTopSpeed(0.5);
-    shooterSubsystem.setBottomSpeed(0.5);
+    shooterSubsystem.setTopSpeed(0.2);
+    shooterSubsystem.setBottomSpeed(-0.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -70,6 +70,7 @@ public class ShootSpeaker extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterPIDTop.atSetpoint() && shooterPIDBottom.atSetpoint();
+    // return shooterPIDTop.atSetpoint() && shooterPIDBottom.atSetpoint();
+    return false;
   }
 }

@@ -25,8 +25,8 @@ public final class DeviceIDs {
     intakeMotor(18), // unknown
 
     topShooter(3),
-    bottomShooter(2),
-    serialShooter(1),
+    bottomShooter(27),
+    serialShooter(41),
     ;
 
     public final int id;
