@@ -105,7 +105,7 @@ public class RobotContainer {
     )));  
     
     operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
-    operator.a().whileTrue(new ShootSpeaker(shooterSubsystem));
+    operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
   }
 
   /**
