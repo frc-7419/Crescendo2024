@@ -31,6 +31,7 @@ import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
 import frc.robot.subsystems.Shooter.ActivateSerializer;
 import frc.robot.subsystems.Shooter.RunShooterToSetpoint;
+import frc.robot.subsystems.Shooter.RunShooterWithJoystick;
 import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
@@ -55,6 +56,7 @@ public class RobotContainer {
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
+  private final RunShooterWithJoystick runShooterWithJoystick = new RunShooterWithJoystick(shooterSubsystem, operator);
   
   private double MaxSpeed = 2; // 4.5 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -89,6 +91,7 @@ public class RobotContainer {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+    shooterSubsystem.setDefaultCommand(runShooterWithJoystick);
     
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -116,9 +119,9 @@ public class RobotContainer {
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
     
-    operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
-    //operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
-    operator.b().whileTrue(runShooterToSetpoint);
+    // operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
+    // //operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
+    // operator.b().whileTrue(runShooterToSetpoint);
   }
 
   public void configAutonSelection() {
