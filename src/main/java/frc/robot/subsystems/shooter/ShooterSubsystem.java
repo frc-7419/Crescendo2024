@@ -34,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushed);
-    shooterWrist = new TalonFX(CanIds.shooterWrist.id);
+    shooterWrist = new TalonFX(CanIds.armFalcon.id);
     constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
   }
   
@@ -130,6 +130,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
+    // SmartDashboard.putNumber("Shooter Wrist Position", shooterWrist.getS);
   }
   public Constraints getConstraints() {
       return constraints;

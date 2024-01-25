@@ -55,8 +55,8 @@ public class ShootSpeaker extends Command {
     double ffBottom = feedForwardBottom.calculate(velocitySetpoint);
     double PIDTop = shooterPIDTop.calculate(shooterSubsystem.getTopVelocity(), velocitySetpoint);
     double PIDBottom = shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint);
-    shooterSubsystem.setTopSpeed(ffTop + PIDTop);
-    shooterSubsystem.setBottomSpeed(ffBottom + PIDBottom);
+    shooterSubsystem.setTopSpeed((ffTop + PIDTop)*0.1);
+    shooterSubsystem.setBottomSpeed((ffBottom + PIDBottom)*0.1);
   }
 
   // Called once the command ends or is interrupted.

@@ -24,10 +24,9 @@ public final class DeviceIDs {
     wrist(17), //unknown
     intakeMotor(18), // unknown
 
-    topShooter(100),
-    bottomShooter(101),
-    serialShooter(102),
-    shooterWrist(103)
+    topShooter(3),
+    bottomShooter(2),
+    serialShooter(1),
     ;
 
     public final int id;
