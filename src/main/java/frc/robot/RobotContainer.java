@@ -18,19 +18,23 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
+import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.RunArmWithJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.ActivateSerializer;
+import frc.robot.subsystems.shooter.RunShooterToSetpoint;
 import frc.robot.subsystems.shooter.ShootSpeaker;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.RunWristWithJoystick;
-import frc.robot.subsystems.wrist.Wrist;
+import frc.robot.subsystems.wrist.WristSubsystem;
 
 public class RobotContainer {
   /*
@@ -41,15 +45,19 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1);
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final Intake intake = new Intake();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intake, driver);
+  private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, driver);
 
-  private final Wrist wrist = new Wrist();
-  private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
+  private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wristSubsystem, operator);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+
+  private final RunArmWithJoystick runArmWithJoystick = new RunArmWithJoystick(armSubsystem, operator);
+  private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
   
-  private double MaxSpeed = 3; // 6 meters per second desired top speed
+  private double MaxSpeed = 2; // 4.5 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -79,6 +87,9 @@ public class RobotContainer {
    * This will configure the drive joystick bindings
    */
   private void configureBindings() {
+    intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
+    wristSubsystem.setDefaultCommand(runWristWithJoystick);
+    armSubsystem.setDefaultCommand(runArmWithJoystick);
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
@@ -106,6 +117,7 @@ public class RobotContainer {
     
     operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
     operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
+    operator.b().whileTrue(runShooterToSetpoint);
   }
 
   /**
@@ -135,9 +147,5 @@ public class RobotContainer {
     // return squareAuto;
   }
 
-  public void setDefaultCommands() {
-    intake.setDefaultCommand(runIntakeWithJoystick);
-    wrist.setDefaultCommand(runWristWithJoystick);
-  }
 
 }

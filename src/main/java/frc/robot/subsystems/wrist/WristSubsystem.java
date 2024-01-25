@@ -19,11 +19,11 @@ import frc.robot.constants.DeviceIDs.CanIds;
 //TODO: add setpoints
 import frc.robot.constants.RobotConstants.WristConstants;
 
-public class Wrist extends SubsystemBase {
+public class WristSubsystem extends SubsystemBase {
   private CANSparkMax wristMotor;
   private TrapezoidProfile.Constraints constraints;
 
-  public Wrist() {
+  public WristSubsystem() {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
     constraints = 
       new TrapezoidProfile.Constraints(WristConstants.maxVelocity, WristConstants.maxAcceleration);

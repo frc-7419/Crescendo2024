@@ -19,9 +19,9 @@ public class MoveWristToSetpointWithFeedForward extends Command {
 
   private double setpoint;
 
-  private Wrist wrist;
+  private WristSubsystem wrist;
 
-  public MoveWristToSetpointWithFeedForward(Wrist wrist, double setpoint) {
+  public MoveWristToSetpointWithFeedForward(WristSubsystem wrist, double setpoint) {
     this.feedforward = WristConstants.wristFeedForward;
     this.wristPIDController =
       new ProfiledPIDController(WristConstants.kP, WristConstants.kI, WristConstants.kD, wrist.getConstraints()); 
