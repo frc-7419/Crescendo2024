@@ -26,7 +26,8 @@ public final class DeviceIDs {
 
     topShooter(100),
     bottomShooter(101),
-    serialShooter(102)
+    serialShooter(102),
+    shooterWrist(103)
     ;
 
     public final int id;

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooter;
 
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -22,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
   private CANSparkFlex shooterSerial;
-  private CANSparkFlex shooterSerial2;
+  private TalonFX shooterWrist;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
   // setpoint needs to be set
@@ -32,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushed);
-    shooterSerial2 = new CANSparkFlex(CanIds.serialShooter2.id, MotorType.kBrushed);
+    shooterWrist = new TalonFX(CanIds.shooterWrist.id);
     constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
   }
   
@@ -46,7 +48,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setSerialSpeed(double speed){
     shooterSerial.set(speed);
-    shooterSerial2.set(speed);
   }
 
   public void setBothSpeed(double speed){
@@ -64,7 +65,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setSerialVelocity(double voltage) {
     shooterSerial.setVoltage(voltage);
-    shooterSerial2.setVoltage(voltage);
   }
   
   public double getTopVelocity() {
@@ -87,12 +87,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void coastSerializer() {
     shooterSerial.setIdleMode(IdleMode.kCoast);
-    shooterSerial2.setIdleMode(IdleMode.kCoast);
   }
 
   public void brakeSerializer() {
     shooterSerial.setIdleMode(IdleMode.kBrake);
-    shooterSerial2.setIdleMode(IdleMode.kBrake);
   }
 
   public void setGoal(double goalState) {
@@ -101,6 +99,30 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public TrapezoidProfile.State getGoal() {
     return goal;
+  }
+
+  public void setWristSpeed(double speed) {
+    shooterWrist.set(speed);
+  }
+
+  public void setWristVoltage(double voltage) {
+    shooterWrist.setVoltage(voltage);
+  }
+
+  public void brakeWrist() {
+    shooterWrist.setNeutralMode(NeutralModeValue.Brake);
+  }
+
+  public void coastWrist() {
+    shooterWrist.setNeutralMode(NeutralModeValue.Coast);
+  }
+
+  public void setSetpoint(double setpointState) {
+    setpoint = new TrapezoidProfile.State(setpointState, 0);
+  }
+
+  public TrapezoidProfile.State getSetpoint() {
+    return setpoint;
   }
 
   @Override
