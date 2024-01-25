@@ -21,7 +21,9 @@ public class RunIntakeWithJoystick extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.coast();
+    intakeSubsystem.coastSerializer();
     intakeSubsystem.setVoltage(0);
+    intakeSubsystem.setSerializerVoltage(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -29,12 +31,15 @@ public class RunIntakeWithJoystick extends Command {
   public void execute() {
     if(Math.abs(joystick.getRightTriggerAxis()) > 0.05){ 
       intakeSubsystem.setSpeed(joystick.getRightTriggerAxis());
+      intakeSubsystem.setSerializerSpeed(joystick.getRightTriggerAxis());
     }
     else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
       intakeSubsystem.setSpeed(-joystick.getLeftTriggerAxis());
+      intakeSubsystem.setSerializerSpeed(-joystick.getLeftTriggerAxis());
     }
     else{
       intakeSubsystem.setSpeed(0);
+      intakeSubsystem.setSerializerSpeed(0);
     }
 
   }
@@ -44,6 +49,8 @@ public class RunIntakeWithJoystick extends Command {
   public void end(boolean interrupted) {
     intakeSubsystem.setVoltage(0);
     intakeSubsystem.brake();
+    intakeSubsystem.setSerializerVoltage(0);
+    intakeSubsystem.brakeSerializer();
   }
 
   // Returns true when the command should end.

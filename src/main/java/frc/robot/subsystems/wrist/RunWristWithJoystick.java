@@ -34,6 +34,7 @@ public class RunWristWithJoystick extends Command {
       double joystickWristPower = joystick.getRightY() * RobotConstants.WristConstants.wristPower;
       // wrist.setSpeed(joystickWristPower);
       wrist.setVoltage(joystickWristPower*12);
+      
     }
     else{
       wrist.setVoltage(0);
