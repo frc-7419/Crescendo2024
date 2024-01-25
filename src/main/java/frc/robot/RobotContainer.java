@@ -46,7 +46,7 @@ public class RobotContainer {
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, driver);
 
   private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wristSubsystem, operator);
