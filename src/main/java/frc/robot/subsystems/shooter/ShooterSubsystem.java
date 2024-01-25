@@ -34,7 +34,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushless);
-    shooterWrist = new TalonFX(CanIds.armFalcon.id);
     constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
   }
   

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.wrist;
+package frc.robot.subsystems.intakeWrist;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,9 +11,9 @@ import frc.robot.constants.RobotConstants;
 
 public class RunWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
-  private WristSubsystem wrist;
+  private IntakeWristSubsystem wrist;
   private CommandXboxController joystick;
-  public RunWristWithJoystick(WristSubsystem wrist, CommandXboxController joystick) {
+  public RunWristWithJoystick(IntakeWristSubsystem wrist, CommandXboxController joystick) {
     this.wrist = wrist;
     this.joystick = joystick;
     addRequirements(wrist);

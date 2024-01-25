@@ -24,17 +24,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
-import frc.robot.subsystems.arm.ArmSubsystem;
-import frc.robot.subsystems.arm.RunArmWithJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
+import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
 import frc.robot.subsystems.shooter.ActivateSerializer;
 import frc.robot.subsystems.shooter.RunShooterToSetpoint;
 import frc.robot.subsystems.shooter.ShootSpeaker;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.wrist.RunWristWithJoystick;
-import frc.robot.subsystems.wrist.WristSubsystem;
+import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
+import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
 public class RobotContainer {
   /*
@@ -48,13 +48,13 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
 
-  private final WristSubsystem wristSubsystem = new WristSubsystem();
+  private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wristSubsystem, operator);
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final ShooterWrist shooterWrist = new ShooterWrist();
 
-  private final RunArmWithJoystick runArmWithJoystick = new RunArmWithJoystick(armSubsystem, operator);
+  private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
   
   private double MaxSpeed = 2; // 4.5 meters per second desired top speed
@@ -71,7 +71,7 @@ public class RobotContainer {
   /*
    * Autonomous Stuff
    */
-  private final SendableChooser<Command> autonChooser = new SendableChooser();
+  private final SendableChooser<Command> autonChooser = new SendableChooser<>();
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
@@ -89,7 +89,9 @@ public class RobotContainer {
   private void configureBindings() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     wristSubsystem.setDefaultCommand(runWristWithJoystick);
-    armSubsystem.setDefaultCommand(runArmWithJoystick);
+    shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+    
+
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.wrist;
+package frc.robot.subsystems.intakeWrist;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -19,9 +19,9 @@ public class MoveWristToSetpointWithFeedForward extends Command {
 
   private double setpoint;
 
-  private WristSubsystem wrist;
+  private IntakeWristSubsystem wrist;
 
-  public MoveWristToSetpointWithFeedForward(WristSubsystem wrist, double setpoint) {
+  public MoveWristToSetpointWithFeedForward(IntakeWristSubsystem wrist, double setpoint) {
     this.feedforward = WristConstants.wristFeedForward;
     this.wristPIDController =
       new ProfiledPIDController(WristConstants.kP, WristConstants.kI, WristConstants.kD, wrist.getConstraints()); 

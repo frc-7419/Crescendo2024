@@ -2,30 +2,30 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.shooterWrist;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-public class RunArmWithJoystick extends Command {
+public class RunShooterWristWithJoystick extends Command {
   /** Creates a new RunArmWithJoystick. */
   private CommandXboxController joystick;
-  private ArmSubsystem armSubsystem;
+  private ShooterWrist shooterWrist;
   private ArmFeedforward armFeedforward;
   private double maxPower = 0.1;
-  public RunArmWithJoystick(ArmSubsystem armSubsystem, CommandXboxController joystick) {
-    this.armSubsystem = armSubsystem;
+  public RunShooterWristWithJoystick(ShooterWrist shooterWrist, CommandXboxController joystick) {
+    this.shooterWrist = shooterWrist;
     this.armFeedforward = new ArmFeedforward(0, 0.1, 0);
     this.joystick = joystick;
-    addRequirements(armSubsystem);
+    addRequirements(shooterWrist);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    armSubsystem.coast();
+    shooterWrist.coast();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,22 +34,22 @@ public class RunArmWithJoystick extends Command {
     // double feedForward = armFeedforward.calculate(, maxPower);
     double feedForward = 0.5/12;
     if (Math.abs(joystick.getLeftY())>0.05){
-      armSubsystem.coast();
+      shooterWrist.coast();
       double armPower = maxPower * joystick.getLeftY();
-      armSubsystem.setPower(armPower+feedForward);
+      shooterWrist.setPower(armPower+feedForward);
     } else {
-      armSubsystem.setPower(feedForward);
-      armSubsystem.brake();
+      shooterWrist.setPower(feedForward);
+      shooterWrist.brake();
 
     }
-    // armSubsystem.setPower(joystick.getLeftY());
+    // shooterWrist.setPower(joystick.getLeftY());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    armSubsystem.setPower(0);
-    armSubsystem.brake();
+    shooterWrist.setPower(0);
+    shooterWrist.brake();
   }
 
   // Returns true when the command should end.

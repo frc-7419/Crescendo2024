@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.shooterWrist;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -10,16 +10,17 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.DeviceIDs.CanIds;
 
-public class ArmSubsystem extends SubsystemBase {
+public class ShooterWrist extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   private TalonFX armMotor;
   private DutyCycleOut dutyCycleOut;
 
-  public ArmSubsystem() {
-    armMotor = new TalonFX(13, "Ryan Biggee");
+  public ShooterWrist() {
+    armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     dutyCycleOut = new DutyCycleOut(0);
-    armMotor.setPosition(0);
+    // armMotor.setPosition(0);
   }
 
   public void setPower(double power){
