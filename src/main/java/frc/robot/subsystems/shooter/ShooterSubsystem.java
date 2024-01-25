@@ -22,6 +22,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
   private CANSparkFlex shooterSerial;
+  private CANSparkFlex shooterSerial2;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
   // setpoint needs to be set
@@ -31,6 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushed);
+    shooterSerial2 = new CANSparkFlex(CanIds.serialShooter2.id, MotorType.kBrushed);
     constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
   }
   
@@ -44,6 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setSerialSpeed(double speed){
     shooterSerial.set(speed);
+    shooterSerial2.set(speed);
   }
 
   public void setBothSpeed(double speed){
@@ -61,6 +64,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setSerialVelocity(double voltage) {
     shooterSerial.setVoltage(voltage);
+    shooterSerial2.setVoltage(voltage);
   }
   
   public double getTopVelocity() {
@@ -83,10 +87,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void coastSerializer() {
     shooterSerial.setIdleMode(IdleMode.kCoast);
+    shooterSerial2.setIdleMode(IdleMode.kCoast);
   }
 
   public void brakeSerializer() {
     shooterSerial.setIdleMode(IdleMode.kBrake);
+    shooterSerial2.setIdleMode(IdleMode.kBrake);
   }
 
   public void setGoal(double goalState) {
