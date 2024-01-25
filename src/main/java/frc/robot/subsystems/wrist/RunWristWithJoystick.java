@@ -10,8 +10,8 @@ import frc.robot.constants.RobotConstants;
 
 public class RunWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
-  private final Wrist wrist;
-  private final CommandXboxController joystick;
+  private Wrist wrist;
+  private CommandXboxController joystick;
   public RunWristWithJoystick(Wrist wrist, CommandXboxController joystick) {
     this.wrist = wrist;
     this.joystick = joystick;
@@ -29,7 +29,8 @@ public class RunWristWithJoystick extends Command {
   public void execute() {
     if(Math.abs(joystick.getRightY()) > 0.05){
       wrist.coast();
-      wrist.setSpeed(joystick.getRightY() * RobotConstants.WristConstants.wristPower);
+      double joystickWristPower = joystick.getRightY() * RobotConstants.WristConstants.wristPower;
+      wrist.setSpeed(joystickWristPower);
     }
     else{
       wrist.setVoltage(0);

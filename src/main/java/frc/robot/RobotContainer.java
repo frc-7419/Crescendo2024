@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
@@ -19,12 +20,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-import frc.robot.subsystems.drive.TurnWithGyro;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+import frc.robot.subsystems.shooter.ActivateSerializer;
+import frc.robot.subsystems.shooter.ShootSpeaker;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.wrist.RunWristWithJoystick;
 import frc.robot.subsystems.wrist.Wrist;
 
@@ -42,6 +46,8 @@ public class RobotContainer {
 
   private final Wrist wrist = new Wrist();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wrist, operator);
+
+  private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   
   private double MaxSpeed = 3; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -52,23 +58,21 @@ public class RobotContainer {
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  private final TurnWithGyro spin = new TurnWithGyro(drivetrain, 69.0);
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   /*
    * Autonomous Stuff
    */
-  private final SendableChooser<Command> autonChooser = new SendableChooser<>();
+  private final SendableChooser<Command> autonChooser = new SendableChooser();
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  private final List<Translation2d> toAmpBezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.9, 7.11, Rotation2d.fromDegrees(90))
-  );
-  private final List<Translation2d> toSpeakerBezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.9, 5.51, Rotation2d.fromDegrees(180))
+  List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
+  new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
+  new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90))
   );
 
   /**
@@ -95,15 +99,13 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     driver.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-      toAmpBezierPoints, 
+      bezierPoints, 
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      new GoalEndState(0.0, Rotation2d.fromDegrees(90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));
-    driver.x().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-      toSpeakerBezierPoints, 
-      new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
-      new GoalEndState(0.0, Rotation2d.fromDegrees(180)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
-    )));
+      new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    )));  
+    
+    operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
+    operator.a().whileTrue(new ShootSpeaker(shooterSubsystem));
   }
 
   /**

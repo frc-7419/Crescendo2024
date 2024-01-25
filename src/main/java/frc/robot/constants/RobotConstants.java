@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.Robot;
 
@@ -40,6 +41,20 @@ public final class RobotConstants {
     public static final double maxVelocity = 0;
     public static final double maxAcceleration = 0;
     public static double SetpointThreshold;
+  }
 
+  public final class ShooterConstants{
+
+    public static final double wristPower = 0;
+    public static final double kS = 0;
+    public static final double kG = 0;
+    public static final double kV = 0.0075;
+    public static final double kA = 0;
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double maxVelocity = 0;
+    public static final double maxAcceleration = 0;
+    public static double SetpointThreshold;
   }
 }
