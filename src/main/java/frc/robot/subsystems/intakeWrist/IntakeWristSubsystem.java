@@ -17,16 +17,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.constants.DeviceIDs.CanIds;
 //TODO: add setpoints
-import frc.robot.constants.RobotConstants.WristConstants;
+import frc.robot.constants.RobotConstants.IntakeWristConstants;
 
 public class IntakeWristSubsystem extends SubsystemBase {
   private CANSparkMax wristMotor;
-  private TrapezoidProfile.Constraints constraints;
 
   public IntakeWristSubsystem() {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
     constraints = 
-      new TrapezoidProfile.Constraints(WristConstants.maxVelocity, WristConstants.maxAcceleration);
+      new TrapezoidProfile.Constraints(IntakeWristConstants.maxVelocity, IntakeWristConstants.maxAcceleration);
     zeroEncoder();
   }
   
@@ -62,8 +61,5 @@ public class IntakeWristSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist position", getPosition());
-  }
-  public Constraints getConstraints() {
-      return constraints;
   }
 }

@@ -3,6 +3,8 @@ package frc.robot.constants;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.robot.Robot;
 
 public final class RobotConstants {
@@ -27,20 +29,20 @@ public final class RobotConstants {
   public static double maxVoltage = 12;
   public static double voltageCompSaturation = 11;
 
-  public final class WristConstants{
+  public final class IntakeWristConstants{
 
     public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;
     public static final double kV = 0;
     public static final double kA = 0;
-    public static final ArmFeedforward wristFeedForward = new ArmFeedforward(WristConstants.kS, WristConstants.kG, WristConstants.kV, WristConstants.kA);
+    public static final ArmFeedforward wristFeedForward = new ArmFeedforward(kS, kG, kV, kA);
     public static final double kP = 0;
     public static final double kI = 0;
     public static final double kD = 0;
     public static final double maxVelocity = 0;
     public static final double maxAcceleration = 0;
-    public static double SetpointThreshold;
+    public static final Constraints constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
   }
 
   public final class ShooterConstants{

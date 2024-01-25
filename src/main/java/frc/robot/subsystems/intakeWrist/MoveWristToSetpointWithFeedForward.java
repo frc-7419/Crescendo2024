@@ -9,12 +9,11 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.RobotConstants.WristConstants;
+import frc.robot.constants.RobotConstants.IntakeWristConstants;;
 
 public class MoveWristToSetpointWithFeedForward extends Command {
   /** Creates a new MoveWristToSetpointWithFeedForward. */
   private ArmFeedforward feedforward;
-  private TrapezoidProfile wristMotorTrapezoidProfile;
   private ProfiledPIDController wristPIDController;
 
   private double setpoint;
@@ -22,27 +21,24 @@ public class MoveWristToSetpointWithFeedForward extends Command {
   private IntakeWristSubsystem wrist;
 
   public MoveWristToSetpointWithFeedForward(IntakeWristSubsystem wrist, double setpoint) {
-    this.feedforward = WristConstants.wristFeedForward;
-    this.wristPIDController =
-      new ProfiledPIDController(WristConstants.kP, WristConstants.kI, WristConstants.kD, wrist.getConstraints()); 
-      // TODO: add kDT here
+    this.feedforward = IntakeWristConstants.wristFeedForward;
+    this.wristPIDController = new ProfiledPIDController(IntakeWristConstants.kP, IntakeWristConstants.kI,
+        IntakeWristConstants.kD, IntakeWristConstants.constraints);
     this.setpoint = setpoint;
     addRequirements(wrist);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     wrist.coast();
     wrist.setVoltage(0);
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    while(Math.abs(setpoint - wrist.getPosition()) > WristConstants.SetpointThreshold){
-        wristPIDController.setGoal(setpoint);
-        wrist.setVoltage(wristPIDController.calculate(wrist.getPosition())
+    while (Math.abs(setpoint - wrist.getPosition()) > IntakeWristConstants.SetpointThreshold) {
+      wristPIDController.setGoal(setpoint);
+      wrist.setVoltage(wristPIDController.calculate(wrist.getPosition())
           + feedforward.calculate(setpoint, wrist.getVelocity()));
     }
   }
@@ -51,10 +47,9 @@ public class MoveWristToSetpointWithFeedForward extends Command {
   public void end(boolean interrupted) {
     wrist.setVoltage(0);
     wrist.brake();
-    
+
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

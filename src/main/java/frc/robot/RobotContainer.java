@@ -122,9 +122,6 @@ public class RobotContainer {
     operator.b().whileTrue(runShooterToSetpoint);
   }
 
-  /**
-   * Configures the sendable chooser for auton
-   */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
