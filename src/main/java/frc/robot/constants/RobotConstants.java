@@ -43,6 +43,7 @@ public final class RobotConstants {
     public static final double maxVelocity = 0;
     public static final double maxAcceleration = 0;
     public static final Constraints constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
+    public static final double SetpointThreshold = 0;
   }
 
   public final class ShooterConstants{

@@ -31,7 +31,7 @@ public class RunWristWithJoystick extends Command {
     SmartDashboard.putNumber("joystick left y", joystick.getLeftY());
     if(Math.abs(joystick.getRightY()) > 0.05){
       wrist.coast();
-      double joystickWristPower = joystick.getRightY() * RobotConstants.WristConstants.wristPower;
+      double joystickWristPower = joystick.getRightY() * RobotConstants.IntakeWristConstants.wristPower;
       // wrist.setSpeed(joystickWristPower);
       wrist.setVoltage(joystickWristPower*12);
       

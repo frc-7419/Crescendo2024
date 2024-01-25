@@ -21,11 +21,11 @@ import frc.robot.constants.RobotConstants.IntakeWristConstants;
 
 public class IntakeWristSubsystem extends SubsystemBase {
   private CANSparkMax wristMotor;
+  private TrapezoidProfile.Constraints constraints;
 
   public IntakeWristSubsystem() {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
-    constraints = 
-      new TrapezoidProfile.Constraints(IntakeWristConstants.maxVelocity, IntakeWristConstants.maxAcceleration);
+    constraints = IntakeWristConstants.constraints;
     zeroEncoder();
   }
   

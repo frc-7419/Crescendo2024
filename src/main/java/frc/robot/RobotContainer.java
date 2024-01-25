@@ -29,10 +29,9 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
-import frc.robot.subsystems.shooter.ActivateSerializer;
-import frc.robot.subsystems.shooter.RunShooterToSetpoint;
-import frc.robot.subsystems.shooter.ShootSpeaker;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.Shooter.ActivateSerializer;
+import frc.robot.subsystems.Shooter.RunShooterToSetpoint;
+import frc.robot.subsystems.Shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -118,7 +117,7 @@ public class RobotContainer {
     )));  
     
     operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
-    operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
+    //operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
     operator.b().whileTrue(runShooterToSetpoint);
   }
 
