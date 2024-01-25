@@ -51,10 +51,10 @@ public class ShootSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double ffTop = feedForwardTop.calculate(velocitySetpoint);
-    double ffBottom = feedForwardBottom.calculate(velocitySetpoint);
-    double PIDTop = shooterPIDTop.calculate(shooterSubsystem.getTopVelocity(), velocitySetpoint);
-    double PIDBottom = shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint);
+    double ffTop = -feedForwardTop.calculate(velocitySetpoint);
+    double ffBottom = -feedForwardBottom.calculate(velocitySetpoint);
+    double PIDTop = -shooterPIDTop.calculate(shooterSubsystem.getTopVelocity(), velocitySetpoint);
+    double PIDBottom = -shooterPIDBottom.calculate(shooterSubsystem.getBottomVelocity(), velocitySetpoint);
     // shooterSubsystem.setTopSpeed((ffTop + PIDTop)*0.1);
     // shooterSubsystem.setBottomSpeed((ffBottom + PIDBottom)*0.1);
     shooterSubsystem.setTopSpeed(0.2);

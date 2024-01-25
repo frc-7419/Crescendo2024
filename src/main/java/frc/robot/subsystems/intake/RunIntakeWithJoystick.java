@@ -33,6 +33,9 @@ public class RunIntakeWithJoystick extends Command {
     else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
       intakeSubsystem.setSpeed(-joystick.getLeftTriggerAxis());
     }
+    else{
+      intakeSubsystem.setSpeed(0);
+    }
 
   }
 

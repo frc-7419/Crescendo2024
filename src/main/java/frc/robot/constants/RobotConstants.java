@@ -29,7 +29,7 @@ public final class RobotConstants {
 
   public final class WristConstants{
 
-    public static final double wristPower = 0;
+    public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;
     public static final double kV = 0;
@@ -45,7 +45,7 @@ public final class RobotConstants {
 
   public final class ShooterConstants{
 
-    public static final double wristPower = 0;
+    public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;
     public static final double kV = 0.0075;
