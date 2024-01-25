@@ -32,7 +32,7 @@ public class RunShooterWristWithJoystick extends Command {
   @Override
   public void execute() {
     // double feedForward = armFeedforward.calculate(, maxPower);
-    double feedForward = 0.5/12;
+    double feedForward = 0.5/12/2.67;
     if (Math.abs(joystick.getLeftY())>0.05){
       shooterWrist.coast();
       double armPower = maxPower * joystick.getLeftY();

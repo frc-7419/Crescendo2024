@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ShooterConstants;
+import frc.robot.constants.RobotConstants;
 
 public class RunShooterToSetpoint extends Command {
   private ShooterSubsystem shooterSubsystem;
@@ -48,8 +48,8 @@ public class RunShooterToSetpoint extends Command {
     feedForwardBottom = new SimpleMotorFeedforward(2, 0.1);
     shooterPIDTop = new PIDController(0.01, kI, kD);
     shooterPIDBottom = new PIDController(0.01, kI, kD);
-    shooterPIDTop.setTolerance(ShooterConstants.tolerance);
-    shooterPIDBottom.setTolerance(ShooterConstants.tolerance);
+    shooterPIDTop.setTolerance(RobotConstants.ShooterConstants.tolerance);
+    shooterPIDBottom.setTolerance(RobotConstants.ShooterConstants.tolerance);
     shooterSubsystem.coast();
   }
 

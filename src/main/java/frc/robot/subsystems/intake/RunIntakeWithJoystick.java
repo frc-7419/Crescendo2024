@@ -4,9 +4,9 @@
 
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.IntakeConstants;
 
 public class RunIntakeWithJoystick extends Command {
   private IntakeSubsystem intakeSubsystem;
@@ -30,12 +30,12 @@ public class RunIntakeWithJoystick extends Command {
   @Override
   public void execute() {
     if(Math.abs(joystick.getRightTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(joystick.getRightTriggerAxis());
-      intakeSubsystem.setSerializerSpeed(joystick.getRightTriggerAxis());
+      intakeSubsystem.setSpeed(IntakeConstants.intakePower);
+      intakeSubsystem.setSerializerSpeed(IntakeConstants.intakePower);
     }
     else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(-joystick.getLeftTriggerAxis());
-      intakeSubsystem.setSerializerSpeed(-joystick.getLeftTriggerAxis());
+      intakeSubsystem.setSpeed(-IntakeConstants.intakePower);
+      intakeSubsystem.setSerializerSpeed(-IntakeConstants.intakePower);
     }
     else{
       intakeSubsystem.setSpeed(0);

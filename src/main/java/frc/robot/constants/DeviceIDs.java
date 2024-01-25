@@ -17,10 +17,12 @@ public final class DeviceIDs {
     wrist(18), //unknown
     intakeMotor(17), // unknown
 
-    topShooter(3),
-    bottomShooter(27),
-    serialShooter(41),
-    serialShooter2(44)
+    topShooter(19),
+    bottomShooter(20),
+    serializerFront(21),
+    serializerBack(22), 
+    shooterSerializer(404), //unknown
+
     ;
 
     public final int id;

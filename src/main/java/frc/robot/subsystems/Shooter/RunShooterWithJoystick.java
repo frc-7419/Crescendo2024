@@ -2,18 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.RobotConstants.ShooterConstants;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class RunShooterWithJoystick extends Command {
+  /** Creates a new RunShooter. */
   private ShooterSubsystem shooterSubsystem;
-  private CommandXboxController joystick;
-  
-  public RunShooterWithJoystick(ShooterSubsystem shooterSubsystem, CommandXboxController joystick) {
+  private double power;
+  public RunShooterWithJoystick(ShooterSubsystem shooterSubsystem, double power) {
     this.shooterSubsystem = shooterSubsystem;
-    this.joystick = joystick;
+    this.power = power;
+    // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
   }
 
@@ -21,28 +24,21 @@ public class RunShooterWithJoystick extends Command {
   @Override
   public void initialize() {
     shooterSubsystem.coast();
+    shooterSubsystem.setBothSpeed(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(joystick.getLeftTriggerAxis() > 0.05){
-      shooterSubsystem.setSerialSpeed(0.5);
-    }
-    else {
-      shooterSubsystem.setSerialSpeed(0);
-    }
-    if(joystick.getRightTriggerAxis() > 0.05) {
-      shooterSubsystem.setBothSpeed(1);
-    }
-    else {
-      shooterSubsystem.setBothSpeed(0);
-    }
+    shooterSubsystem.setBothSpeed(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooterSubsystem.setBothSpeed(0);
+    shooterSubsystem.brake();
+  }
 
   // Returns true when the command should end.
   @Override

@@ -15,11 +15,19 @@ import frc.robot.constants.DeviceIDs.CanIds;
 
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax intakeMotor;
-  private CANSparkFlex serializer;
+  private CANSparkFlex serializerFront;
+  private CANSparkFlex serializerBack;
   
   public IntakeSubsystem() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    serializer = new CANSparkFlex(CanIds.serialShooter2.id, MotorType.kBrushless);
+    serializerFront = new CANSparkFlex(CanIds.serializerFront.id, MotorType.kBrushless);
+    serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
+    invertMotors();
+  }
+
+  public void invertMotors(){
+    serializerFront.setInverted(true);
+    serializerBack.setInverted(false);
   }
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {
@@ -30,11 +38,13 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setSerializerVoltage(double voltage) {
-    serializer.setVoltage(voltage);
+    serializerFront.setVoltage(voltage);
+    serializerBack.setVoltage(voltage);
   }
 
   public void setSerializerSpeed(double speed) {
-    serializer.set(speed);
+    serializerFront.set(speed);
+    serializerBack.set(speed);
   }
 
   public void brake(){
@@ -42,7 +52,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void brakeSerializer() {
-    serializer.setIdleMode(IdleMode.kBrake);
+    serializerFront.setIdleMode(IdleMode.kBrake);
+    serializerBack.setIdleMode(IdleMode.kBrake);
   }
 
   public void coast(){
@@ -50,12 +61,14 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void coastSerializer() {
-    serializer.setIdleMode(IdleMode.kCoast);
+    serializerFront.setIdleMode(IdleMode.kCoast);
+    serializerBack.setIdleMode(IdleMode.kCoast);
   }
 
   @Override
   public void periodic() {
       SmartDashboard.putNumber("IntakeSpeed", intakeMotor.get());
-      SmartDashboard.putNumber("SerializerSpeed", serializer.get());
+      SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
+      SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
   }
 }

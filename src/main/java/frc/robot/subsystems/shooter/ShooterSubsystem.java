@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -23,7 +23,6 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
-  private CANSparkFlex shooterSerial;
   private TalonFX shooterWrist;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
@@ -33,8 +32,14 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
-    shooterSerial = new CANSparkFlex(CanIds.serialShooter.id, MotorType.kBrushless);
-    constraints = new TrapezoidProfile.Constraints(ShooterConstants.maxVelocity, ShooterConstants.maxAcceleration);
+    constraints = ShooterConstants.Constraints;
+    
+    invertMotors();
+  }
+
+  public void invertMotors() {
+    shooterMotorBottom.setInverted(false);
+    shooterMotorTop.setInverted(false);    
   }
   
   public void setTopSpeed(double speed){
@@ -45,13 +50,9 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorBottom.set(speed);
   }
 
-  public void setSerialSpeed(double speed){
-    shooterSerial.set(speed);
-  }
-
   public void setBothSpeed(double speed){
     setTopSpeed(speed);
-    setBottomSpeed(speed);
+    setBottomSpeed(-speed);
   }
 
   public void setTopVoltage(double voltage){
@@ -60,10 +61,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setBottomVoltage(double voltage){
     shooterMotorBottom.setVoltage(voltage);
-  }
-
-  public void setSerialVelocity(double voltage) {
-    shooterSerial.setVoltage(voltage);
   }
   
   public double getTopVelocity() {
@@ -84,13 +81,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorBottom.setIdleMode(IdleMode.kCoast);
   }
 
-  public void coastSerializer() {
-    shooterSerial.setIdleMode(IdleMode.kCoast);
-  }
-
-  public void brakeSerializer() {
-    shooterSerial.setIdleMode(IdleMode.kBrake);
-  }
 
   public void setGoal(double goalState) {
     goal = new TrapezoidProfile.State(goalState, 0);

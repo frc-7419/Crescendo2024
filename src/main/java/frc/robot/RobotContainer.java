@@ -19,20 +19,22 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
+import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
-import frc.robot.subsystems.Shooter.ActivateSerializer;
-import frc.robot.subsystems.Shooter.RunShooterToSetpoint;
-import frc.robot.subsystems.Shooter.RunShooterWithJoystick;
-import frc.robot.subsystems.Shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.RunShooterWithJoystick;
+import frc.robot.subsystems.shooter.RunShooterToSetpoint;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -55,8 +57,7 @@ public class RobotContainer {
   private final ShooterWrist shooterWrist = new ShooterWrist();
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
-  private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
-  private final RunShooterWithJoystick runShooterWithJoystick = new RunShooterWithJoystick(shooterSubsystem, operator);
+  // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
   
   private double MaxSpeed = 2; // 4.5 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
@@ -91,7 +92,6 @@ public class RobotContainer {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
-    shooterSubsystem.setDefaultCommand(runShooterWithJoystick);
     
 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -118,10 +118,10 @@ public class RobotContainer {
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
+    operator.rightBumper().whileTrue(new RepeatCommand(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower)));
     
-    // operator.leftBumper().whileTrue(new ActivateSerializer(shooterSubsystem));
-    // //operator.rightBumper().whileTrue(new ShootSpeaker(shooterSubsystem));
-    // operator.b().whileTrue(runShooterToSetpoint);
+
+   
   }
 
   public void configAutonSelection() {

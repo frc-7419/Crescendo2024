@@ -47,7 +47,7 @@ public final class RobotConstants {
   }
 
   public final class ShooterConstants{
-
+    public static final double shooterPower = 1;
     public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;
@@ -58,6 +58,8 @@ public final class RobotConstants {
     public static final double kD = 0;
     public static final double maxVelocity = 0;
     public static final double maxAcceleration = 0;
+    public static final double tolerance = 500;
+    public static final Constraints Constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
     public static double SetpointThreshold;
   }
 }
