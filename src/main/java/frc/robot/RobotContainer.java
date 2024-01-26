@@ -48,7 +48,7 @@ public class RobotContainer {
   private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, driver);
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
 
   private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
   private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wristSubsystem, operator);
@@ -118,13 +118,13 @@ public class RobotContainer {
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
-    operator.rightBumper().whileTrue(new RepeatCommand(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower)));
+    operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
     
 
    
   }
 
-  public void configAutonSelection() {
+  public void configAutonSelection() {  
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
     autonChooser.addOption("Two Note Auto", twoNoteAuto);

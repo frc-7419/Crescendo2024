@@ -21,7 +21,7 @@ public final class DeviceIDs {
     bottomShooter(20),
     serializerFront(21),
     serializerBack(22), 
-    shooterSerializer(404), //unknown
+ 
 
     ;
 
