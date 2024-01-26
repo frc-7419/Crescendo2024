@@ -15,19 +15,19 @@ import frc.robot.constants.DeviceIDs.CanIds;
 
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax intakeMotor;
-  private CANSparkFlex serializerFront;
+  private CANSparkMax serializerFront;
   private CANSparkFlex serializerBack;
   
   public IntakeSubsystem() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    serializerFront = new CANSparkFlex(CanIds.serializerFront.id, MotorType.kBrushless);
+    serializerFront = new CANSparkMax(CanIds.serializerFront.id, MotorType.kBrushless);
     serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
   public void invertMotors(){
-    serializerFront.setInverted(true);
-    serializerBack.setInverted(false);
+    serializerFront.setInverted(false);
+    serializerBack.setInverted(true);
   }
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {

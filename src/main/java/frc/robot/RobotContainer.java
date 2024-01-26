@@ -118,6 +118,7 @@ public class RobotContainer {
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
+    
     operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
     
 
