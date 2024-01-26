@@ -24,6 +24,8 @@ public class RunIntakeWithJoystick extends Command {
     intakeSubsystem.coastSerializer();
     intakeSubsystem.setVoltage(0);
     intakeSubsystem.setSerializerVoltage(0);
+    intakeSubsystem.setSpeed(0);
+    intakeSubsystem.setSerializerSpeed(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,8 +40,8 @@ public class RunIntakeWithJoystick extends Command {
       intakeSubsystem.setSerializerSpeed(-IntakeConstants.intakePower);
     }
     else{
-      intakeSubsystem.setSpeed(0);
       intakeSubsystem.setSerializerSpeed(0);
+      intakeSubsystem.setSpeed(0);
     }
 
   }

@@ -29,10 +29,12 @@ public class IntakeSubsystem extends SubsystemBase {
     serializerFront.setInverted(false);
     serializerBack.setInverted(true);
   }
+  
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {
     intakeMotor.set(speed);
   }
+
   public void setVoltage(double voltage) {
     intakeMotor.setVoltage(voltage);
   }

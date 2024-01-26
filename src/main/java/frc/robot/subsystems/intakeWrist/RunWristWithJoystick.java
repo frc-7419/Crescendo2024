@@ -28,7 +28,7 @@ public class RunWristWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("joystick left y", joystick.getLeftY());
+    SmartDashboard.putNumber("joystick left y", joystick.getRightY());
     if(Math.abs(joystick.getRightY()) > 0.05){
       wrist.coast();
       double joystickWristPower = joystick.getRightY() * RobotConstants.IntakeWristConstants.wristPower;

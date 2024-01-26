@@ -14,15 +14,13 @@ public final class DeviceIDs {
     // Gyro CAN IDss
     pigeon(16),
 
-    wrist(18), //unknown
-    intakeMotor(17), // unknown
+    wrist(18),
+    intakeMotor(17),
 
     topShooter(19),
     bottomShooter(20),
     serializerFront(7),
-    serializerBack(22), 
- 
-
+    serializerBack(21), 
     ;
 
     public final int id;
