@@ -33,10 +33,10 @@ import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
 import frc.robot.subsystems.shooter.RunShooterWithJoystick;
-import frc.robot.subsystems.shooter.RunShooterToSetpoint;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
+import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 
 public class RobotContainer {
   /*
@@ -55,7 +55,7 @@ public class RobotContainer {
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
-  private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 90, 90);
+  private final RunShooterWristToSetpoint runShooterToSetpoint = new RunShooterWristToSetpoint(shooterWrist, 90);
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);

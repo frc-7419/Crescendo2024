@@ -29,7 +29,7 @@ public class RunShooterWristToSetpoint extends Command {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(0.1, 0, 0, new TrapezoidProfile.Constraints(0.4, 0.1));
+      = new ProfiledPIDController(0.2, 0, 0, new TrapezoidProfile.Constraints(0.4, 0.1));
     addRequirements(shooterWrist);
   }
 
@@ -45,7 +45,7 @@ public class RunShooterWristToSetpoint extends Command {
   public void execute() {
       while (Math.abs(setpoint - shooterWrist.getPosition()) > IntakeWristConstants.SetpointThreshold) {
       shooterWristPIDController.setGoal(setpoint);
-      shooterWrist.setVoltage(shooterWristPIDController.calculate(shooterWrist.getPosition()));
+      shooterWrist.setPower(shooterWristPIDController.calculate(shooterWrist.getPosition()));
     }
   }
 
