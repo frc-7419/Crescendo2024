@@ -55,6 +55,7 @@ public class RobotContainer {
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
+  private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 90, 90);
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
@@ -122,7 +123,7 @@ public class RobotContainer {
     operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
     // operator.rightStick(-0.5).whileTrue(new RunShooterWristWithJoystick(shooterWrist, driver)) 
 
-   
+   operator.b().whileTrue(runShooterToSetpoint);
   }
 
   public void configAutonSelection() {  
