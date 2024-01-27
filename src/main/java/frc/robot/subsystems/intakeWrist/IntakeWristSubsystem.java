@@ -27,6 +27,8 @@ public class IntakeWristSubsystem extends SubsystemBase {
     wristMotor = new CANSparkMax(CanIds.wrist.id, MotorType.kBrushless);
     constraints = IntakeWristConstants.constraints;
     zeroEncoder();
+
+    wristMotor.setInverted(false);
   }
   
   public void setSpeed(double speed){

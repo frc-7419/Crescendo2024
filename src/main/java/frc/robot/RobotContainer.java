@@ -121,9 +121,8 @@ public class RobotContainer {
     )));  
     
     operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
-    // operator.rightStick(-0.5).whileTrue(new RunShooterWristWithJoystick(shooterWrist, driver)) 
 
-   operator.b().whileTrue(runShooterToSetpoint);
+  //  operator.b().whileTrue(runShooterToSetpoint);
   }
 
   public void configAutonSelection() {  

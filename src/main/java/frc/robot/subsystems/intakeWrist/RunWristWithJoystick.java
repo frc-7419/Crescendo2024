@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.intakeWrist;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -13,10 +14,13 @@ public class RunWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
   private IntakeWristSubsystem wrist;
   private CommandXboxController joystick;
+  private double feedForward;
   public RunWristWithJoystick(IntakeWristSubsystem wrist, CommandXboxController joystick) {
     this.wrist = wrist;
     this.joystick = joystick;
+    this.feedForward = - 0.07 * 0.2;
     addRequirements(wrist);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -31,13 +35,12 @@ public class RunWristWithJoystick extends Command {
     SmartDashboard.putNumber("joystick left y", joystick.getRightY());
     if(Math.abs(joystick.getRightY()) > 0.05){
       wrist.coast();
-      double joystickWristPower = joystick.getRightY() * RobotConstants.IntakeWristConstants.wristPower;
-      // wrist.setSpeed(joystickWristPower);
+      double joystickWristPower = feedForward + joystick.getRightY() * RobotConstants.IntakeWristConstants.wristPower;
       wrist.setVoltage(joystickWristPower*12);
       
     }
     else{
-      wrist.setVoltage(0);
+      wrist.setVoltage(feedForward*12);
       wrist.brake();
     }
   }
