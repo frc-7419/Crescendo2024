@@ -47,7 +47,7 @@ public final class RobotConstants {
   }
 
   public final class ShooterConstants{
-    public static final double shooterPower = 0.5   ;
+    public static final double shooterPower = 0.65;
     public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;

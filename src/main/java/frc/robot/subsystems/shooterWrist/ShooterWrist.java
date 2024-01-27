@@ -38,7 +38,8 @@ public class ShooterWrist extends SubsystemBase {
   public void brake(){
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
-  public void getAngle(){
+  public void getPosition(){
+    armMotor.
   }
   @Override
   public void periodic() {
