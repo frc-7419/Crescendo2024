@@ -27,8 +27,8 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
-import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
-import frc.robot.subsystems.shooter.RunShooterWithJoystick;
+import frc.robot.subsystems.intakeWrist.RunIntakeWristWithJoystick;
+import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
@@ -50,7 +50,7 @@ public class RobotContainer {
 
 
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
-  private final RunWristWithJoystick runWristWithJoystick = new RunWristWithJoystick(wristSubsystem, operator);
+  private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
 
@@ -122,7 +122,7 @@ public class RobotContainer {
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
     
-    operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, ShooterConstants.shooterPower));
     operator.b().whileTrue(new RunShooterWristToSetpoint(shooterWrist, 30));
   }
 

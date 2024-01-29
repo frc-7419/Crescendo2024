@@ -10,12 +10,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.RobotConstants;
 
-public class RunWristWithJoystick extends Command {
+public class RunIntakeWristWithJoystick extends Command {
   /** Creates a new RunWristWithJoystick. */
   private IntakeWristSubsystem wrist;
   private CommandXboxController joystick;
   private double feedForward;
-  public RunWristWithJoystick(IntakeWristSubsystem wrist, CommandXboxController joystick) {
+  public RunIntakeWristWithJoystick(IntakeWristSubsystem wrist, CommandXboxController joystick) {
     this.wrist = wrist;
     this.joystick = joystick;
     this.feedForward = - 0.07 * 0.2;

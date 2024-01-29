@@ -5,15 +5,13 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.constants.RobotConstants.ShooterConstants;
-import edu.wpi.first.wpilibj.XboxController;
 
-public class RunShooterWithJoystick extends Command {
+public class RunShooter extends Command {
   /** Creates a new RunShooter. */
   private ShooterSubsystem shooterSubsystem;
   private double power;
-  public RunShooterWithJoystick(ShooterSubsystem shooterSubsystem, double power) {
+
+  public RunShooter(ShooterSubsystem shooterSubsystem, double power) {
     this.shooterSubsystem = shooterSubsystem;
     this.power = power;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,13 +22,12 @@ public class RunShooterWithJoystick extends Command {
   @Override
   public void initialize() {
     shooterSubsystem.coast();
-    shooterSubsystem.setBothSpeed(0);
+    shooterSubsystem.setBothSpeed(power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setBothSpeed(power);
   }
 
   // Called once the command ends or is interrupted.
