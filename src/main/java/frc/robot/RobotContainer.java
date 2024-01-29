@@ -58,7 +58,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
   
-  private final RunShooterWristToSetpoint runShooterWristToSetpoint = new RunShooterWristToSetpoint(shooterWrist, 5);
+  private final RunShooterWristToSetpoint runShooterWristToSetpoint = new RunShooterWristToSetpoint(shooterWrist, 30);
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);

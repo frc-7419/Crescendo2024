@@ -33,8 +33,9 @@ public class ShooterWrist extends SubsystemBase {
   public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     dutyCycleOut = new DutyCycleOut(0);
-    armMotor.setInverted(true);
+    armMotor.setInverted(false);
     armMotor.setPosition(0);
+    
   }
   public void setPowerUp(double power){
     dutyCycleOut.Output = -power;
@@ -42,6 +43,7 @@ public class ShooterWrist extends SubsystemBase {
   }
   public void setPower(double power){
     dutyCycleOut.Output = power;
+    dutyCycleOut.EnableFOC = true;
     armMotor.setControl(dutyCycleOut);
   }
   public void coast(){
@@ -51,11 +53,12 @@ public class ShooterWrist extends SubsystemBase {
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   public double getPosition(){
-    return -1*armMotor.getPosition().getValueAsDouble();
+    return armMotor.getPosition().getValueAsDouble();
   }
   public void zeroEncoder(){
    armMotor.setPosition(0);
   }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
