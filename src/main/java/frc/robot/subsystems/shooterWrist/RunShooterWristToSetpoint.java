@@ -16,7 +16,7 @@ public class RunShooterWristToSetpoint extends Command {
   private ProfiledPIDController shooterWristPIDController;
 
   private double kP;
-  private double kI;
+  private double kI;  
   private double kD;
   private double kS;
   private double kV;
@@ -29,7 +29,7 @@ public class RunShooterWristToSetpoint extends Command {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(0.2, 0, 0, new TrapezoidProfile.Constraints(0.4, 0.1));
+      = new ProfiledPIDController(0.2, 0, 0, new TrapezoidProfile.Constraints(0.000002, 0.000005));
     addRequirements(shooterWrist);
   }
 
@@ -38,15 +38,15 @@ public class RunShooterWristToSetpoint extends Command {
   public void initialize() {
     shooterWrist.coast();
     shooterWrist.setPower(0);
+    shooterWristPIDController.reset(shooterWrist.getPosition());
+    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      while (Math.abs(setpoint - shooterWrist.getPosition()) > IntakeWristConstants.SetpointThreshold) {
-      shooterWristPIDController.setGoal(setpoint);
-      shooterWrist.setPower(shooterWristPIDController.calculate(shooterWrist.getPosition()));
-    }
+      shooterWrist.setPowerUp(shooterWristPIDController.calculate(shooterWrist.getPosition()));
   }
 
   // Called once the command ends or is interrupted.
@@ -59,7 +59,6 @@ public class RunShooterWristToSetpoint extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return shooterPIDTop.atSetpoint() && shooterPIDBottom.atSetpoint();
-    return false;
+    return shooterWristPIDController.atGoal();
   }
 }

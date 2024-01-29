@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
@@ -55,7 +57,8 @@ public class RobotContainer {
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
-  private final RunShooterWristToSetpoint runShooterToSetpoint = new RunShooterWristToSetpoint(shooterWrist, 90);
+  
+  private final RunShooterWristToSetpoint runShooterWristToSetpoint = new RunShooterWristToSetpoint(shooterWrist, 5);
 
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
@@ -64,7 +67,7 @@ public class RobotContainer {
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05); // Add a 10% deadband
+      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05); // Add a 5% deadband
       // .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -119,11 +122,12 @@ public class RobotContainer {
       new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
       new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     )));  
-    
+    operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
     operator.rightBumper().whileTrue(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower));
+    operator.b().whileTrue(runShooterWristToSetpoint);
+    
+    }
 
-  //  operator.b().whileTrue(runShooterToSetpoint);
-  }
 
   public void configAutonSelection() {  
     autonChooser.setDefaultOption("Test Auto", testAuto);

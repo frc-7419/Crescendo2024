@@ -44,6 +44,14 @@ public class IntakeSubsystem extends SubsystemBase {
     serializerBack.setVoltage(voltage);
   }
 
+  public void setSerializerFrontSpeed(double speed) {
+    serializerFront.set(speed);
+  }
+
+  public void setSerializerBackSpeed(double speed) {
+    serializerBack.set(speed);
+  }
+
   public void setSerializerSpeed(double speed) {
     serializerFront.set(speed);
     serializerBack.set(speed);

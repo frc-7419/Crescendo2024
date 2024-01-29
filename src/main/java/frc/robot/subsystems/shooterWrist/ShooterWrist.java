@@ -16,18 +16,33 @@ public class ShooterWrist extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   private TalonFX armMotor;
   private DutyCycleOut dutyCycleOut;
+  private double gearing = 70;
+
+  public double rotationToRadians(double rotations){
+    return rotations/gearing * 2 * Math.PI;
+  }
+  public double getRadians(){
+    return rotationToRadians(getPosition());
+  }
+  public double rotationToDegrees(double rotations){
+    return rotations/gearing * 360;
+  }
+  public double degreesToRotation(double degrees){
+    return degrees/360 * gearing;
+  }
   public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     dutyCycleOut = new DutyCycleOut(0);
     armMotor.setInverted(true);
+    armMotor.setPosition(0);
   }
-
+  public void setPowerUp(double power){
+    dutyCycleOut.Output = -power;
+    armMotor.setControl(dutyCycleOut);
+  }
   public void setPower(double power){
     dutyCycleOut.Output = power;
     armMotor.setControl(dutyCycleOut);
-  }
-  public void setSetpoint(double setpoint){
-    armMotor.setPosition(setpoint);
   }
   public void coast(){
     armMotor.setNeutralMode(NeutralModeValue.Coast);
@@ -36,11 +51,15 @@ public class ShooterWrist extends SubsystemBase {
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   public double getPosition(){
-    return armMotor.getPosition().getValueAsDouble();
+    return -1*armMotor.getPosition().getValueAsDouble();
+  }
+  public void zeroEncoder(){
+   armMotor.setPosition(0);
   }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm position", this.getPosition());
+    SmartDashboard.putNumber("Arm in Degrees", rotationToDegrees(getPosition()));
   }
 }
