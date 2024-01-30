@@ -27,6 +27,7 @@ import frc.robot.constants.RobotConstants.ShooterConstants;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -71,9 +72,12 @@ public class ShooterSubsystem extends SubsystemBase {
             .voltage(
               appliedVoltage.mut_replace(
                 shooterMotorBottom.get() * RobotController.getBatteryVoltage(), Volts))
+            // .angularPosition(shooterDistance)
+            .angularVelocity(null)
             .linearPosition(shooterDistance.mut_replace(getBottomPositionMeters(), Meters))
             .linearVelocity(
-              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), MetersPerSecond));
+              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), RotationsPerSecond));
+              //convert m/s to rps
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
           log.motor("shooter-top")
@@ -198,5 +202,11 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return shooterSysIdRoutine.dynamic(direction);
+  }
+  public double getTopRotations() {
+    return shooterMotorTop.getEncoder().getPosition();
+  }
+  public double getBottomRotations() {
+    return shooterMotorBottom.getEncoder().getPosition();
   }
 }

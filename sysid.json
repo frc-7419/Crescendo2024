@@ -1,0 +1,20 @@
+{
+  "SysId": {
+    "Analysis Type": "",
+    "Data Selector": {
+      "window": {
+        "visible": false
+      }
+    },
+    "NetworkTables Settings": {
+      "serverTeam": ""
+    },
+    "Program Log": {
+      "window": {
+        "visible": false
+      }
+    },
+    "mode": "",
+    "serverTeam": ""
+  }
+}
