@@ -27,12 +27,11 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
-import frc.robot.subsystems.intakeWrist.RunIntakeWristWithJoystick;
-import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
+import frc.robot.subsystems.shooter.RunShooter;
 
 public class RobotContainer {
   /*
@@ -50,9 +49,10 @@ public class RobotContainer {
 
 
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
-  private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
+  // private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
+    private final RunShooter runShooter = new RunShooter(shooterSubsystem, 0.7);
 
   // private final RunShooterToSetpoint runShooterToSetpoint = new
   // RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
@@ -121,9 +121,8 @@ public class RobotContainer {
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, ShooterConstants.shooterPower));
-    operator.b().whileTrue(new RunShooterWristToSetpoint(shooterWrist, 30));
+    operator.b().whileTrue(new RunShooterWristToSetpoint(shooterWrist, 0.8));
   }
 
   public void configAutonSelection() {
@@ -145,7 +144,7 @@ public class RobotContainer {
 
   public void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
-    wristSubsystem.setDefaultCommand(runWristWithJoystick);
+    // wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
   }
 

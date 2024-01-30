@@ -15,7 +15,7 @@ public final class DeviceIDs {
     pigeon(16),
 
     wrist(18),
-    intakeMotor(17),
+    intakeMotor(7),
 
     topShooter(19),
     bottomShooter(20),

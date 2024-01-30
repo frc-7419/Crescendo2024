@@ -31,7 +31,7 @@ public class RunShooterWristToSetpoint extends Command {
   public void initialize() {
     shooterWrist.coast();
     shooterWrist.setPower(0);
-    shooterWristPIDController.reset(shooterWrist.rotationToDegrees(shooterWrist.getPosition()));
+    shooterWristPIDController.reset(shooterWrist.getPosition());
     shooterWristPIDController.setGoal(setpoint);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
   }
@@ -39,8 +39,8 @@ public class RunShooterWristToSetpoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      //shooterWrist.setPower(shooterWristPIDController.calculate(shooterWrist.rotationToDegrees(shooterWrist.getPosition())));
-      SmartDashboard.putNumber("armSetpointPower", shooterWristPIDController.calculate(shooterWrist.rotationToDegrees(shooterWrist.getPosition())));
+      SmartDashboard.putNumber("armSetpointPower", shooterWristPIDController.calculate(shooterWrist.getPosition()));
+      //shooterWrist.setPower(shooterWristPIDController.calculate(shooterWrist.getPosition()));
   }
 
   // Called once the command ends or is interrupted.

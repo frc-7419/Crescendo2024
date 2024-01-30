@@ -33,12 +33,12 @@ public class RunIntakeWithJoystick extends Command {
   public void execute() {
     if(Math.abs(joystick.getRightTriggerAxis()) > 0.05){ 
       intakeSubsystem.setSpeed(-IntakeConstants.intakePower);
-      intakeSubsystem.setSerializerFrontSpeed(1);
+      // intakeSubsystem.setSerializerFrontSpeed(1);
       intakeSubsystem.setSerializerBackSpeed(IntakeConstants.serialPower);
     }
     else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
       intakeSubsystem.setSpeed(IntakeConstants.intakePower);
-      intakeSubsystem.setSerializerFrontSpeed(-1);
+      // intakeSubsystem.setSerializerFrontSpeed(-1);
       intakeSubsystem.setSerializerBackSpeed(-IntakeConstants.serialPower);
     }
     else{
