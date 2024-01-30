@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
@@ -27,6 +28,8 @@ import frc.robot.constants.RobotConstants.ShooterConstants;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Minute;
+import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -45,6 +48,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private final MutableMeasure<Distance> shooterDistance = mutable(Meters.of(0));
   // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
   private final MutableMeasure<Velocity<Distance>> shooterVelocity = mutable(MetersPerSecond.of(0));
+
+  Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
@@ -73,11 +78,10 @@ public class ShooterSubsystem extends SubsystemBase {
               appliedVoltage.mut_replace(
                 shooterMotorBottom.get() * RobotController.getBatteryVoltage(), Volts))
             // .angularPosition(shooterDistance)
-            .angularVelocity(null)
+            .angularVelocity(RotationsPerMinute.of(getBottomVelocity()))
             .linearPosition(shooterDistance.mut_replace(getBottomPositionMeters(), Meters))
             .linearVelocity(
-              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), RotationsPerSecond));
-              //convert m/s to rps
+              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), MetersPerSecond));
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
           log.motor("shooter-top")
