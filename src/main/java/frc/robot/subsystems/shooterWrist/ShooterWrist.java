@@ -43,4 +43,13 @@ public class ShooterWrist extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm position", armMotor.getPosition().getValueAsDouble());
   }
+
+public double degreesToRotation(double degree) {
+    return degree/360 * 70;
+}
+
+public double getPosition() {
+  // TODO Auto-generated method stub
+  throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
+}
 }
