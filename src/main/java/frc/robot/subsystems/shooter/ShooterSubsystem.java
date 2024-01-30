@@ -2,12 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.Shooter;
+package frc.robot.subsystems.shooter;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -40,21 +39,20 @@ public class ShooterSubsystem extends SubsystemBase {
   // setpoint needs to be set
   private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
-  private final MutableMeasure<Voltage> m_appliedVoltage = mutable(Volts.of(0));
+  private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutableMeasure<Distance> m_distance = mutable(Meters.of(0));
+  private final MutableMeasure<Distance> shooterDistance = mutable(Meters.of(0));
   // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutableMeasure<Velocity<Distance>> m_velocity = mutable(MetersPerSecond.of(0));
+  private final MutableMeasure<Velocity<Distance>> shooterVelocity = mutable(MetersPerSecond.of(0));
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
     constraints = ShooterConstants.Constraints;
-    
     invertMotors();
   }
 
-  private final SysIdRoutine m_sysIdRoutine =
+  private final SysIdRoutine shooterSysIdRoutine =
     new SysIdRoutine(
       // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
       new SysIdRoutine.Config(),
@@ -71,20 +69,20 @@ public class ShooterSubsystem extends SubsystemBase {
           // the entire group to be one motor.
           log.motor("shooter-bottom")
             .voltage(
-              m_appliedVoltage.mut_replace(
+              appliedVoltage.mut_replace(
                 shooterMotorBottom.get() * RobotController.getBatteryVoltage(), Volts))
-            .linearPosition(m_distance.mut_replace(shooterMotorBottom.getEncoder().getPosition(), Meters))
+            .linearPosition(shooterDistance.mut_replace(getBottomPositionMeters(), Meters))
             .linearVelocity(
-              m_velocity.mut_replace(shooterMotorBottom.getEncoder().getVelocity(), MetersPerSecond));
+              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), MetersPerSecond));
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
           log.motor("shooter-top")
             .voltage(
-              m_appliedVoltage.mut_replace(
+              appliedVoltage.mut_replace(
                 shooterMotorTop.get() * RobotController.getBatteryVoltage(), Volts))
-            .linearPosition(m_distance.mut_replace(shooterMotorTop.getEncoder().getPosition(), Meters))
+            .linearPosition(shooterDistance.mut_replace(getTopPositionMeters(), Meters))
             .linearVelocity(
-              m_velocity.mut_replace(shooterMotorTop.getEncoder().getVelocity(), MetersPerSecond));
+              shooterVelocity.mut_replace(getTopVelocityMetersPerSecond(), MetersPerSecond));
         },
         // Tell SysId to make generated commands require this subsystem, suffix test state in
         // WPILog with this subsystem's name ("drive")
@@ -171,17 +169,34 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
-    SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
+    SmartDashboard.putNumber("Top Shooter RPM", getTopVelocity());
+    SmartDashboard.putNumber("Bottom Shooter RPM", getBottomVelocity());
     // SmartDashboard.putNumber("Shooter Wrist Position", shooterWrist.getS);
   }
   public Constraints getConstraints() {
       return constraints;
   }
+
+  public double getTopVelocityMetersPerSecond() {
+    return (getTopVelocity()*Math.PI*ShooterConstants.wheelDiameterIn*0.0254)/60;
+  }
+
+  public double getBottomVelocityMetersPerSecond() {
+    return (getBottomVelocity()*Math.PI*ShooterConstants.wheelDiameterIn*0.0254)/60;
+  }
+
+  public double getTopPositionMeters() {
+    return (shooterMotorTop.getEncoder().getPosition()*Math.PI*ShooterConstants.wheelDiameterIn*0.0254);
+  }
+
+  public double getBottomPositionMeters() {
+    return (shooterMotorBottom.getEncoder().getPosition()*Math.PI*ShooterConstants.wheelDiameterIn*0.0254);
+  }
+
   public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.quasistatic(direction);
+    return shooterSysIdRoutine.quasistatic(direction);
   }
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.dynamic(direction);
+    return shooterSysIdRoutine.dynamic(direction);
   }
 }

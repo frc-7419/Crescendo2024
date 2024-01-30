@@ -33,9 +33,9 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.RunWristWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
-import frc.robot.subsystems.Shooter.RunShooterWithJoystick;
-import frc.robot.subsystems.Shooter.RunShooterToSetpoint;
-import frc.robot.subsystems.Shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooter.RunShooterWithJoystick;
+import frc.robot.subsystems.shooter.RunShooterToSetpoint;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -150,7 +150,6 @@ public class RobotContainer {
       shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward),
       shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse),
       shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward),
-      
       shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse)
     );
     // return squareAuto;
