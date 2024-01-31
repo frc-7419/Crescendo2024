@@ -11,6 +11,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import frc.robot.constants.VisionConstants;
 /**
@@ -44,5 +45,24 @@ public class VisionWrapper {
     backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
     return out;
   }
-
+  public double headingToTag(int id) {
+    PhotonPipelineResult[] results = latestResults();
+    PhotonTrackedTarget best = null;
+    double bestAmb = 2.0;
+    for (PhotonPipelineResult result:results) {
+      if (result.getBestTarget().getFiducialId() == id) {
+        if (result.getBestTarget().getPoseAmbiguity() < bestAmb) {
+          bestAmb = result.getBestTarget().getPoseAmbiguity();
+          best = result.getBestTarget();
+        }
+      }
+    }
+    if (best == null) return Double.MIN_VALUE;
+    return best.getYaw();
+  }
+  public PhotonPipelineResult[] latestResults() {
+    PhotonPipelineResult frontResult = frontCam.getLatestResult();
+    PhotonPipelineResult backResult = backCam.getLatestResult();
+    return new PhotonPipelineResult[] {frontResult,backResult};
+  }
 }
