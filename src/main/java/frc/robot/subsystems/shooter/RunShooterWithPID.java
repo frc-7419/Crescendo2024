@@ -15,8 +15,8 @@ import frc.robot.constants.RobotConstants.ShooterConstants;
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
   private ShooterSubsystem shooterSubsystem;
-  private PIDController topShooterPidController = new PIDController(0, 0, 0);
-  private PIDController bottomShooterPidController = new PIDController(0, 0, 0);
+  private PIDController topShooterPidController = new PIDController(0.2, 0, 0);
+  private PIDController bottomShooterPidController = new PIDController(0.2, 0, 0);
 
   public RunShooterWithPID(ShooterSubsystem shooterSubsystem) {
     this.shooterSubsystem = shooterSubsystem;
