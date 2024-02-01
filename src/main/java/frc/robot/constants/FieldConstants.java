@@ -38,7 +38,7 @@ public class FieldConstants {
     public static final double sourceZonedepth = 18.75;
 
     //someone double check this - also its in meters
-    public static final Pose3d speakerPose = new Pose3d(3.85, 5.56, speakerMiddleHeight * 0.0254, null);
+    public static final Pose3d speakerPose = new Pose3d(0.25, 5.54, speakerMiddleHeight * 0.0254, null);
 
     
 }
