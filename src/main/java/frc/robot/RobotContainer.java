@@ -60,7 +60,7 @@ public class RobotContainer {
   // private final RunShooterToSetpoint runShooterToSetpoint = new
   // RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
-  private double MaxSpeed = 4.5; // 4.5 meters per second desired top speed
+  private double MaxSpeed =  4.5;// 4.5 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -126,7 +126,7 @@ public class RobotContainer {
     // zero
     //operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder))
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem,ShooterConstants.shooterPower));
+    operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.1209));
   }
