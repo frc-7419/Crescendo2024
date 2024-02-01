@@ -73,10 +73,10 @@ public class ShooterWrist extends SubsystemBase {
     encoder.reset();
   }
   //code needs to be fixed
-  //find intakeHeight 
+  //all of this needs to be in meters
   public double calculateAngle(Pose3d estimatedRobotPose){
       double angle 
-        = Math.tan((FieldConstants.speakerMiddleHeight - RobotConstants.intakeHeight) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
+        = Math.tan((FieldConstants.speakerMiddleHeight - RobotConstants.shooterWristHeight) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
       return this.radiansToRotations(angle);
   }
  
