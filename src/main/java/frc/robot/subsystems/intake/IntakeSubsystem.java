@@ -15,19 +15,20 @@ import frc.robot.constants.DeviceIDs.CanIds;
 
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax intakeMotor;
-  private CANSparkMax serializerFront;
+  // private CANSparkMax serializerFront;
   private CANSparkFlex serializerBack;
   
   public IntakeSubsystem() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    serializerFront = new CANSparkMax(CanIds.serializerFront.id, MotorType.kBrushless);
+    // serializerFront = new CANSparkMax(CanIds.serializerFront.id, MotorType.kBrushless);
     serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
   public void invertMotors(){
-    serializerFront.setInverted(false);
+    // serializerFront.setInverted(false);
     serializerBack.setInverted(true);
+    intakeMotor.setInverted(true);
   }
   
   //add voltage compensation and trapezoidal motion later
@@ -40,12 +41,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setSerializerVoltage(double voltage) {
-    serializerFront.setVoltage(voltage);
+    // serializerFront.setVoltage(voltage);
     serializerBack.setVoltage(voltage);
   }
 
   public void setSerializerFrontSpeed(double speed) {
-    serializerFront.set(speed);
+    // serializerFront.set(speed);
   }
 
   public void setSerializerBackSpeed(double speed) {
@@ -53,7 +54,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setSerializerSpeed(double speed) {
-    serializerFront.set(speed);
+    // serializerFront.set(speed);
     serializerBack.set(speed);
   }
 
@@ -62,7 +63,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void brakeSerializer() {
-    serializerFront.setIdleMode(IdleMode.kBrake);
+    // serializerFront.setIdleMode(IdleMode.kBrake);
     serializerBack.setIdleMode(IdleMode.kBrake);
   }
 
@@ -71,14 +72,14 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void coastSerializer() {
-    serializerFront.setIdleMode(IdleMode.kCoast);
+    // serializerFront.setIdleMode(IdleMode.kCoast);
     serializerBack.setIdleMode(IdleMode.kCoast);
   }
 
   @Override
   public void periodic() {
       SmartDashboard.putNumber("IntakeSpeed", intakeMotor.get());
-      SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
+      // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
   }
 }
