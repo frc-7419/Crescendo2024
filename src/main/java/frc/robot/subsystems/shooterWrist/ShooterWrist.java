@@ -76,7 +76,7 @@ public class ShooterWrist extends SubsystemBase {
   //all of this needs to be in meters
   public double calculateAngle(Pose2d estimatedRobotPose){
       double angle 
-        = Math.tan((FieldConstants.speakerMiddleHeight - RobotConstants.shooterWristHeight) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
+        = Math.atan((FieldConstants.speakerMiddleHeight - RobotConstants.shooterWristHeight) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
       return this.radiansToRotations(angle);
   }
  
