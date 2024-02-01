@@ -23,7 +23,7 @@ public final class RobotConstants {
   public static final Transform3d kCameraToRobot = new Transform3d();
 
   //TODO get intake height, this just an estimate
-  public static final double shooterWristHeight = 8 * 0.0254;
+  public static final double shooterWristHeight = 8.37 * 0.0254;
 
   public static double autoScoreDelaySeconds = 0.5;
 
