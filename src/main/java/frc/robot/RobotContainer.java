@@ -15,13 +15,18 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -124,7 +129,11 @@ public class RobotContainer {
     )));
 
     // zero
-    //operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder))
+    operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
+
+    //needs testing - dont run
+    //operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.0, 5.5, new Rotation2d(180)))));
+    //SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
 
     operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
