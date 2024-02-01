@@ -22,6 +22,9 @@ public final class RobotConstants {
   // arbitrary until we mount camera
   public static final Transform3d kCameraToRobot = new Transform3d();
 
+  //TODO get intake height
+  public static final double intakeHeight = 0;
+
   public static double autoScoreDelaySeconds = 0.5;
 
   public static double joystickDeadZone = 0.07;

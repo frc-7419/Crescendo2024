@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.DeviceIDs.CanIds;
 
 public class ShooterWrist extends SubsystemBase {
@@ -75,7 +76,7 @@ public class ShooterWrist extends SubsystemBase {
   //find intakeHeight 
   public double calculateAngle(Pose3d estimatedRobotPose){
       double angle 
-        = Math.tan((FieldConstants.speakerPose.getY() - estimatedRobotPose.getY()) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
+        = Math.tan((FieldConstants.speakerMiddleHeight - RobotConstants.intakeHeight) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
       return this.radiansToRotations(angle);
   }
  
