@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intakeWrist.IntakeWristSubsystem;
@@ -69,6 +70,7 @@ public class RobotContainer {
   // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   /*
@@ -104,6 +106,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driver.x().whileTrue(turn);
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
