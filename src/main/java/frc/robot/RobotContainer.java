@@ -32,6 +32,7 @@ import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooter.RunShooter;
+import frc.robot.subsystems.shooter.RunShooterWithPID;
 
 public class RobotContainer {
   /*
@@ -45,7 +46,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
-  private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
+  //private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
 
 
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
@@ -54,10 +55,11 @@ public class RobotContainer {
       operator);
     private final RunShooter runShooter = new RunShooter(shooterSubsystem, 0.7);
 
+
   // private final RunShooterToSetpoint runShooterToSetpoint = new
   // RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
-  private double MaxSpeed = 2; // 4.5 meters per second desired top speed
+  private double MaxSpeed = 4.5; // 4.5 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -119,10 +121,11 @@ public class RobotContainer {
     )));
 
     // zero
-    operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
+    //operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, ShooterConstants.shooterPower));
-    operator.b().whileTrue(new RunShooterWristToSetpoint(shooterWrist, 0.8));
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem,ShooterConstants.shooterPower));
+    operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
+    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.1209));
   }
 
   public void configAutonSelection() {

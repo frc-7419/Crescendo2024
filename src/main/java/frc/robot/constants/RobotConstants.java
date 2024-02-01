@@ -56,10 +56,10 @@ public final class RobotConstants {
     public static final double kP = 0.1;
     public static final double kI = 0;
     public static final double kD = 0;
-    public static final double maxVelocity = 0;
+    public static final double maxVelocity = 4000;
     public static final double maxAcceleration = 0;
     public static final double tolerance = 500;
     public static final Constraints Constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
-    public static double SetpointThreshold = 0.1;
+    public static double SetpointThreshold = 0.01;
   }
 }

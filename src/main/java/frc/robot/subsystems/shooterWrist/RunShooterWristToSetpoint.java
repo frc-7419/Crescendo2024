@@ -8,21 +8,21 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.RobotConstants.IntakeWristConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class RunShooterWristToSetpoint extends Command {
   private ShooterWrist shooterWrist;
   private double setpoint;
   private ProfiledPIDController shooterWristPIDController;
-
+  private double feedForward = (0.6/12)/2.67;
+  private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
   public RunShooterWristToSetpoint(ShooterWrist shooterWrist, double setpoint) {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(0.2, 0, 0, new TrapezoidProfile.Constraints(0.000002, 0.000005));
+      = new ProfiledPIDController(1.5, 0, 0, new TrapezoidProfile.Constraints(15, 15));
     addRequirements(shooterWrist);
   }
 
@@ -31,7 +31,6 @@ public class RunShooterWristToSetpoint extends Command {
   public void initialize() {
     shooterWrist.coast();
     shooterWrist.setPower(0);
-    shooterWristPIDController.reset(shooterWrist.getPosition());
     shooterWristPIDController.setGoal(setpoint);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
   }
@@ -39,10 +38,18 @@ public class RunShooterWristToSetpoint extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      SmartDashboard.putNumber("armSetpointPower", shooterWristPIDController.calculate(shooterWrist.getPosition()));
-      //shooterWrist.setPower(shooterWristPIDController.calculate(shooterWrist.getPosition()));
+      feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
+      SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
+      double armPower = -shooterWristPIDController.calculate(shooterWrist.getPosition());
+      armPower += Math.copySign(feedForwardPower, armPower);
+      SmartDashboard.putNumber("armSetpointPower", armPower);
+      SmartDashboard.putNumber("Arm Pos", shooterWrist.getPosition());
+      shooterWrist.setPower(armPower);
   }
 
+  public void visionExecute() {
+    
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

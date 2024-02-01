@@ -29,7 +29,7 @@ public class RunShooterWristWithJoystick extends Command {
   @Override
   public void initialize() {
     shooterWrist.coast();
-    shooterWrist.zeroEncoder();
+  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,13 +39,14 @@ public class RunShooterWristWithJoystick extends Command {
       shooterWrist.coast();
       double armJoystickPower = maxPower * joystick.getLeftY();
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
+      SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
 
       double armPower = armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower);
       shooterWrist.setPower(armPower);
       SmartDashboard.putNumber("armJoystickPower", armPower);
     } else {
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
-      shooterWrist.setPower(feedForwardPower);
+      shooterWrist.setPower(-feedForwardPower);
       SmartDashboard.putNumber("armJoystickPower", feedForwardPower);
       shooterWrist.brake();
 
@@ -57,7 +58,7 @@ public class RunShooterWristWithJoystick extends Command {
   @Override
   public void end(boolean interrupted) {
     shooterWrist.setPower(0);
-    shooterWrist.brake();
+    shooterWrist.coast();
   }
 
   // Returns true when the command should end.

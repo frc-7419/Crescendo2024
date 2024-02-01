@@ -119,7 +119,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
-    // SmartDashboard.putNumber("Shooter Wrist Position", shooterWrist.getS);
+    SmartDashboard.putNumber("ShooterVelocityDifference", getBottomVelocity()+getTopVelocity());
   }
   public Constraints getConstraints() {
       return constraints;
