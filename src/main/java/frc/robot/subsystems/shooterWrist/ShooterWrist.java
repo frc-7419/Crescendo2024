@@ -8,12 +8,15 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj.DigitalSource;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
+import frc.robot.constants.FieldConstants;
 import frc.robot.constants.DeviceIDs.CanIds;
 
 public class ShooterWrist extends SubsystemBase {
@@ -34,6 +37,10 @@ public class ShooterWrist extends SubsystemBase {
   public double rotationToRadians(double rotations){
     return rotations * 2 * Math.PI;
   }
+  public double radiansToRotations(double radians){
+    return radians/(2 * Math.PI);
+  }
+
   public double getRadians(){
     return rotationToRadians(getPosition());
   }
@@ -64,6 +71,14 @@ public class ShooterWrist extends SubsystemBase {
   public void zeroEncoder(){
     encoder.reset();
   }
+  //code needs to be fixed
+  //find intakeHeight 
+  public double calculateAngle(Pose3d estimatedRobotPose){
+      double angle 
+        = Math.tan((FieldConstants.speakerPose.getY() - estimatedRobotPose.getY()) / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
+      return this.radiansToRotations(angle);
+  }
+ 
 
   @Override
   public void periodic() {

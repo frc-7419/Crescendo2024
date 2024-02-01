@@ -124,7 +124,7 @@ public class RobotContainer {
     )));
 
     // zero
-    //operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
+    //operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder))
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem,ShooterConstants.shooterPower));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));

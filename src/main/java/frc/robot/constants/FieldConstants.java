@@ -1,5 +1,7 @@
 package frc.robot.constants;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 public class FieldConstants {
     //All measurmeents in inches
     public static final double speakerBottomHeight = 78;
@@ -35,6 +37,7 @@ public class FieldConstants {
     
     public static final double sourceZonedepth = 18.75;
 
-
+    public static final Pose3d speakerPose = new Pose3d(3.85, 5.56, speakerTopHeight, null);
+    //someone double check this - also its in meters
     
 }
