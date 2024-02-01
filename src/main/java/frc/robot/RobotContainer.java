@@ -131,8 +131,9 @@ public class RobotContainer {
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.0, 5.5, new Rotation2d(180)))));
-    SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
+    //needs testing - dont run
+    //operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.0, 5.5, new Rotation2d(180)))));
+    //SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
 
     operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
