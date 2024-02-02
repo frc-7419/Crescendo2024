@@ -105,6 +105,7 @@ public class RobotContainer {
     configureBindings();
     configAutonSelection();
     setDefaultCommands();
+    testAuto2 = new PathPlannerAuto("1 note intake");
   }
 
   /**
