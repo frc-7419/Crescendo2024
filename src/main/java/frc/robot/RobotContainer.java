@@ -24,88 +24,107 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.OperatorConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-// import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
-// import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
 public class RobotContainer {
-  /*
-   * Prebuilt Swerve Stuff
-   */
-  /* Setting up bindings for necessary control of the swerve drive platform */
-  private final CommandXboxController driver = new CommandXboxController(0); // My joystick
-  private final CommandXboxController operator = new CommandXboxController(1);
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
-  private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
+  // JOYSTICKS-----------------------------------------------------------------------------------------------------------------------
+  
+  private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
+  private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
+  
+  // JOYSTICKS END-------------------------------------------------------------------------------------------------------------------
+  
+  // SUBSYSTEMS----------------------------------------------------------------------------------------------------------------------
+  
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
-  //private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem();
 
-
+  private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
+  //private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem(); //TODO figure out this situation
+  
+  // SUBSYSTEMS END------------------------------------------------------------------------------------------------------------------
+  
+  // TELEOP COMMANDS-----------------------------------------------------------------------------------------------------------------
+  
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
+  private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
   // private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
-  private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
-      operator);
-    private final RunShooter runShooter = new RunShooter(shooterSubsystem, 0.7);
+  // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
-
-  // private final RunShooterToSetpoint runShooterToSetpoint = new
-  // RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
-
-  private double MaxSpeed =  4.5;// 4.5 meters per second desired top speed
-  private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
-
+  // TELEOP COMMANDS END-------------------------------------------------------------------------------------------------------------
+  
+  // SWERVE--------------------------------------------------------------------------------------------------------------------------
+  
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05); // Add a 5% deadband
+      .withDeadband(RobotConstants.kMaxSpeed * 0.05).withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.05); // Add a 5% deadband
   // .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want
   // field-centric
   // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   // private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
-  private final Telemetry logger = new Telemetry(MaxSpeed);
+  private final Telemetry logger = new Telemetry(RobotConstants.kMaxSpeed);
 
-  /*
-   * Autonomous Stuff
-   */
+  // SWERVE END----------------------------------------------------------------------------------------------------------------------
+  
+  // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
+  
   private final SendableChooser<Command> autonChooser = new SendableChooser<>();
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
   private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
 
-  List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+  private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
       new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
       new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
       new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90)));
 
+  // AUTONOMOUS END------------------------------------------------------------------------------------------------------------------
+  
+  /**
+   * Creates a new RobotContainer
+   */
+  public RobotContainer() {
+    registerCommands();
+    configureBindings();
+    configAutonSelection();
+    setDefaultCommands();
+  }
+
+  /**
+   * Registers commands in the path planner system, these can be used when running paths
+   */
   private void registerCommands() {
-    NamedCommands.registerCommand("Run Intake", new RunIntake(intakeSubsytem, 0.5));
-    NamedCommands.registerCommand("Run Shooter", new RunShooter(shooterSubsystem, 0.7));
-    NamedCommands.registerCommand("Wrist to Position", new RunShooterWristToSetpoint(shooterWrist, 0.13));
+    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsytem, 0.5));
+    NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
+    NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.15));
   }
 
   /**
    * This will configure the drive joystick bindings
    */
   private void configureBindings() {
-
     // Drivetrain
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * MaxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed) // Drive forward with
                                                                                          // negative Y (forward)
-            .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-driver.getRightX() * RobotConstants.kMaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
@@ -143,40 +162,33 @@ public class RobotContainer {
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.1209));
   }
-
+  
+  /**
+   * Configures the auton chooser selections
+   */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
     autonChooser.addOption("Two Note Auto", twoNoteAuto);
-    // autonChooser.addOption("Three Note Auto", threeNoteAuto);
     autonChooser.addOption("Circle Auto", circleAuto);
   }
-
+  
   /**
-   * Creates a new RobotContainer
+   * Sets the default commands to run during teleop
    */
-  public RobotContainer() {
-    configureBindings();
-    configAutonSelection();
-    setDefaultCommands();
-    registerCommands();
-  }
-
   public void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     // wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
   }
-
+  
   /**
    * Gets the auton command selected by the user
    * 
    * @return selected autonomous command
    */
-  public Command getAutonomousCommand() {
+   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
     return twoNoteAuto;
-    // return squareAuto;
   }
-
 }

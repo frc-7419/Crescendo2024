@@ -1,15 +1,14 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import frc.robot.Robot;
 
 public final class RobotConstants {
   public static final double TalonFXTicksPerRotation = 2048;
-
+  public static final double kMaxSpeed = 4.5;// 4.5 meters per second desired top speed
+  public static final double kMaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
   public static final double kTrackWidth = 0.6858; // meters
 
   public static final double kWheelRadius = 3 * 0.0254; // inches TO centimeters conversion
@@ -25,15 +24,14 @@ public final class RobotConstants {
   //TODO get intake height, this just an estimate
   public static final double shooterWristHeight = 8.37 * 0.0254;
 
-  public static double autoScoreDelaySeconds = 0.5;
+  public static final double autoScoreDelaySeconds = 0.5;
 
-  public static double joystickDeadZone = 0.07;
+  public static final double joystickDeadZone = 0.07;
 
-  public static double maxVoltage = 12;
-  public static double voltageCompSaturation = 11;
+  public static final double maxVoltage = 12;
+  public static final double voltageCompSaturation = 11;
 
   public final class IntakeWristConstants{
-
     public static final double wristPower = 0.2;
     public static final double kS = 0;
     public static final double kG = 0;
@@ -63,6 +61,6 @@ public final class RobotConstants {
     public static final double maxAcceleration = 0;
     public static final double tolerance = 500;
     public static final Constraints Constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
-    public static double SetpointThreshold = 0.01;
+    public static final double SetpointThreshold = 0.01;
   }
 }
