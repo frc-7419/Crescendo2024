@@ -87,7 +87,8 @@ public class RobotContainer {
   private final Command testAuto = new PathPlannerAuto("Test Auto");
   private final Command squareAuto = new PathPlannerAuto("Square Auto");
   private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
-  private final Command circleAuto = new PathPlannerAuto("Circle Auto");;
+  private final Command circleAuto = new PathPlannerAuto("Circle Auto");
+  private final Command testAuto2;
 
   private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
       new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
@@ -110,9 +111,10 @@ public class RobotContainer {
    * Registers commands in the path planner system, these can be used when running paths
    */
   private void registerCommands() {
-    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsytem, 0.5));
+    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsytem, -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
-    NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.15));
+    NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
+    NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
   }
 
   /**
@@ -153,14 +155,14 @@ public class RobotContainer {
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.0, 5.5, new Rotation2d(0)))));
+    operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.25, 5.5, new Rotation2d(Math.PI)))));
     operator.y().whileTrue(new RunCommand(() -> SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose)), shooterWrist, drivetrain));
     
     SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
-    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.1209));
+    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, Math.abs(shooterWrist.calculateAngle(drivetrain.getState().Pose))));
   }
   
   /**
@@ -189,6 +191,7 @@ public class RobotContainer {
    */
    public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return twoNoteAuto;
+    return testAuto2;
+    // return squareAuto;
   }
 }

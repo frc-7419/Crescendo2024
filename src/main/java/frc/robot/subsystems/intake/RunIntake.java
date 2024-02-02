@@ -20,14 +20,17 @@ public class RunIntake extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSubsystem.setSpeed(power);
-    intakeSubsystem.setSerializerFrontSpeed(power);
-    intakeSubsystem.setSerializerBackSpeed(power);
+    intakeSubsystem.coast();
+    intakeSubsystem.setSpeed(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    intakeSubsystem.setSpeed(power);
+    intakeSubsystem.setSerializerFrontSpeed(power);
+    intakeSubsystem.setSerializerBackSpeed(-power);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -35,6 +38,7 @@ public class RunIntake extends Command {
     intakeSubsystem.setSpeed(0);
     intakeSubsystem.setSerializerFrontSpeed(0);
     intakeSubsystem.setSerializerBackSpeed(0);
+    intakeSubsystem.brake();
   }
 
   // Returns true when the command should end.
