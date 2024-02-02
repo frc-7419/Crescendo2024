@@ -9,6 +9,7 @@ import java.util.List;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -25,11 +26,12 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-import frc.robot.subsystems.drive.TurnToSpeaker;
+// import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
-import frc.robot.subsystems.shooter.RunShooterWithPID;
+// import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
@@ -70,7 +72,7 @@ public class RobotContainer {
   // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
+  // private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   /*
@@ -86,6 +88,12 @@ public class RobotContainer {
       new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
       new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
       new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90)));
+
+  private void registerCommands() {
+    NamedCommands.registerCommand("Run Intake", new RunIntake(intakeSubsytem, 0.5));
+    NamedCommands.registerCommand("Run Shooter", new RunShooter(shooterSubsystem, 0.7));
+    NamedCommands.registerCommand("Wrist to Position", new RunShooterWristToSetpoint(shooterWrist, 0.13));
+  }
 
   /**
    * This will configure the drive joystick bindings
@@ -106,7 +114,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    driver.x().whileTrue(turn);
+    // driver.x().whileTrue(turn);
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -131,7 +139,7 @@ public class RobotContainer {
     
     SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
 
-    operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem));
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.1209));
   }
@@ -151,6 +159,7 @@ public class RobotContainer {
     configureBindings();
     configAutonSelection();
     setDefaultCommands();
+    registerCommands();
   }
 
   public void setDefaultCommands() {
