@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3966769976295312,
-      "y": 5.55
+      "x": 1.2601803825935456,
+      "y": 5.547612425391122
     },
     "rotation": 0
   },
@@ -80,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Move Back"
+                  "pathName": "MoveForwardSpeakerMiddle"
                 }
               },
               {
@@ -95,7 +95,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Move Forward"
+            "pathName": "MoveBackSpeakerMiddle"
           }
         },
         {

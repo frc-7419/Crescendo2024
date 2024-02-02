@@ -84,11 +84,10 @@ public class RobotContainer {
   // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
   
   private final SendableChooser<Command> autonChooser = new SendableChooser<>();
-  private final Command testAuto = new PathPlannerAuto("Test Auto");
-  private final Command squareAuto = new PathPlannerAuto("Square Auto");
-  private final Command twoNoteAuto = new PathPlannerAuto("2 Note Auto");
-  private final Command circleAuto = new PathPlannerAuto("Circle Auto");
-  private final Command testAuto2;
+  private final Command testAuto;
+  private final Command squareAuto;
+  private final Command circleAuto;
+  private final Command twoNote;
 
   private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
       new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
@@ -105,7 +104,10 @@ public class RobotContainer {
     configureBindings();
     configAutonSelection();
     setDefaultCommands();
-    testAuto2 = new PathPlannerAuto("1 note intake");
+    testAuto = new PathPlannerAuto("Test Auto");
+    squareAuto = new PathPlannerAuto("Square Auto");
+    circleAuto = new PathPlannerAuto("Circle Auto");
+    twoNote = new PathPlannerAuto("TwoNote");
   }
 
   /**
@@ -172,7 +174,7 @@ public class RobotContainer {
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
     autonChooser.addOption("Square Auto", squareAuto);
-    autonChooser.addOption("Two Note Auto", twoNoteAuto);
+    autonChooser.addOption("Two Note Auto", twoNote);
     autonChooser.addOption("Circle Auto", circleAuto);
   }
   
@@ -192,7 +194,7 @@ public class RobotContainer {
    */
    public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return testAuto2;
+    return twoNote;
     // return squareAuto;
   }
 }
