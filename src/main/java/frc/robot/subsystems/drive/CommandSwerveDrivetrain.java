@@ -128,5 +128,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
        
        SmartDashboard.putNumber("Robot X Pose", this.getState().Pose.getX());
        SmartDashboard.putNumber("Robot Y Pose", this.getState().Pose.getY());
+
+       SmartDashboard.putNumber("shooterMAXCALC", this.calculateAngle());
     }
 }

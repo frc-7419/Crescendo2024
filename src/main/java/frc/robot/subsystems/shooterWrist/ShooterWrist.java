@@ -27,7 +27,7 @@ public class ShooterWrist extends SubsystemBase {
     public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     dutyCycleOut = new DutyCycleOut(0);
-    armMotor.setInverted(false);
+    armMotor.setInverted(true);
     armMotor.setPosition(0);
     encoder = new DutyCycleEncoder(0 );
     encoder.setPositionOffset(ArmConstants.armOffset);
