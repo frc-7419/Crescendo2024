@@ -113,6 +113,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
+
+    public double calculateAngle(){
+        return(visionWrapper.calculateAngle(this.getState().Pose));
+    }
+    
     public void periodic() {
        EstimatedRobotPose[] estimates = visionWrapper.updatePoseEstimate();
        for (EstimatedRobotPose estimate:estimates) {

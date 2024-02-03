@@ -21,10 +21,12 @@ public class RunShooterWristToSetpointWithCalculatedAngle extends SequentialComm
     this.shooterWrist = shooterWrist;
     this.drivetrain = drivetrain;
 
-    double angle = shooterWrist.calculateAngle(drivetrain.getState().Pose);
+    double angle = drivetrain.calculateAngle();
     SmartDashboard.putNumber("ShooterMAXCALC", angle);
+
+    //TODO: add shooting later
     addCommands(
-      //new RunShooterWristToSetpoint(shooterWrist, angle)
+      new RunShooterWristToSetpoint(shooterWrist, angle)
     );
   }
 }
