@@ -43,8 +43,7 @@ public class RunShooterWristToSetpoint extends Command {
       double armPower = -shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      SmartDashboard.putNumber("Arm Pos", shooterWrist.getPosition());
-      shooterWrist.setPower(armPower);
+      //shooterWrist.setPower(armPower);
   }
 
   public void visionExecute() {

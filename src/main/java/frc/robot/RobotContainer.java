@@ -28,12 +28,14 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
+import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -138,7 +140,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    // driver.x().whileTrue(turn);
+    driver.x().whileTrue(new TurnToSpeaker(drivetrain));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -158,14 +160,14 @@ public class RobotContainer {
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.25, 5.5, new Rotation2d(Math.PI)))));
-    operator.y().whileTrue(new RunCommand(() -> SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose)), shooterWrist, drivetrain));
+    // operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.25, 5.5, new Rotation2d(0)))));
+    // operator.y().onTrue(new RunCommand(() -> SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose)), shooterWrist, drivetrain));
     
-    SmartDashboard.putNumber("ShooterAngleCalculation", shooterWrist.calculateAngle(drivetrain.getState().Pose));
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
+    // operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
-    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, Math.abs(shooterWrist.calculateAngle(drivetrain.getState().Pose))));
+    // operator.a().whileTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
+
   }
   
   /**

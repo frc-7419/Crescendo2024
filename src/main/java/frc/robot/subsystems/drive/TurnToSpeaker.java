@@ -29,7 +29,7 @@ public class TurnToSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = vision.headingToTag(8);
+    double angle = vision.headingToTag(3);
     drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(new Rotation2d(angle)));
   }
 

@@ -120,5 +120,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
         }
        }
+       
+       SmartDashboard.putNumber("Robot X Pose", this.getState().Pose.getX());
+       SmartDashboard.putNumber("Robot Y Pose", this.getState().Pose.getY());
     }
 }
