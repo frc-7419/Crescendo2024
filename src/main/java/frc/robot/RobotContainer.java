@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoShoot;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
@@ -166,7 +167,7 @@ public class RobotContainer {
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
     operator.a().onTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
-
+    operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
   }
   
   /**

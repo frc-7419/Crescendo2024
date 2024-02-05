@@ -22,7 +22,7 @@ public class RunShooterWristToSetpoint extends Command {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(1.5, 0, 0, new TrapezoidProfile.Constraints(15, 15));
+      = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(10, 0.1125));
     addRequirements(shooterWrist);
   }
 
@@ -43,7 +43,7 @@ public class RunShooterWristToSetpoint extends Command {
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      //shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armPower);
   }
 
   public void visionExecute() {
