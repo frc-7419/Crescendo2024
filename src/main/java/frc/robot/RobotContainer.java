@@ -167,7 +167,7 @@ public class RobotContainer {
     
 
     operator.rightBumper().whileTrue(new RunShooterVoltage(shooterSubsystem, 11));
-    operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
+    operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     // operator.a().onTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
   }

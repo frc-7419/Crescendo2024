@@ -22,7 +22,7 @@ public class RunShooterWristToSetpoint extends Command {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(4, 0, 0, new TrapezoidProfile.Constraints(10, 0.1125));
+      = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(10, 0.1125));
     addRequirements(shooterWrist);
   }
 
@@ -46,9 +46,6 @@ public class RunShooterWristToSetpoint extends Command {
       shooterWrist.setPower(armPower);
   }
 
-  public void visionExecute() {
-    
-  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
