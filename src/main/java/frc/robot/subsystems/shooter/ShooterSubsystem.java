@@ -76,21 +76,18 @@ public class ShooterSubsystem extends SubsystemBase {
           log.motor("shooter-bottom")
             .voltage(
               appliedVoltage.mut_replace(
-                shooterMotorBottom.get() * RobotController.getBatteryVoltage(), Volts))
+                shooterMotorBottom.getBusVoltage(), Volts))
             // .angularPosition(shooterDistance)
             .angularVelocity(RotationsPerMinute.of(getBottomVelocity()))
-            .linearPosition(shooterDistance.mut_replace(getBottomPositionMeters(), Meters))
-            .linearVelocity(
-              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), MetersPerSecond));
+           .angularPosition(Rotations.of(getBottomRotations()));
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
           log.motor("shooter-top")
             .voltage(
               appliedVoltage.mut_replace(
                 shooterMotorTop.get() * RobotController.getBatteryVoltage(), Volts))
-            .linearPosition(shooterDistance.mut_replace(getTopPositionMeters(), Meters))
-            .linearVelocity(
-              shooterVelocity.mut_replace(getTopVelocityMetersPerSecond(), MetersPerSecond));
+             .angularVelocity(RotationsPerMinute.of(getTopVelocity()))
+           .angularPosition(Rotations.of(getTopRotations()));
         },
         // Tell SysId to make generated commands require this subsystem, suffix test state in
         // WPILog with this subsystem's name ("drive")
@@ -115,12 +112,11 @@ public class ShooterSubsystem extends SubsystemBase {
     setBottomSpeed(-speed);
   }
 
-  public void setTopVoltage(double voltage){
-    shooterMotorTop.setVoltage(voltage);
+  public double getTopVoltage(){
+    return shooterMotorTop.getBusVoltage();
   }
-
-  public void setBottomVoltage(double voltage){
-    shooterMotorBottom.setVoltage(voltage);
+  public double getBottomVoltage(){
+    return shooterMotorBottom.getBusVoltage();
   }
   
   public double getTopVelocity() {
