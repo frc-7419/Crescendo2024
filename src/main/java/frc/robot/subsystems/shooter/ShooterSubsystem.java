@@ -76,7 +76,7 @@ public class ShooterSubsystem extends SubsystemBase {
           log.motor("shooter-bottom")
             .voltage(
               appliedVoltage.mut_replace(
-                shooterMotorBottom.getBusVoltage(), Volts))
+                shooterMotorTop.get() * RobotController.getBatteryVoltage(), Volts))
             // .angularPosition(shooterDistance)
             .angularVelocity(RotationsPerMinute.of(getBottomVelocity()))
            .angularPosition(Rotations.of(getBottomRotations()));
@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
           log.motor("shooter-top")
             .voltage(
               appliedVoltage.mut_replace(
-                shooterMotorTop.getBusVoltage(), Volts))
+                shooterMotorTop.get() * RobotController.getBatteryVoltage(), Volts))
              .angularVelocity(RotationsPerMinute.of(getTopVelocity()))
            .angularPosition(Rotations.of(getTopRotations()));
         },
