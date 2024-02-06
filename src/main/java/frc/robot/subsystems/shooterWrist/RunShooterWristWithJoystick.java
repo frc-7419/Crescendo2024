@@ -34,7 +34,7 @@ public class RunShooterWristWithJoystick extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (Math.abs(joystick.getLeftY())>0.05){
+    if (Math.abs(joystick.getLeftY()) > 0.05){
       shooterWrist.coast();
       double armJoystickPower = maxPower * joystick.getLeftY();
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());

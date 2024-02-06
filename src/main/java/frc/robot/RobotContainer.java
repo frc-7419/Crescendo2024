@@ -34,9 +34,10 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
+import frc.robot.subsystems.shooter.RunShooterVoltage;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
-import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
+// import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -113,6 +114,8 @@ public class RobotContainer {
     twoNote = new PathPlannerAuto("TwoNote");
   }
 
+
+
   /**
    * Registers commands in the path planner system, these can be used when running paths
    */
@@ -134,7 +137,7 @@ public class RobotContainer {
             .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driver.getRightX() * RobotConstants.kMaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
-
+    
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
     driver.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
@@ -161,13 +164,12 @@ public class RobotContainer {
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.x().onTrue(drivetrain.runOnce(()-> drivetrain.seedFieldRelative(new Pose2d(1.25, 5.5, new Rotation2d(0)))));
     
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
+    operator.rightBumper().whileTrue(new RunShooterVoltage(shooterSubsystem, 11));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.13));
-    operator.a().onTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
-    operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
+    // operator.a().onTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
+    // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
   }
   
   /**
@@ -183,7 +185,7 @@ public class RobotContainer {
   /**
    * Sets the default commands to run during teleop
    */
-  public void setDefaultCommands() {
+  private void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     // wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);

@@ -61,6 +61,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setBottomVoltage(double voltage){
     shooterMotorBottom.setVoltage(voltage);
   }
+
+  public void setBothVoltage(double voltage) {
+    setTopVoltage(voltage);
+    setBottomVoltage(-voltage);
+  }
   
   public double getTopVelocity() {
     return shooterMotorTop.getEncoder().getVelocity();
@@ -118,7 +123,6 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
-    SmartDashboard.putNumber("ShooterVelocityDifference", getBottomVelocity()+getTopVelocity());
   }
   public Constraints getConstraints() {
       return constraints;
