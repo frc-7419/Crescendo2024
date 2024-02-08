@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
@@ -124,13 +125,23 @@ public class RobotContainer {
     ))); 
 
     operator.rightBumper().whileTrue(new RepeatCommand(new RunShooterWithJoystick(shooterSubsystem, ShooterConstants.shooterPower)));
-    operator.a().onTrue(shooterSubsystem.sysIdQuasistatic(Direction.kForward));
-    operator.b().onTrue(shooterSubsystem.sysIdDynamic(Direction.kForward));
+<<<<<<< Updated upstream
+    operator.a().whileTrue(shooterWrist.sysIdQuasistatic(Direction.kForward));
+    operator.b().whileTrue(shooterWrist.sysIdQuasistatic(Direction.kReverse));
+    operator.x().whileTrue(shooterWrist.sysIdDynamic(Direction.kForward));
+    operator.y().whileTrue(shooterWrist.sysIdDynamic(Direction.kReverse));
+=======
+    operator.a().whileTrue(shooterSubsystem.sysIdQuasistatic(Direction.kForward));
+    operator.b().whileTrue(shooterSubsystem.sysIdDynamic(Direction.kForward));
+    operator.x().whileTrue(shooterSubsystem.sysIdQuasistatic(Direction.kReverse));
+    operator.y().whileTrue(shooterSubsystem.sysIdDynamic(Direction.kReverse));
 
     
+>>>>>>> Stashed changes
 
    
   }
+
 
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
@@ -152,13 +163,14 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return new SequentialCommandGroup(
-      shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward),
-      shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse),
-      shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward),
-      shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-    );
+    // return new SequentialCommandGroup(
+    //   shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kForward),
+    //   shooterSubsystem.sysIdQuasistatic(SysIdRoutine.Direction.kReverse),
+    //   shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kForward),
+    //   shooterSubsystem.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+    // );
     // return squareAuto;
+    return new WaitCommand(0);
   }
 
 

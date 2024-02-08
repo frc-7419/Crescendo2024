@@ -30,7 +30,6 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -45,9 +44,6 @@ public class ShooterSubsystem extends SubsystemBase {
    // Mutable holder for unit-safe voltage values, persisted to avoid reallocation.
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   // Mutable holder for unit-safe linear distance values, persisted to avoid reallocation.
-  private final MutableMeasure<Distance> shooterDistance = mutable(Meters.of(0));
-  // Mutable holder for unit-safe linear velocity values, persisted to avoid reallocation.
-  private final MutableMeasure<Velocity<Distance>> shooterVelocity = mutable(MetersPerSecond.of(0));
 
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
 
@@ -58,6 +54,42 @@ public class ShooterSubsystem extends SubsystemBase {
     invertMotors();
   }
 
+<<<<<<< Updated upstream
+  // private final SysIdRoutine shooterSysIdRoutine =
+  //   new SysIdRoutine(
+  //     // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+  //     new SysIdRoutine.Config(),
+  //     new SysIdRoutine.Mechanism(
+  //       // Tell SysId how to plumb the driving voltage to the motors.
+  //       (Measure<Voltage> volts) -> {
+  //         shooterMotorBottom.setVoltage(volts.in(Volts));
+  //         shooterMotorTop.setVoltage(volts.in(Volts));
+  //       },
+  //       // Tell SysId how to record a frame of data for each motor on the mechanism being
+  //       // characterized.
+  //       log -> {
+  //         // Record a frame for the left motors.  Since these share an encoder, we consider
+  //         // the entire group to be one motor.
+  //         log.motor("shooter-bottom")
+  //           .voltage(
+  //             appliedVoltage.mut_replace(
+  //               shooterMotorBottom.getAppliedOutput() * RobotController.getBatteryVoltage(), Volts))
+  //           // .angularPosition(shooterDistance)
+  //           .angularVelocity(RotationsPerMinute.of(getBottomVelocity()))
+  //          .angularPosition(Rotations.of(getBottomRotations()));
+  //         // Record a frame for the right motors.  Since these share an encoder, we consider
+  //         // the entire group to be one motor.
+  //         log.motor("shooter-top")
+  //           .voltage(
+  //             appliedVoltage.mut_replace(
+  //               shooterMotorTop.getAppliedOutput() * RobotController.getBatteryVoltage(), Volts))
+  //            .angularVelocity(RotationsPerMinute.of(getTopVelocity()))
+  //          .angularPosition(Rotations.of(getTopRotations()));
+  //       },
+  //       // Tell SysId to make generated commands require this subsystem, suffix test state in
+  //       // WPILog with this subsystem's name ("drive")
+  //       this));
+=======
   private final SysIdRoutine shooterSysIdRoutine =
     new SysIdRoutine(
       // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
@@ -76,22 +108,27 @@ public class ShooterSubsystem extends SubsystemBase {
           log.motor("shooter-bottom")
             .voltage(
               appliedVoltage.mut_replace(
-                shooterMotorBottom.getAppliedOutput() * RobotController.getBatteryVoltage(), Volts))
+                shooterMotorBottom.get() * RobotController.getBatteryVoltage(), Volts))
             // .angularPosition(shooterDistance)
             .angularVelocity(RotationsPerMinute.of(getBottomVelocity()))
-           .angularPosition(Rotations.of(getBottomRotations()));
+            .linearPosition(shooterDistance.mut_replace(getBottomPositionMeters(), Meters))
+            .linearVelocity(
+              shooterVelocity.mut_replace(getBottomVelocityMetersPerSecond(), MetersPerSecond));
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
           log.motor("shooter-top")
             .voltage(
               appliedVoltage.mut_replace(
-                shooterMotorTop.getAppliedOutput() * RobotController.getBatteryVoltage(), Volts))
-             .angularVelocity(RotationsPerMinute.of(getTopVelocity()))
-           .angularPosition(Rotations.of(getTopRotations()));
+                shooterMotorTop.get() * RobotController.getBatteryVoltage(), Volts))
+            .angularVelocity(RotationsPerMinute.of(getTopVelocity()))
+            .linearPosition(shooterDistance.mut_replace(getTopPositionMeters(), Meters))
+            .linearVelocity(
+              shooterVelocity.mut_replace(getTopVelocityMetersPerSecond(), MetersPerSecond));
         },
         // Tell SysId to make generated commands require this subsystem, suffix test state in
         // WPILog with this subsystem's name ("drive")
         this));
+>>>>>>> Stashed changes
 
   public void invertMotors() {
     shooterMotorBottom.setInverted(false);
@@ -197,12 +234,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return (shooterMotorBottom.getEncoder().getPosition()*Math.PI*ShooterConstants.wheelDiameterIn*0.0254);
   }
 
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return shooterSysIdRoutine.quasistatic(direction);
-  }
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-    return shooterSysIdRoutine.dynamic(direction);
-  }
+  // public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+  //   return shooterSysIdRoutine.quasistatic(direction);
+  // }
+  // public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+  //   return shooterSysIdRoutine.dynamic(direction);
+  // }
   public double getTopRotations() {
     return shooterMotorTop.getEncoder().getPosition();
   }
