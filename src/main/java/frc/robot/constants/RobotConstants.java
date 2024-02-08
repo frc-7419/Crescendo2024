@@ -62,5 +62,6 @@ public final class RobotConstants {
     public static final double tolerance = 500;
     public static final Constraints Constraints = new TrapezoidProfile.Constraints(maxVelocity, maxAcceleration);
     public static final double SetpointThreshold = 0.01;
+    public static final double shooterV = 6000;
   }
 }

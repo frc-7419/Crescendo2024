@@ -28,6 +28,7 @@ import frc.robot.commands.AutoShoot;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -35,6 +36,7 @@ import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterVoltage;
+import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
@@ -66,6 +68,7 @@ public class RobotContainer {
   
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
+  private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem, ShooterConstants.shooterV, ShooterConstants.shooterV);
   // private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
@@ -168,7 +171,8 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(new RunShooterVoltage(shooterSubsystem, 11));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
-    // operator.a().onTrue(new RunShooterWristToSetpointWithCalculatedAngle(shooterWrist, drivetrain));
+    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.09));
+    operator.y().whileTrue(runShooterWithPID);
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
   }
   

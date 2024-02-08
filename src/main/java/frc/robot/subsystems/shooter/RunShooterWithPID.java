@@ -5,18 +5,25 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
   private ShooterSubsystem shooterSubsystem;
-  private PIDController topShooterPidController = new PIDController(0.2, 0, 0);
-  private PIDController bottomShooterPidController = new PIDController(0.2, 0, 0);
+  private PIDController topShooterPidController = new PIDController(0.001852, 0, 0);
+  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private PIDController bottomShooterPidController = new PIDController(0.001852, 0, 0);
+  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
-  public RunShooterWithPID(ShooterSubsystem shooterSubsystem) {
+  private double topV, bottomV;
+
+  public RunShooterWithPID(ShooterSubsystem shooterSubsystem, double topVelocity, double bottomVelocity) {
     this.shooterSubsystem = shooterSubsystem;
     addRequirements(shooterSubsystem);
+    topV = topVelocity;
+    bottomV = bottomVelocity;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,19 +31,23 @@ public class RunShooterWithPID extends Command {
   @Override
   public void initialize() {
     topShooterPidController.reset();
-    topShooterPidController.setSetpoint(ShooterConstants.maxVelocity);
+    topShooterPidController.setSetpoint(topV);
     topShooterPidController.setTolerance(50);
 
     bottomShooterPidController.reset();
-    bottomShooterPidController.setSetpoint(-ShooterConstants.maxVelocity);
+    bottomShooterPidController.setSetpoint(bottomV);
     bottomShooterPidController.setTolerance(50);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setTopSpeed(topShooterPidController.calculate(shooterSubsystem.getTopVelocity()));
-    shooterSubsystem.setBottomSpeed(bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity()));
+    double topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
+    double bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
+    double topFor = topFeedforward.calculate(topV);
+    double bottomFor = bottomFeedforward.calculate(bottomV);
+    shooterSubsystem.setTopSpeed(topPid+topFor);
+    shooterSubsystem.setBottomSpeed(bottomPid+bottomFor);
   }
 
   // Called once the command ends or is interrupted.
