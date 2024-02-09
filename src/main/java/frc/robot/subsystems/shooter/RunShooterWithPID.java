@@ -47,7 +47,7 @@ public class RunShooterWithPID extends Command {
     double topFor = topFeedforward.calculate(topV);
     double bottomFor = bottomFeedforward.calculate(bottomV);
     shooterSubsystem.setTopSpeed(topPid+topFor);
-    shooterSubsystem.setBottomSpeed(bottomPid+bottomFor);
+    shooterSubsystem.setBottomSpeed(-bottomPid-bottomFor);
   }
 
   // Called once the command ends or is interrupted.

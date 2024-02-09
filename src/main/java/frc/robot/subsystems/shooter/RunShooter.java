@@ -22,12 +22,14 @@ public class RunShooter extends Command {
   @Override
   public void initialize() {
     shooterSubsystem.coast();
-    shooterSubsystem.setBothSpeed(power);
+    shooterSubsystem.setTopSpeed(power);
+    shooterSubsystem.setBottomSpeed(-power);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.
