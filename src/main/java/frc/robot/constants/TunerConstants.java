@@ -101,10 +101,11 @@ private static final double shortDistance = 21.75;
     private static final double kFrontLeftYPosInches = longDistance/2;
 
     // Front Right
-    private static final int kFrontRightDriveMotorId = 4;
-    private static final int kFrontRightSteerMotorId = 3;
+    private static final int kFrontRightDriveMotorId = 3;
+    private static final int kFrontRightSteerMotorId = 4;
     private static final int kFrontRightEncoderId = 9;
-    private static final double kFrontRightEncoderOffset = 0.389892578125;
+    private static final double kFrontRightEncoderOffset = -0.25;
+        //find the actual encoder offset later
 
     private static final double kFrontRightXPosInches = shortDistance/2;
     private static final double kFrontRightYPosInches = -longDistance/2;
