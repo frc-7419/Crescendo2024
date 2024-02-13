@@ -68,7 +68,7 @@ public class RobotContainer {
   
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist, operator);
-  private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem, ShooterConstants.shooterV, ShooterConstants.shooterV);
+  private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem, ShooterConstants.shooterPower, ShooterConstants.shooterPower);
   // private final RunIntakeWristWithJoystick runWristWithJoystick = new RunIntakeWristWithJoystick(wristSubsystem, operator);
   // private final RunShooterToSetpoint runShooterToSetpoint = new RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
@@ -147,7 +147,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    driver.x().whileTrue(new TurnToSpeaker(drivetrain));
+    // driver.x().whileTrue(new TurnToSpeaker(drivetrain));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -169,11 +169,12 @@ public class RobotContainer {
 
     
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.85));
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
-    // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
+    operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
+  
   }
   
   /**
@@ -181,7 +182,7 @@ public class RobotContainer {
    */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Test Auto", testAuto);
-    autonChooser.addOption("Square Auto", squareAuto);
+    autonChooser.addOption("Square Auto", squareAuto);  
     autonChooser.addOption("Two Note Auto", twoNote);
     autonChooser.addOption("Circle Auto", circleAuto);
   }

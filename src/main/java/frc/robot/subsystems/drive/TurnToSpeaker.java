@@ -24,13 +24,15 @@ public class TurnToSpeaker extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    double angle = vision.headingToTag(3);
+    drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(new Rotation2d(angle)));
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angle = vision.headingToTag(3);
-    drivetrain.applyRequest(() -> new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(new Rotation2d(angle)));
+    
   }
 
   // Called once the command ends or is interrupted.

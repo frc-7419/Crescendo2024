@@ -6,6 +6,7 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
@@ -24,19 +25,24 @@ public class RunShooterWithPID extends Command {
     addRequirements(shooterSubsystem);
     topV = topVelocity;
     bottomV = bottomVelocity;
+    SmartDashboard.putNumber("Top Setpoint", topV);
+    SmartDashboard.putNumber("Bottom Setpoint", bottomV);
+
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    topV = SmartDashboard.getNumber("Top Setpoint", topV);
+    topV = SmartDashboard.getNumber("Top Setpoint", topV);
+
     topShooterPidController.reset();
     topShooterPidController.setSetpoint(topV);
-    topShooterPidController.setTolerance(50);
 
     bottomShooterPidController.reset();
     bottomShooterPidController.setSetpoint(bottomV);
-    bottomShooterPidController.setTolerance(50);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,6 +54,11 @@ public class RunShooterWithPID extends Command {
     double bottomFor = bottomFeedforward.calculate(bottomV);
     shooterSubsystem.setTopSpeed(topPid+topFor);
     shooterSubsystem.setBottomSpeed(-bottomPid-bottomFor);
+
+    SmartDashboard.putNumber("Bottom Setpoint", bottomV);
+    SmartDashboard.putNumber("Bottom Velocity", shooterSubsystem.getBottomVelocity());
+    SmartDashboard.putNumber("Top Setpoint", topV);
+    SmartDashboard.putNumber("Top Velocity", shooterSubsystem.getTopVelocity());
   }
 
   // Called once the command ends or is interrupted.
@@ -60,6 +71,6 @@ public class RunShooterWithPID extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (bottomShooterPidController.atSetpoint()  && topShooterPidController.atSetpoint());
+    return false;
   }
 }

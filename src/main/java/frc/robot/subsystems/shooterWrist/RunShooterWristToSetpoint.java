@@ -22,7 +22,7 @@ public class RunShooterWristToSetpoint extends Command {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(1, 0, 0, new TrapezoidProfile.Constraints(10, 0.1125));
+      = new ProfiledPIDController(1.5, 0, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
     addRequirements(shooterWrist);
   }
 

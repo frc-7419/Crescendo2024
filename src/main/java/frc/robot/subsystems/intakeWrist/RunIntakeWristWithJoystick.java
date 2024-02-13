@@ -35,11 +35,11 @@ public class RunIntakeWristWithJoystick extends Command {
     if(Math.abs(joystick.getRightY()) > 0.05){
       wrist.coast();
       double joystickWristPower = feedForward + joystick.getRightY() * RobotConstants.IntakeWristConstants.wristPower;
-      wrist.setVoltage(joystickWristPower*12);
+      wrist.setVoltage(joystickWristPower * 12);
       
     }
     else{
-      wrist.setVoltage(feedForward*12);
+      wrist.setVoltage(feedForward * 12);
       wrist.brake();
     }
   }

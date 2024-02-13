@@ -48,9 +48,6 @@ public class RunIntakeWithJoystick extends Command {
 
   }
 
-  public void moveBack() {
-
-  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

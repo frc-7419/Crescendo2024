@@ -36,7 +36,7 @@ public class RunShooterWristWithJoystick extends Command {
   public void execute() {
     if (Math.abs(joystick.getLeftY()) > 0.05){
       shooterWrist.coast();
-      double armJoystickPower = maxPower * joystick.getLeftY();
+      double armJoystickPower = maxPower * -joystick.getLeftY();
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
 
