@@ -147,7 +147,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    // driver.x().whileTrue(new TurnToSpeaker(drivetrain));
+    driver.x().whileTrue(new TurnToSpeaker(drivetrain));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

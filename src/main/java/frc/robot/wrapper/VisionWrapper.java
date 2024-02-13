@@ -24,16 +24,16 @@ import frc.robot.constants.VisionConstants;
 public class VisionWrapper {
 
   private final PhotonCamera frontCam;
-  private final PhotonCamera backCam;
+  //private final PhotonCamera backCam;
   private final PhotonPoseEstimator frontPoseEstimator;
-  private final PhotonPoseEstimator backPoseEstimator;
+  //private final PhotonPoseEstimator backPoseEstimator;
   private PhotonPipelineResult result;
 
   public VisionWrapper() {
     frontCam = new PhotonCamera("frontCam");
-    backCam = new PhotonCamera("backCam");
+    //backCam = new PhotonCamera("backCam");
     frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCam, VisionConstants.ROBOT_TO_FRONT);
-    backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCam, VisionConstants.ROBOT_TO_BACK);
+    //backPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, backCam, VisionConstants.ROBOT_TO_BACK);
   }
   /**
    * Uses the cameras to estimate the pose of the robot ont he field
@@ -42,11 +42,11 @@ public class VisionWrapper {
   public EstimatedRobotPose[] updatePoseEstimate() {
     EstimatedRobotPose[] out = new EstimatedRobotPose[2];
     Optional<EstimatedRobotPose> frontPose = frontPoseEstimator.update();
-    Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
+    //Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
     // Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
     // Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
     frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
-    backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
+    //backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
     return out;
   }
   public double headingToTag(int id) {
@@ -54,20 +54,26 @@ public class VisionWrapper {
     PhotonTrackedTarget best = null;
     double bestAmb = 2.0;
     for (PhotonPipelineResult result:results) {
-      if (result.getBestTarget().getFiducialId() == id) {
+      try {
+        System.out.println(result.getBestTarget());
+        if (result.getBestTarget().getFiducialId() == id) {
         if (result.getBestTarget().getPoseAmbiguity() < bestAmb) {
           bestAmb = result.getBestTarget().getPoseAmbiguity();
           best = result.getBestTarget();
         }
       }
+      } catch (NullPointerException e) {
+        e.printStackTrace();
+      }
+      
     }
     if (best == null) return Double.MIN_VALUE;
     return best.getYaw();
   }
   public PhotonPipelineResult[] latestResults() {
     PhotonPipelineResult frontResult = frontCam.getLatestResult();
-    PhotonPipelineResult backResult = backCam.getLatestResult();
-    return new PhotonPipelineResult[] {frontResult,backResult};
+    //PhotonPipelineResult backResult = backCam.getLatestResult();
+    return new PhotonPipelineResult[] {frontResult};
   }
     //code needs to be fixed
   //all of this needs to be in meters
