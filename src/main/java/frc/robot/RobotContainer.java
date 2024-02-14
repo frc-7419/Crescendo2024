@@ -150,8 +150,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    driver.rightBumper().whileTrue(SmartDashboard.putNumber("drivePower", vision.calculateRotation()));
-    
+
     driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
 
     if (Utils.isSimulation()) {

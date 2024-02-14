@@ -118,6 +118,6 @@ public class VisionWrapper extends SubsystemBase {
   }
 
   public void periodic(){
-
+    SmartDashboard.putNumber("drivePower", this.calculateRotation());
   }
 }
