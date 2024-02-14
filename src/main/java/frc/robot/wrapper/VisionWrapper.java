@@ -90,6 +90,19 @@ public class VisionWrapper extends SubsystemBase {
   }
   // code needs to be fixed
   // all of this needs to be in meters
+  public double calculateRotation(){
+    EstimatedRobotPose[] estimates = this.updatePoseEstimate();
+    double driveTrainPower = 0;
+    for (EstimatedRobotPose estimate : estimates) {
+      if (estimate != null) {
+        double angle = this.headingToTag(9);
+        System.out.println(angle + "hello");
+        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
+        driveTrainPower = (-0.1 * angle);
+      }
+    }
+    return driveTrainPower;
+  }
 
   public double calculateAngle(Pose2d estimatedRobotPose) {
     SmartDashboard.putNumber("yValue", FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight);
