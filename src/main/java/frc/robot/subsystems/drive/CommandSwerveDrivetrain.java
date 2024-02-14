@@ -35,13 +35,10 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    final VisionWrapper visionWrapper;
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        visionWrapper = new VisionWrapper();
-        this.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -49,8 +46,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
-        visionWrapper = new VisionWrapper();
-        this.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -111,18 +106,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
     }
-
-    public double calculateAngle(){
-        return(visionWrapper.calculateAngle(this.getState().Pose));
-    }
     
     public void periodic() {
-       EstimatedRobotPose[] estimates = visionWrapper.updatePoseEstimate();
-       for (EstimatedRobotPose estimate:estimates) {
-        if (estimate != null) {
-            addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
-        }
-       }
+       
        
     //    SmartDashboard.putNumber("Robot X Pose", this.getState().Pose.getX());
     //    SmartDashboard.putNumber("Robot Y Pose", this.getState().Pose.getY());

@@ -42,6 +42,7 @@ import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
+import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
 
@@ -60,6 +61,8 @@ public class RobotContainer {
   private final ShooterWrist shooterWrist = new ShooterWrist();
 
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
+  private final VisionWrapper vision = new VisionWrapper();
+
   //private final IntakeWristSubsystem wristSubsystem = new IntakeWristSubsystem(); //TODO figure out this situation
   
   // SUBSYSTEMS END------------------------------------------------------------------------------------------------------------------
@@ -147,7 +150,7 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    driver.x().whileTrue(new TurnToSpeaker(drivetrain));
+    driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -193,7 +196,7 @@ public class RobotContainer {
   private void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     // wristSubsystem.setDefaultCommand(runWristWithJoystick);
-    shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+    // shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
   }
   
   /**
