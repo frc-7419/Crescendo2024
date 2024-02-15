@@ -18,6 +18,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +31,7 @@ import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.DrivetrainWithVision;
 import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
@@ -49,6 +51,7 @@ public class RobotContainer {
   // JOYSTICKS-----------------------------------------------------------------------------------------------------------------------
   
   private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
+  private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
   private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
   
   // JOYSTICKS END-------------------------------------------------------------------------------------------------------------------
@@ -88,6 +91,7 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   // private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
   private final Telemetry logger = new Telemetry(RobotConstants.kMaxSpeed);
+  private final DrivetrainWithVision drivetrainWithVision = new DrivetrainWithVision(drivetrain, drive, driverRaw, vision);
 
   // SWERVE END----------------------------------------------------------------------------------------------------------------------
   
@@ -137,12 +141,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Drivetrain
+    drivetrain.setDefaultCommand(drivetrainWithVision);
+    /* 
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed) // Drive forward with
                                                                                          // negative Y (forward)
             .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driver.getRightX() * RobotConstants.kMaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
+        */
     
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
     driver.b().whileTrue(drivetrain
@@ -151,7 +158,7 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-    driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
+    // driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

@@ -65,7 +65,6 @@ public class VisionWrapper extends SubsystemBase {
     for (PhotonPipelineResult result : results) {
       try {
         if (result.hasTargets()) {
-          System.out.println(result.getBestTarget());
           if (result.getBestTarget().getFiducialId() == id) {
             if (result.getBestTarget().getPoseAmbiguity() < bestAmb) {
               bestAmb = result.getBestTarget().getPoseAmbiguity();
@@ -79,7 +78,7 @@ public class VisionWrapper extends SubsystemBase {
 
     }
     if (best == null)
-      return Double.MIN_VALUE;
+      return 0;
     return best.getYaw();
   }
 
@@ -88,19 +87,14 @@ public class VisionWrapper extends SubsystemBase {
     // PhotonPipelineResult backResult = backCam.getLatestResult();
     return new PhotonPipelineResult[] { frontResult };
   }
+
   // code needs to be fixed
   // all of this needs to be in meters
-  public double calculateRotation(){
-    EstimatedRobotPose[] estimates = this.updatePoseEstimate();
-    double driveTrainPower = 0;
-    for (EstimatedRobotPose estimate : estimates) {
-      if (estimate != null) {
-        double angle = this.headingToTag(9);
-        System.out.println(angle + "hello");
-        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
-        driveTrainPower = (-0.1 * angle);
-      }
-    }
+  public double calculateRotation() {
+    double angle = headingToTag(9);
+    // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
+    // estimate.timestampSeconds);
+    double driveTrainPower = (-0.1 * angle);
     return driveTrainPower;
   }
 
@@ -117,7 +111,7 @@ public class VisionWrapper extends SubsystemBase {
     return (angle / (2 * Math.PI));
   }
 
-  public void periodic(){
+  public void periodic() {
     SmartDashboard.putNumber("drivePower", this.calculateRotation());
   }
 }
