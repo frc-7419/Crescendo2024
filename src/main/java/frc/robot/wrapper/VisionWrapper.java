@@ -10,10 +10,12 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
@@ -83,21 +85,44 @@ public class VisionWrapper extends SubsystemBase {
     return best.getYaw();
   }
 
+  public double distanceToTag(int id) {
+    var result = frontCam.getLatestResult();
+    final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(24);
+    final double TARGET_HEIGHT_METERS = Units.feetToMeters(5);
+
+    // Angle between horizontal and the camera.
+    final double CAMERA_PITCH_RADIANS = Units.degreesToRadians(0);
+
+    if (result.hasTargets()) {
+      // First calculate range
+      double range = PhotonUtils.calculateDistanceToTargetMeters(
+          CAMERA_HEIGHT_METERS,
+          TARGET_HEIGHT_METERS,
+          CAMERA_PITCH_RADIANS,
+          Units.degreesToRadians(result.getBestTarget().getPitch()));
+      return range;
+    } else {
+      return 0;
+    }
+  }
+
   public PhotonPipelineResult[] latestResults() {
     PhotonPipelineResult frontResult = frontCam.getLatestResult();
     // PhotonPipelineResult backResult = backCam.getLatestResult();
     return new PhotonPipelineResult[] { frontResult };
   }
+
   // code needs to be fixed
   // all of this needs to be in meters
-  public double calculateRotation(){
+  public double calculateRotation() {
     EstimatedRobotPose[] estimates = this.updatePoseEstimate();
     double driveTrainPower = 0;
     for (EstimatedRobotPose estimate : estimates) {
       if (estimate != null) {
         double angle = this.headingToTag(9);
         System.out.println(angle + "hello");
-        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
+        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
+        // estimate.timestampSeconds);
         driveTrainPower = (-0.1 * angle);
       }
     }
@@ -117,7 +142,7 @@ public class VisionWrapper extends SubsystemBase {
     return (angle / (2 * Math.PI));
   }
 
-  public void periodic(){
+  public void periodic() {
     SmartDashboard.putNumber("drivePower", this.calculateRotation());
   }
 }
