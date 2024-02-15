@@ -44,6 +44,7 @@ import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
+import frc.robot.subsystems.shooterWrist.TurnShooterToTag;
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -184,7 +185,8 @@ public class RobotContainer {
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
-    operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
+    // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
+    operator.x().onTrue(new TurnShooterToTag(shooterWrist, vision));
   
   }
   
@@ -204,7 +206,7 @@ public class RobotContainer {
   private void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     // wristSubsystem.setDefaultCommand(runWristWithJoystick);
-    // shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+    shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
   }
   
   /**
