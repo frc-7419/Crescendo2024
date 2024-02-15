@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 /**
  * PhotonVision is handled in this class
@@ -32,10 +33,11 @@ public class VisionWrapper extends SubsystemBase {
   private final PhotonPoseEstimator frontPoseEstimator;
   // private final PhotonPoseEstimator backPoseEstimator;
   private PhotonPipelineResult result;
+  private CommandSwerveDrivetrain drivetrain;
 
-  public VisionWrapper() {
+  public VisionWrapper(CommandSwerveDrivetrain drivetrain) {
     frontCam = new PhotonCamera("frontCam");
-
+    this.drivetrain = drivetrain;
     // backCam = new PhotonCamera("backCam");
     frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCam, VisionConstants.ROBOT_TO_FRONT);
@@ -49,15 +51,14 @@ public class VisionWrapper extends SubsystemBase {
    * 
    * @return The poses esimated by the two cameras
    */
-  public EstimatedRobotPose[] updatePoseEstimate() {
-    EstimatedRobotPose[] out = new EstimatedRobotPose[2];
+  public Optional<EstimatedRobotPose> updatePoseEstimate() {
     Optional<EstimatedRobotPose> frontPose = frontPoseEstimator.update();
     // Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
     // Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
     // Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
-    frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
+    // frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
     // backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
-    return out;
+    return frontPose;
   }
 
   public double headingToTag(int id) {
@@ -114,20 +115,20 @@ public class VisionWrapper extends SubsystemBase {
 
   // code needs to be fixed
   // all of this needs to be in meters
-  public double calculateRotation() {
-    EstimatedRobotPose[] estimates = this.updatePoseEstimate();
-    double driveTrainPower = 0;
-    for (EstimatedRobotPose estimate : estimates) {
-      if (estimate != null) {
-        double angle = this.headingToTag(9);
-        System.out.println(angle + "hello");
-        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
-        // estimate.timestampSeconds);
-        driveTrainPower = (-0.1 * angle);
-      }
-    }
-    return driveTrainPower;
-  }
+  // public double calculateRotation() {
+  //   EstimatedRobotPose[] estimates = this.updatePoseEstimate();
+  //   double driveTrainPower = 0;
+  //   for (EstimatedRobotPose estimate : estimates) {
+  //     if (estimate != null) {
+  //       double angle = this.headingToTag(9);
+  //       System.out.println(angle + "hello");
+  //       // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
+  //       // estimate.timestampSeconds);
+  //       driveTrainPower = (-0.1 * angle);
+  //     }
+  //   }
+  //   return driveTrainPower;
+  // }
 
   public double calculateAngle(Pose2d estimatedRobotPose) {
     SmartDashboard.putNumber("yValue", FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight);
@@ -142,7 +143,14 @@ public class VisionWrapper extends SubsystemBase {
     return (angle / (2 * Math.PI));
   }
 
+  @Override
   public void periodic() {
-    SmartDashboard.putNumber("drivePower", this.calculateRotation());
+    Optional<EstimatedRobotPose> estimate = updatePoseEstimate();
+    if (estimate.isPresent()) {
+
+    drivetrain.addVisionMeasurement(estimate.get().estimatedPose.toPose2d(),
+        estimate.get().timestampSeconds);
+    }
+    SmartDashboard.putNumber("Robot Angle", drivetrain.getState().Pose.getRotation().getDegrees());
   }
 }

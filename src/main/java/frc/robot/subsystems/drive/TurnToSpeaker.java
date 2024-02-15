@@ -9,6 +9,7 @@ import org.photonvision.EstimatedRobotPose;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
@@ -18,13 +19,11 @@ public class TurnToSpeaker extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
       .withDeadband(RobotConstants.kMaxSpeed * 0.05);
-  private VisionWrapper vision;
 
   /** Creates a new TurnToSpeaker. */
-  public TurnToSpeaker(CommandSwerveDrivetrain drivetrain, VisionWrapper vision) {
+  public TurnToSpeaker(CommandSwerveDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.vision = vision;
-    // Use addRequirements() here to declare subsystem dependencies.
+    // Use addRequirements() here to declare subsyst,em dependencies.
     addRequirements(drivetrain);
   }
 
@@ -38,15 +37,21 @@ public class TurnToSpeaker extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    EstimatedRobotPose[] estimates = vision.updatePoseEstimate();
-    for (EstimatedRobotPose estimate : estimates) {
-      if (estimate != null) {
-        double angle = vision.headingToTag(9);
-        System.out.println(angle + "hello");
-        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
-        drivetrain.setControl(driveRequest.withRotationalRate(-angle*0.1));
-      }
-    }
+    double distX = drivetrain.getState().Pose.getX() - 0;
+    double distY = drivetrain.getState().Pose.getY() - 5;
+    double curAngle = drivetrain.getState().Pose.getRotation().getDegrees();
+
+    double targetAngle = Math.atan(distY/distX) * (180/Math.PI) + 180;
+
+    SmartDashboard.putNumber("Target Angle", targetAngle);
+    SmartDashboard.putNumber("Current Angle", curAngle);
+    double diff = targetAngle - curAngle;
+
+    double output = diff*0.02;
+
+    SmartDashboard.putNumber("Rot Output", output);
+
+    drivetrain.setControl(driveRequest.withRotationalRate(output));
   }
 
   // Called once the command ends or is interrupted.

@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 public final class VisionConstants {
-  public static final Transform3d ROBOT_TO_FRONT = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+  public static final Transform3d ROBOT_TO_FRONT = new Transform3d(new Translation3d(0.35, -0.12, 0.05), new Rotation3d(0,30,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
   public static final Transform3d ROBOT_TO_BACK = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //keshav
 
   public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();

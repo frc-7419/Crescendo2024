@@ -44,7 +44,6 @@ public class TurnShooterToTag extends Command {
 
         this.shooterWristPIDController = new ProfiledPIDController(1.5, 0, 0.05,
                 new TrapezoidProfile.Constraints(10, 0.1125));
-        // Use addRequirements() here to declare subsystem dependencies.
        
         addRequirements(shooterWrist);
     }
@@ -65,7 +64,6 @@ public class TurnShooterToTag extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
         SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
