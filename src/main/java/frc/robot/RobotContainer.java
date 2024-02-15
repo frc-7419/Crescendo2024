@@ -159,7 +159,7 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-    // driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
+    driver.x().whileTrue(new TurnToSpeaker(drivetrain, vision));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -186,7 +186,7 @@ public class RobotContainer {
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist, intakeSubsytem));
-    operator.x().onTrue(new TurnShooterToTag(shooterWrist, vision));
+    driver.x().onTrue(new TurnShooterToTag(shooterWrist, vision));
   
   }
   

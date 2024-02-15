@@ -41,7 +41,7 @@ public class TurnToSpeaker extends Command {
     EstimatedRobotPose[] estimates = vision.updatePoseEstimate();
     for (EstimatedRobotPose estimate : estimates) {
       if (estimate != null) {
-        double angle = vision.headingToTag(9);
+        double angle = vision.headingToTag(7);
         System.out.println(angle + "hello");
         // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
         drivetrain.setControl(driveRequest.withRotationalRate(-angle*0.1));
