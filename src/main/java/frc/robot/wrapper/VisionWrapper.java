@@ -151,6 +151,11 @@ public class VisionWrapper extends SubsystemBase {
     drivetrain.addVisionMeasurement(estimate.get().estimatedPose.toPose2d(),
         estimate.get().timestampSeconds);
     }
-    SmartDashboard.putNumber("Robot Angle", drivetrain.getState().Pose.getRotation().getDegrees());
+    Pose2d pose = drivetrain.getState().Pose;
+    SmartDashboard.putNumber("Robot Angle", pose.getRotation().getDegrees());
+    double distX = pose.getX() - 0;
+    double distY = pose.getY() - 5;
+    double dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+    SmartDashboard.putNumber("Distance to Speaker", dist);
   }
 }

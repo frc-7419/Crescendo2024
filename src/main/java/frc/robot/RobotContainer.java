@@ -115,10 +115,6 @@ public class RobotContainer {
   private final Command circleAuto;
   private final Command twoNote;
 
-  private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
-      new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-      new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90)));
 
   // AUTONOMOUS
   // END------------------------------------------------------------------------------------------------------------------
@@ -176,16 +172,6 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
-
-    driver.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-        bezierPoints,
-        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a
-                                                                 // differential drivetrain, the angular constraints
-                                                                 // have no effect.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If
-                                                           // using a differential drivetrain, the rotation will have no
-                                                           // effect.
-    )));
 
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
