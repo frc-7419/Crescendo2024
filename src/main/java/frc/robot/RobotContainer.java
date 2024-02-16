@@ -90,7 +90,7 @@ public class RobotContainer {
   // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
-  // private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
+  private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
   private final Telemetry logger = new Telemetry(RobotConstants.kMaxSpeed);
   private final DrivetrainWithVision drivetrainWithVision = new DrivetrainWithVision(drivetrain, drive, driverRaw, vision);
 
@@ -153,6 +153,7 @@ public class RobotContainer {
         */
     
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    driver.y().whileTrue(turn);
     driver.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
