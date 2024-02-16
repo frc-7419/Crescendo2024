@@ -43,7 +43,8 @@ public class DrivetrainWithVision extends Command {
   @Override
   public void execute() {
     // i think theres input delay
-    drivetrainPower = vision.calculateRotation();
+    drivetrainPower = vision.calculateRotation(7);
+    System.out.println(drivetrainPower);
     drivetrain.setControl(drive.withVelocityX(-xboxController.getLeftY() * RobotConstants.kMaxSpeed) // Drive forward
         // with // negative
         // Y (forward)
