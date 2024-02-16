@@ -18,12 +18,10 @@ public class TurnToSpeaker extends Command {
   private CommandSwerveDrivetrain drivetrain;
   private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
       .withDeadband(RobotConstants.kMaxSpeed * 0.05);
-  private VisionWrapper vision;
 
   /** Creates a new TurnToSpeaker. */
-  public TurnToSpeaker(CommandSwerveDrivetrain drivetrain, VisionWrapper vision) {
+  public TurnToSpeaker(CommandSwerveDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.vision = vision;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -31,22 +29,16 @@ public class TurnToSpeaker extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrain.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
+    // drivetrain.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    EstimatedRobotPose[] estimates = vision.updatePoseEstimate();
-    for (EstimatedRobotPose estimate : estimates) {
-      if (estimate != null) {
-        double angle = vision.headingToTag(7);
-        System.out.println(angle + "hello");
         // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
-        drivetrain.setControl(driveRequest.withRotationalRate(-angle*0.1));
-      }
-    }
+    drivetrain.setControl(driveRequest.withRotationalRate(-drivetrain.robotToSpeaker()*0.1));
+
   }
 
   // Called once the command ends or is interrupted.
