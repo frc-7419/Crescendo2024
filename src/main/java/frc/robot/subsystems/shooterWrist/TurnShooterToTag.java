@@ -59,13 +59,14 @@ public class TurnShooterToTag extends Command {
         double TARGET_HEIGHT_METERS = Units.feetToMeters(6.5);
         double setpoint = Math.atan(TARGET_HEIGHT_METERS/ vision.distanceToTag(7)) / (2 * Math.PI);
         SmartDashboard.putNumber("arm tag setpoint", setpoint);
-        shooterWristPIDController.setGoal(setpoint);
+        if (vision.distanceToTag(7) != Integer.MAX_VALUE) {
+            shooterWristPIDController.setGoal(setpoint);
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
         feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
         SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());

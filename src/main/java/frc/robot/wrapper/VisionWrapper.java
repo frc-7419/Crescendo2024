@@ -102,7 +102,7 @@ public class VisionWrapper extends SubsystemBase {
           Units.degreesToRadians(result.getBestTarget().getPitch()));
       return range;
     } else {
-      return 0;
+      return Integer.MAX_VALUE;
     }
   }
 
@@ -115,7 +115,10 @@ public class VisionWrapper extends SubsystemBase {
   // code needs to be fixed
   // all of this needs to be in meters
   public double calculateRotation(int tag) {
-    double angle = headingToTag(tag);
+    double angle = headingToTag(tag)-6;
+    if(headingToTag(tag) == 0){
+      angle = 0;
+    }
     System.out.println(angle + "fjkdsjfkdsfldsf;lkdsafl;saf;lsdfdsaf");
     // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
     // estimate.timestampSeconds);
