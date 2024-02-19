@@ -1,6 +1,7 @@
 package frc.robot.constants;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class FieldConstants {
     //All measurmeents in inches
@@ -39,6 +40,8 @@ public class FieldConstants {
 
     //someone double check this - also its in meters
     public static final Pose3d speakerPose = new Pose3d(0.25, 5.5, speakerTopHeight * 0.0254, null);
+
+    public static final Translation2d SPEAKER_POSE = new Translation2d(0.25, 5.5);
 
     
 }

@@ -44,6 +44,7 @@ import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.TurnShooterToTag;
+import frc.robot.subsystems.shooterWrist.TurnShooterWithOdo;
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -76,7 +77,7 @@ public class RobotContainer {
   // TELEOP
   // COMMANDS-----------------------------------------------------------------------------------------------------------------
 
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, driver);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
@@ -114,6 +115,7 @@ public class RobotContainer {
   private final Command squareAuto;
   private final Command circleAuto;
   private final Command twoNote;
+  private final Command threeNoteAuto;
 
 
   // AUTONOMOUS
@@ -131,6 +133,8 @@ public class RobotContainer {
     squareAuto = new PathPlannerAuto("Square Auto");
     circleAuto = new PathPlannerAuto("Circle Auto");
     twoNote = new PathPlannerAuto("TwoNote");
+    threeNoteAuto = new PathPlannerAuto("Three Note Auto");
+    drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2, 4), new Rotation2d()));
   }
 
   /**
@@ -142,6 +146,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
     NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
+    NamedCommands.registerCommand("Auto Shoot", new TurnShooterWithOdo(drivetrain, shooterWrist));
   }
 
   /**
@@ -177,12 +182,16 @@ public class RobotContainer {
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist,
     // intakeSubsytem));
-    operator.x().onTrue(new TurnShooterToTag(shooterWrist, vision));
+    driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
+    driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
+    driver.y().onTrue(new TurnShooterWithOdo(drivetrain, shooterWrist));
+    operator.x().onTrue(new TurnShooterWithOdo(drivetrain, shooterWrist));
 
   }
 
@@ -194,6 +203,7 @@ public class RobotContainer {
     autonChooser.addOption("Square Auto", squareAuto);
     autonChooser.addOption("Two Note Auto", twoNote);
     autonChooser.addOption("Circle Auto", circleAuto);
+    autonChooser.addOption("Three Note", threeNoteAuto);
   }
 
   /**
@@ -212,7 +222,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    return twoNote;
+    // return twoNote;
+    return threeNoteAuto;
     // return squareAuto;
   }
 }

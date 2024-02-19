@@ -15,6 +15,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -105,6 +107,12 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             updateSimState(deltaTime, RobotController.getBatteryVoltage());
         });
         m_simNotifier.startPeriodic(kSimLoopPeriod);
+    }
+    public void setPoseState(double x, double y, double theta){
+        this.m_odometry.resetPosition(new Rotation2d(theta), m_modulePositions, new Pose2d(x, y, new Rotation2d(theta)));
+    }
+    public void setPoseStateToSpeaker(){
+        this.m_odometry.resetPosition(new Rotation2d(0), m_modulePositions, new Pose2d(1.5, 5.5, new Rotation2d(0)));
     }
     
     public void periodic() {

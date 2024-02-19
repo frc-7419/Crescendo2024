@@ -38,6 +38,7 @@ public class VisionWrapper extends SubsystemBase {
   public VisionWrapper(CommandSwerveDrivetrain drivetrain) {
     frontCam = new PhotonCamera("frontCam");
     this.drivetrain = drivetrain;
+    drivetrain.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
     // backCam = new PhotonCamera("backCam");
     frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCam, VisionConstants.ROBOT_TO_FRONT);
@@ -82,7 +83,8 @@ public class VisionWrapper extends SubsystemBase {
 
     }
     if (best == null)
-      return Double.MIN_VALUE;
+      // WHO EVER KEEPS CHANGING THIS TO Double.MINVALUE THIS IS WHAT IS BREAKING THE CODE. THE DRIVE TRAIN BUGS OUT WHEN GIVEN THIS VALUE AND BREAKS EVERYTHING
+      return 0;
     return best.getYaw();
   }
 
