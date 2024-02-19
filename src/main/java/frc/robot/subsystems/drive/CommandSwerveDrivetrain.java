@@ -23,9 +23,12 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
@@ -95,23 +98,18 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
+    public Translation2d getFuturePose() {
+        boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
+        Translation2d speakerPose = (isBlueAlliance) ? FieldConstants.BLUE_SPEAKER_TRANSLATION : FieldConstants.RED_SPEAKER_TRANSLATION;
 
-    public double robotToSpeaker() {
-        Pose2d currentPose = this.getState().Pose;
-        Translation2d speakerPose = new Translation2d(0.25, 5.5);
+        ChassisSpeeds robotVelocity = getCurrentRobotChassisSpeeds();
+        double speakerDistance = getState().Pose.getTranslation().getDistance(speakerPose);
 
-        Translation2d currentPoseTranslation = currentPose.getTranslation();
+        double futureX = speakerPose.getX() - (robotVelocity.vxMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
+        double futureY = speakerPose.getY() - (robotVelocity.vyMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
 
-        Translation2d robotToSpeakerVector = currentPoseTranslation.minus(speakerPose);
-
-        double robotToSpeakerAngle = Math.atan(robotToSpeakerVector.getY() / robotToSpeakerVector.getX());
-
-        Rotation2d currentRotation = currentPose.getRotation();
-        
-        double currentHeading = currentRotation.getDegrees();
-
-        return robotToSpeakerAngle - currentHeading;
-    }
+        return new Translation2d(futureX, futureY);
+    }  
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
