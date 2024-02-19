@@ -153,27 +153,20 @@ public class RobotContainer {
         */
     
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
+
     driver.y().whileTrue(turn);
+
     driver.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
-    // reset the field-centric heading on left bumper press
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    
+    driver.rightBumper().whileTrue(drivetrain.driveAroundPoint(drivetrain.getFuturePose()));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
-
-    driver.y().whileTrue(AutoBuilder.followPath(new PathPlannerPath(
-        bezierPoints,
-        new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a
-                                                                 // differential drivetrain, the angular constraints
-                                                                 // have no effect.
-        new GoalEndState(0.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If
-                                                           // using a differential drivetrain, the rotation will have no
-                                                           // effect.
-    )));
 
     // zero
     operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));

@@ -15,6 +15,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -98,18 +99,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public ChassisSpeeds getCurrentRobotChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
-    public Translation2d getFuturePose() {
-        boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
-        Translation2d speakerPose = (isBlueAlliance) ? FieldConstants.BLUE_SPEAKER_TRANSLATION : FieldConstants.RED_SPEAKER_TRANSLATION;
-
-        ChassisSpeeds robotVelocity = getCurrentRobotChassisSpeeds();
-        double speakerDistance = getState().Pose.getTranslation().getDistance(speakerPose);
-
-        double futureX = speakerPose.getX() - (robotVelocity.vxMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
-        double futureY = speakerPose.getY() - (robotVelocity.vyMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
-
-        return new Translation2d(futureX, futureY);
-    }  
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();
@@ -134,4 +123,27 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     //    SmartDashboard.putNumber("shooterMAXCALC", this.calculateAngle());
     }
+
+    public Translation2d getFuturePose() {
+        boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
+        Translation2d speakerPose = (isBlueAlliance) ? FieldConstants.BLUE_SPEAKER_TRANSLATION : FieldConstants.RED_SPEAKER_TRANSLATION;
+
+        ChassisSpeeds robotVelocity = getCurrentRobotChassisSpeeds();
+        double speakerDistance = getState().Pose.getTranslation().getDistance(speakerPose);
+
+        double futureX = speakerPose.getX() - (robotVelocity.vxMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
+        double futureY = speakerPose.getY() - (robotVelocity.vyMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
+
+        return new Translation2d(futureX, futureY);
+    }
+
+    public Command driveAroundPoint(Translation2d point) {
+        Translation2d currentPose = getState().Pose.getTranslation();
+        double desiredAngle = MathUtil.angleModulus(currentPose.minus(point).getAngle().getRadians());
+        SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(new Rotation2d(desiredAngle));
+
+        return this.applyRequest(() -> request);
+
+    }   
+
 }
