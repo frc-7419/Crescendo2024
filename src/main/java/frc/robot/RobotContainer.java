@@ -79,7 +79,7 @@ public class RobotContainer {
   // TELEOP
   // COMMANDS-----------------------------------------------------------------------------------------------------------------
 
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, driver);
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,

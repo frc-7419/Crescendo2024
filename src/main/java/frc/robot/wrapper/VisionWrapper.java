@@ -126,17 +126,17 @@ public class VisionWrapper extends SubsystemBase {
     return driveTrainPower;
   }
 
-  public double calculateAngle(Pose2d estimatedRobotPose) {
-    SmartDashboard.putNumber("yValue", FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight);
-    SmartDashboard.putNumber("xValue", (estimatedRobotPose.getX() - 0.25));
-    SmartDashboard.putNumber("Robot X Poseothy", estimatedRobotPose.getX());
-    SmartDashboard.putNumber("Robot Y Poseothy", estimatedRobotPose.getY());
+  // public double calculateAngle(Pose2d estimatedRobotPose) {
+  //   SmartDashboard.putNumber("yValue", drivetrain.getSpeakerPose.getY() - RobotConstants.shooterWristHeight);
+  //   SmartDashboard.putNumber("xValue", (estimatedRobotPose.getX() - 0.25));
+  //   SmartDashboard.putNumber("Robot X Poseothy", estimatedRobotPose.getX());
+  //   SmartDashboard.putNumber("Robot Y Poseothy", estimatedRobotPose.getY());
 
-    double angle = Math.atan((FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight)
-        / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
-    SmartDashboard.putNumber("ShooterCalcothy", angle / (2 * Math.PI));
+  //   double angle = Math.atan((FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight)
+  //       / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
+  //   SmartDashboard.putNumber("ShooterCalcothy", angle / (2 * Math.PI));
 
-    return (angle / (2 * Math.PI));
-  }
+  //   return (angle / (2 * Math.PI));
+  // }
 
 }
