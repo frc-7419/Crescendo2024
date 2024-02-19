@@ -31,7 +31,7 @@ public final class RobotConstants {
   public static final double maxVoltage = 12;
   public static final double voltageCompSaturation = 11;
 
-  public static final double MAX_NOTE_VELOCITY = 20.0
+  public static final double MAX_NOTE_VELOCITY = 20.0;
 
   public final class IntakeWristConstants{
     public static final double wristPower = 0.2;
