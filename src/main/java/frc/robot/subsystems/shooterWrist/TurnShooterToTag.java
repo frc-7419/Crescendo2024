@@ -4,12 +4,29 @@
 
 package frc.robot.subsystems.shooterWrist;
 
+import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonUtils;
+
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.constants.VisionConstants;
+import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
+import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.wrapper.VisionWrapper;
 
 public class TurnShooterToTag extends Command {
@@ -20,12 +37,14 @@ public class TurnShooterToTag extends Command {
     private double feedForward = (0.6 / 12) / 2.67;
     private double feedForwardPower;
 
+    /** Creates a new TurnToSpeaker. */
     public TurnShooterToTag(ShooterWrist shooter, VisionWrapper vision) {
         this.shooterWrist = shooter;
         this.vision = vision;
 
         this.shooterWristPIDController = new ProfiledPIDController(1.5, 0, 0.05,
                 new TrapezoidProfile.Constraints(10, 0.1125));
+        // Use addRequirements() here to declare subsystem dependencies.
        
         addRequirements(shooterWrist);
     }
@@ -40,7 +59,9 @@ public class TurnShooterToTag extends Command {
         double TARGET_HEIGHT_METERS = Units.feetToMeters(6.5);
         double setpoint = Math.atan(TARGET_HEIGHT_METERS/ vision.distanceToTag(7)) / (2 * Math.PI);
         SmartDashboard.putNumber("arm tag setpoint", setpoint);
-        shooterWristPIDController.setGoal(setpoint);
+        if (vision.distanceToTag(7) != Integer.MAX_VALUE) {
+            shooterWristPIDController.setGoal(setpoint);
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.

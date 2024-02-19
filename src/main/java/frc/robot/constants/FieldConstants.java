@@ -40,8 +40,14 @@ public class FieldConstants {
 
     //someone double check this - also its in meters
     public static final Pose3d speakerPose = new Pose3d(0.25, 5.5, speakerTopHeight * 0.0254, null);
+<<<<<<< HEAD
 
     public static final Translation2d SPEAKER_POSE = new Translation2d(0.25, 5.5);
 
+=======
+    
+    public static final Translation2d BLUE_SPEAKER_TRANSLATION = new Translation2d(0.25, 5.5);
+    public static final Translation2d RED_SPEAKER_TRANSLATION = new Translation2d(16.25, 5.5);
+>>>>>>> 009bbefe1247a338174d2bbb390da6d49355d2dd
     
 }

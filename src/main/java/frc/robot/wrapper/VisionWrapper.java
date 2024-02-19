@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 /**
  * PhotonVision is handled in this class
@@ -33,12 +32,9 @@ public class VisionWrapper extends SubsystemBase {
   private final PhotonPoseEstimator frontPoseEstimator;
   // private final PhotonPoseEstimator backPoseEstimator;
   private PhotonPipelineResult result;
-  private CommandSwerveDrivetrain drivetrain;
 
-  public VisionWrapper(CommandSwerveDrivetrain drivetrain) {
+  public VisionWrapper() {
     frontCam = new PhotonCamera("frontCam");
-    this.drivetrain = drivetrain;
-    drivetrain.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
     // backCam = new PhotonCamera("backCam");
     frontPoseEstimator = new PhotonPoseEstimator(VisionConstants.FIELD_LAYOUT,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, frontCam, VisionConstants.ROBOT_TO_FRONT);
@@ -52,14 +48,15 @@ public class VisionWrapper extends SubsystemBase {
    * 
    * @return The poses esimated by the two cameras
    */
-  public Optional<EstimatedRobotPose> updatePoseEstimate() {
+  public EstimatedRobotPose[] updatePoseEstimate() {
+    EstimatedRobotPose[] out = new EstimatedRobotPose[2];
     Optional<EstimatedRobotPose> frontPose = frontPoseEstimator.update();
     // Optional<EstimatedRobotPose> backPose = backPoseEstimator.update();
     // Optional<EstimatedRobotPose> leftPose = leftPoseEstimator.update();
     // Optional<EstimatedRobotPose> rightPose = rightPoseEstimator.update();
-    // frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
+    frontPose.ifPresent(estimatedRobotPose -> out[0] = estimatedRobotPose);
     // backPose.ifPresent(estimatedRobotPose -> out[1] = estimatedRobotPose);
-    return frontPose;
+    return out;
   }
 
   public double headingToTag(int id) {
@@ -105,7 +102,7 @@ public class VisionWrapper extends SubsystemBase {
           Units.degreesToRadians(result.getBestTarget().getPitch()));
       return range;
     } else {
-      return 0;
+      return Integer.MAX_VALUE;
     }
   }
 
@@ -117,20 +114,17 @@ public class VisionWrapper extends SubsystemBase {
 
   // code needs to be fixed
   // all of this needs to be in meters
-  // public double calculateRotation() {
-  //   EstimatedRobotPose[] estimates = this.updatePoseEstimate();
-  //   double driveTrainPower = 0;
-  //   for (EstimatedRobotPose estimate : estimates) {
-  //     if (estimate != null) {
-  //       double angle = this.headingToTag(9);
-  //       System.out.println(angle + "hello");
-  //       // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
-  //       // estimate.timestampSeconds);
-  //       driveTrainPower = (-0.1 * angle);
-  //     }
-  //   }
-  //   return driveTrainPower;
-  // }
+  public double calculateRotation(int tag) {
+    double angle = headingToTag(tag)-6;
+    if(headingToTag(tag) == 0){
+      angle = 0;
+    }
+    System.out.println(angle + "fjkdsjfkdsfldsf;lkdsafl;saf;lsdfdsaf");
+    // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
+    // estimate.timestampSeconds);
+    double driveTrainPower = (-0.1 * angle);
+    return driveTrainPower;
+  }
 
   public double calculateAngle(Pose2d estimatedRobotPose) {
     SmartDashboard.putNumber("yValue", FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight);
@@ -145,19 +139,4 @@ public class VisionWrapper extends SubsystemBase {
     return (angle / (2 * Math.PI));
   }
 
-  @Override
-  public void periodic() {
-    Optional<EstimatedRobotPose> estimate = updatePoseEstimate();
-    if (estimate.isPresent()) {
-
-    drivetrain.addVisionMeasurement(estimate.get().estimatedPose.toPose2d(),
-        estimate.get().timestampSeconds);
-    }
-    Pose2d pose = drivetrain.getState().Pose;
-    SmartDashboard.putNumber("Robot Angle", pose.getRotation().getDegrees());
-    double distX = pose.getX() - 0;
-    double distY = pose.getY() - 5;
-    double dist = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
-    SmartDashboard.putNumber("Distance to Speaker", dist);
-  }
 }

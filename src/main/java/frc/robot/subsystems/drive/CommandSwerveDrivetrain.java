@@ -17,13 +17,21 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.constants.FieldConstants;
+import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
@@ -123,4 +131,27 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     //    SmartDashboard.putNumber("shooterMAXCALC", this.calculateAngle());
     }
+
+    public Translation2d getFuturePose() {
+        boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
+        Translation2d speakerPose = (isBlueAlliance) ? FieldConstants.BLUE_SPEAKER_TRANSLATION : FieldConstants.RED_SPEAKER_TRANSLATION;
+
+        ChassisSpeeds robotVelocity = getCurrentRobotChassisSpeeds();
+        double speakerDistance = getState().Pose.getTranslation().getDistance(speakerPose);
+
+        double futureX = speakerPose.getX() - (robotVelocity.vxMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
+        double futureY = speakerPose.getY() - (robotVelocity.vyMetersPerSecond * (speakerDistance / RobotConstants.MAX_NOTE_VELOCITY));
+
+        return new Translation2d(futureX, futureY);
+    }
+
+    public Command driveAroundPoint(Translation2d point) {
+        Translation2d currentPose = getState().Pose.getTranslation();
+        double desiredAngle = MathUtil.angleModulus(currentPose.minus(point).getAngle().getRadians());
+        SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle().withTargetDirection(new Rotation2d(desiredAngle));
+
+        return this.applyRequest(() -> request);
+
+    }   
+
 }
