@@ -47,7 +47,7 @@ public class TurnToSpeaker extends Command {
 
     Translation2d translationalPose = pose.getTranslation();
 
-    Translation2d vectorDiff = FieldConstants.SPEAKER_POSE.minus(translationalPose);
+    Translation2d vectorDiff = drivetrain.getSpeakerPose().minus(translationalPose);
     
     double curAngle = (pose.getRotation().getDegrees());
 

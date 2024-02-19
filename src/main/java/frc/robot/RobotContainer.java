@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -40,6 +41,7 @@ import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterVoltage;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooterWrist.PrepShooterForPoint;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
@@ -154,15 +156,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Drivetrain
-    drivetrain.setDefaultCommand(drivetrainWithVision);
-    /* 
+    // drivetrain.setDefaultCommand(drivetrainWithVision);
+     
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed) // Drive forward with
                                                                                          // negative Y (forward)
             .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driver.getRightX() * RobotConstants.kMaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
-        */
+        
     
     driver.a().whileTrue(drivetrain.applyRequest(() -> brake));
 
@@ -173,7 +175,13 @@ public class RobotContainer {
 
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
     
-    driver.rightBumper().whileTrue(drivetrain.driveAroundPoint(drivetrain.getFuturePose()));
+    driver.rightBumper().whileTrue(
+      Commands.parallel(
+        drivetrain.driveAroundPoint(
+          -driver.getLeftY() * RobotConstants.kMaxSpeed,
+          -driver.getLeftX() * RobotConstants.kMaxSpeed,
+          drivetrain.getFuturePose()), 
+        new PrepShooterForPoint(drivetrain, shooterWrist, drivetrain.getFuturePose())));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -187,6 +195,7 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
     driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
