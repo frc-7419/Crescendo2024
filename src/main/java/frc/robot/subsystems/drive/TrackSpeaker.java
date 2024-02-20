@@ -4,29 +4,27 @@
 
 package frc.robot.subsystems.drive;
 
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.FieldConstants;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
-import frc.robot.wrapper.VisionWrapper;
 
-public class TurnToSpeaker extends Command {
+public class TrackSpeaker extends Command {
   private CommandSwerveDrivetrain drivetrain;
+  private CommandXboxController joystick;
   private PIDController turnPID;
   private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
       .withDeadband(RobotConstants.kMaxSpeed * 0.05);
 
   /** Creates a new TurnToSpeaker. */
-  public TurnToSpeaker(CommandSwerveDrivetrain drivetrain) {
+  public TrackSpeaker(CommandSwerveDrivetrain drivetrain, CommandXboxController joystick) {
     this.drivetrain = drivetrain;
+    this.joystick = joystick;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
   }
@@ -44,24 +42,18 @@ public class TurnToSpeaker extends Command {
   @Override
   public void execute() {
     Pose2d pose = drivetrain.getState().Pose;
-
-    Translation2d translationalPose = pose.getTranslation();
-
-    Translation2d vectorDiff = drivetrain.getSpeakerPose().minus(translationalPose);
     
     double curAngle = (pose.getRotation().getDegrees());
 
-    double targetAngle = (Math.atan(vectorDiff.getY()/vectorDiff.getX()) * (180/Math.PI));
+    double targetAngle = drivetrain.getDesiredAngle();
 
-    SmartDashboard.putNumber("Target Angle", targetAngle);
-    SmartDashboard.putNumber("Current Angle", curAngle);
-    // turnPID.enableContinuousInput(-180, 180);
     double output = -turnPID.calculate(curAngle, targetAngle);
 
     SmartDashboard.putNumber("Rot Output", output);
 
     drivetrain.setControl(driveRequest
-    .withVelocityX(output)
+    .withVelocityX(-joystick.getLeftY())
+    .withVelocityY(-joystick.getLeftX())
     .withRotationalRate(-output));
   }
 

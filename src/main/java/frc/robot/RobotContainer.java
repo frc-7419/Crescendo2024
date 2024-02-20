@@ -33,6 +33,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.DrivetrainWithVision;
+import frc.robot.subsystems.drive.TrackSpeaker;
 import frc.robot.subsystems.drive.TurnToSpeaker;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
@@ -70,8 +71,6 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
 
-  // private final IntakeWristSubsystem wristSubsystem = new
-  // IntakeWristSubsystem(); //TODO figure out this situation
 
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
@@ -84,10 +83,6 @@ public class RobotContainer {
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
       ShooterConstants.shooterPower, ShooterConstants.shooterPower);
-  // private final RunIntakeWristWithJoystick runWristWithJoystick = new
-  // RunIntakeWristWithJoystick(wristSubsystem, operator);
-  // private final RunShooterToSetpoint runShooterToSetpoint = new
-  // RunShooterToSetpoint(shooterSubsystem, 2000, 2000);
 
   // TELEOP COMMANDS END-------------------------------------------------------------------------------------------------------------
   
@@ -102,7 +97,6 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   private final TurnToSpeaker turn = new TurnToSpeaker(drivetrain);
   private final Telemetry logger = new Telemetry(RobotConstants.kMaxSpeed);
-  private final DrivetrainWithVision drivetrainWithVision = new DrivetrainWithVision(drivetrain, drive, driverRaw, vision);
 
   // SWERVE END----------------------------------------------------------------------------------------------------------------------
   
@@ -115,10 +109,6 @@ public class RobotContainer {
   private final Command twoNote;
   private final Command threeNoteAuto;
 
-  private final List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
-      new Pose2d(1.0, 1.0, Rotation2d.fromDegrees(0)),
-      new Pose2d(3.0, 1.0, Rotation2d.fromDegrees(0)),
-      new Pose2d(5.0, 3.0, Rotation2d.fromDegrees(90)));
 
   // AUTONOMOUS END------------------------------------------------------------------------------------------------------------------
   
@@ -135,7 +125,6 @@ public class RobotContainer {
     circleAuto = new PathPlannerAuto("Circle Auto");
     twoNote = new PathPlannerAuto("TwoNote");
     threeNoteAuto = new PathPlannerAuto("Three Note Auto");
-    drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2, 4), new Rotation2d()));
   }
 
 
@@ -175,12 +164,17 @@ public class RobotContainer {
 
     driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2, 4), new Rotation2d()))));
     
+    // driver.rightBumper().whileTrue(
+    //   Commands.parallel(
+    //     drivetrain.driveAroundPoint(
+    //       -driver.getLeftY(),
+    //       -driver.getLeftX(),
+    //       drivetrain.getFuturePose()), 
+    //     new PrepShooterForPoint(drivetrain, shooterWrist, drivetrain.getFuturePose())));
+    
     driver.rightBumper().whileTrue(
       Commands.parallel(
-        drivetrain.driveAroundPoint(
-          -driver.getLeftY() * RobotConstants.kMaxSpeed,
-          -driver.getLeftX() * RobotConstants.kMaxSpeed,
-          drivetrain.getFuturePose()), 
+       new TrackSpeaker(drivetrain, driver), 
         new PrepShooterForPoint(drivetrain, shooterWrist, drivetrain.getFuturePose())));
 
     if (Utils.isSimulation()) {
