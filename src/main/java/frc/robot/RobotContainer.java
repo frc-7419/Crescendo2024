@@ -33,12 +33,12 @@ import frc.robot.subsystems.shooter.RunShooter;
 
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterWrist.PrepShooterForPoint;
+import frc.robot.subsystems.shooterWrist.PrepShooter;
 import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
-import frc.robot.subsystems.shooterWrist.TurnShooterWithOdo;
+import frc.robot.subsystems.shooterWrist.RaiseShooter;
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -135,7 +135,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
     NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
-    NamedCommands.registerCommand("Auto Shoot", new TurnShooterWithOdo(drivetrain, shooterWrist));
+    NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
   }
 
   /**
@@ -181,7 +181,7 @@ public class RobotContainer {
                     .withTargetDirection(drivetrain.getDesiredAngle())
                     .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                     .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)),
-            new PrepShooterForPoint(drivetrain, shooterWrist, drivetrain.getFuturePose())));
+            new PrepShooter(drivetrain, shooterWrist, drivetrain.getFuturePose())));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -201,8 +201,8 @@ public class RobotContainer {
     // intakeSubsytem));
     driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-    driver.y().onTrue(new TurnShooterWithOdo(drivetrain, shooterWrist));
-    operator.x().onTrue(new TurnShooterWithOdo(drivetrain, shooterWrist));
+    driver.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    operator.x().onTrue(new RaiseShooter(drivetrain, shooterWrist));
 
   }
 
