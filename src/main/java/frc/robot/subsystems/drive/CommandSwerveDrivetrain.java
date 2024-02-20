@@ -124,12 +124,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     
     public void periodic() {
-       
-       
-    //    SmartDashboard.putNumber("Robot X Pose", this.getState().Pose.getX());
-    //    SmartDashboard.putNumber("Robot Y Pose", this.getState().Pose.getY());
+        SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
+        SmartDashboard.putNumber("Desired Angle", getDesiredAngle() * (180 / Math.PI));
+    }
+    public double getDesiredAngle() {
+        Translation2d currentPose = getState().Pose.getTranslation();
+        double desiredAngle = MathUtil.angleModulus(currentPose.minus(getFuturePose()).getAngle().getRadians());
+        return desiredAngle;
 
-    //    SmartDashboard.putNumber("shooterMAXCALC", this.calculateAngle());
     }
     public Translation2d getSpeakerPose() {
         boolean isBlueAlliance = DriverStation.getAlliance().orElse(Alliance.Blue).equals(Alliance.Blue);
@@ -150,12 +152,17 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public Command driveAroundPoint(double xVelocity, double yVelocity, Translation2d point) {
-        Translation2d currentPose = getState().Pose.getTranslation();
-        double desiredAngle = MathUtil.angleModulus(currentPose.minus(point).getAngle().getRadians());
+
+        double desiredAngle = getDesiredAngle();
+        
         SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
         .withVelocityX(xVelocity)
         .withVelocityY(yVelocity)
         .withTargetDirection(new Rotation2d(desiredAngle));
+
+        
+        
+        SmartDashboard.putNumber("Request Desired Angle", desiredAngle * (180 / Math.PI));
 
         return this.applyRequest(() -> request);
 

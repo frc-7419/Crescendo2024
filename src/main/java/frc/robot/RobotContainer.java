@@ -173,7 +173,7 @@ public class RobotContainer {
     driver.b().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
-    driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    driver.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2, 4), new Rotation2d()))));
     
     driver.rightBumper().whileTrue(
       Commands.parallel(
@@ -194,7 +194,7 @@ public class RobotContainer {
     
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
-    driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
     
     operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
     operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
