@@ -122,7 +122,7 @@ public class RobotContainer {
     twoNote = new PathPlannerAuto("TwoNote");
     threeNoteAuto = new PathPlannerAuto("Three Note Auto");
 
-    fieldAngle.HeadingController.setPID(10, 0, 0);
+    fieldAngle.HeadingController.setPID(7.5, 0, 0);
     fieldAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
