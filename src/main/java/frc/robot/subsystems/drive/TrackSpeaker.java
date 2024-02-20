@@ -45,7 +45,7 @@ public class TrackSpeaker extends Command {
     
     double curAngle = (pose.getRotation().getDegrees());
 
-    double targetAngle = drivetrain.getDesiredAngle();
+    double targetAngle = drivetrain.getDesiredAngle().getDegrees();
 
     double output = -turnPID.calculate(curAngle, targetAngle);
 
