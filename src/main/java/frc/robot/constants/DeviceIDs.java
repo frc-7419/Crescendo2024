@@ -2,27 +2,19 @@ package frc.robot.constants;
 
 public final class DeviceIDs {
   public static enum CanIds {
-    // Drivetrain CAN IDs
-    leftFalcon1(4),
-    rightFalcon1(2),
-    leftFalcon2(5),
-    rightFalcon2(3),
-
     // Arm CAN IDs
-    armFalcon(13),
-
-    // Gripper CAN IDs
-    gripperNeo(15), // change later
-
-    // Elevator CAN IDs
-    mainElevatorMotor(12),
+    shooterWrist(13),
 
     // Gyro CAN IDss
     pigeon(16),
-    extendedPigeon(51),
 
-    wrist(17), //unknown
-    intakeMotor(18) // unknown
+    wrist(18),
+    intakeMotor(7),
+
+    topShooter(19),
+    bottomShooter(20),
+    serializerFront(7),
+    serializerBack(21), 
     ;
 
     public final int id;
