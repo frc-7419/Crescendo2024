@@ -34,7 +34,6 @@ import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.PrepShooter;
-import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
@@ -133,8 +132,8 @@ public class RobotContainer {
   private void registerCommands() {
     NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsytem, -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
-    NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
-    NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
+    // NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
+    // NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
   }
 
@@ -194,12 +193,12 @@ public class RobotContainer {
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
     // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
 
-    operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
-    operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
+    // operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
+    // operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     operator.y().whileTrue(runShooterWithPID);
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist,
     // intakeSubsytem));
-    driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
+    // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
     driver.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     operator.x().onTrue(new RaiseShooter(drivetrain, shooterWrist));
