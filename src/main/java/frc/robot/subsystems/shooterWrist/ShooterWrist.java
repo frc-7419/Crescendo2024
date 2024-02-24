@@ -134,7 +134,8 @@ public class ShooterWrist extends SubsystemBase {
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   public double getPosition(){
-    return encoder.getAbsolutePosition() - encoder.getPositionOffset();
+    // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
+    return armMotor.getRotorPosition().getValueAsDouble();
   }
   public void zeroEncoder(){
     encoder.reset();
