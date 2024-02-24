@@ -38,6 +38,7 @@ import frc.robot.subsystems.shooterWrist.PrepShooter;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.RaiseShooter;
+import frc.robot.subsystems.shooterWrist.RaiseShooterWithMotionMagic;
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -72,6 +73,7 @@ public class RobotContainer {
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
       ShooterConstants.shooterPower, ShooterConstants.shooterPower);
+  private final RaiseShooterWithMotionMagic raiseShooterWithMotionMagic = new RaiseShooterWithMotionMagic(drivetrain, shooterWrist);
 
   // TELEOP COMMANDS
   // END-------------------------------------------------------------------------------------------------------------
@@ -201,7 +203,7 @@ public class RobotContainer {
     // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
     driver.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
-    operator.x().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
 

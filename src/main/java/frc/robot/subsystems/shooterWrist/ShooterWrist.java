@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooterWrist;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -103,8 +105,8 @@ public class ShooterWrist extends SubsystemBase {
   }
 
   public void setMMConfigs() {
-  var talonFXConfigs = new TalonFXConfiguration();
-  var slot0Configs = talonFXConfigs.Slot0;
+  TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
+  Slot0Configs slot0Configs = talonFXConfigs.Slot0;
   slot0Configs.kS = 0.25; // Add 0.25 V output to overcome static friction
   slot0Configs.kV = 0.12; // A velocity target of 1 rps results in 0.12 V output
   slot0Configs.kA = 0.01; // An acceleration of 1 rps/s requires 0.01 V output
@@ -112,7 +114,7 @@ public class ShooterWrist extends SubsystemBase {
   slot0Configs.kI = 0; // no output for integrated error
   slot0Configs.kD = 0.1; // A velocity error of 1 rps results in 0.1 V output
 
-  var motionMagicConfigs = talonFXConfigs.MotionMagic;
+  MotionMagicConfigs motionMagicConfigs = talonFXConfigs.MotionMagic;
   motionMagicConfigs.MotionMagicCruiseVelocity = 80; // Target cruise velocity of 80 rps
   motionMagicConfigs.MotionMagicAcceleration = 160; // Target acceleration of 160 rps/s (0.5 seconds)
   motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
@@ -121,10 +123,9 @@ public class ShooterWrist extends SubsystemBase {
 
   }
 
-  public void applyRequest() {
+  public void applyRequest(double position) {
     final MotionMagicVoltage armRequest = new MotionMagicVoltage(0);
-    armMotor.setControl(armRequest.withPosition(100));
-
+    armMotor.setControl(armRequest.withPosition(position));
   }
   public void coast(){
     armMotor.setNeutralMode(NeutralModeValue.Coast);
