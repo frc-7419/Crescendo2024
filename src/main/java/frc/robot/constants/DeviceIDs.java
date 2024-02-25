@@ -13,7 +13,6 @@ public final class DeviceIDs {
 
     topShooter(19),
     bottomShooter(20),
-    serializerFront(7),
     serializerBack(21), 
     ;
 

@@ -28,7 +28,6 @@ public class RunIntake extends Command {
   @Override
   public void execute() {
     intakeSubsystem.setSpeed(power);
-    intakeSubsystem.setSerializerFrontSpeed(power);
     intakeSubsystem.setSerializerBackSpeed(-power);
   }
 
@@ -36,7 +35,6 @@ public class RunIntake extends Command {
   @Override
   public void end(boolean interrupted) {
     intakeSubsystem.setSpeed(0);
-    intakeSubsystem.setSerializerFrontSpeed(0);
     intakeSubsystem.setSerializerBackSpeed(0);
     intakeSubsystem.brake();
   }

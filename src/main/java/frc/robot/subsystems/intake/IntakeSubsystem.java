@@ -20,13 +20,11 @@ public class IntakeSubsystem extends SubsystemBase {
   
   public IntakeSubsystem() {
     intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    // serializerFront = new CANSparkMax(CanIds.serializerFront.id, MotorType.kBrushless);
     serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
   public void invertMotors(){
-    // serializerFront.setInverted(false);
     serializerBack.setInverted(true);
     intakeMotor.setInverted(true);
   }

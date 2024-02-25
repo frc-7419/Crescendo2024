@@ -105,6 +105,7 @@ public class RobotContainer {
   private final Command circleAuto;
   private final Command twoNote;
   private final Command threeNoteAuto;
+  private final Command Auton1NoteUpdated;
 
   // AUTONOMOUS
   // END------------------------------------------------------------------------------------------------------------------
@@ -122,6 +123,7 @@ public class RobotContainer {
     circleAuto = new PathPlannerAuto("Circle Auto");
     twoNote = new PathPlannerAuto("TwoNote");
     threeNoteAuto = new PathPlannerAuto("Three Note Auto");
+    Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
 
     fieldAngle.HeadingController.setPID(7.5, 0, 0);
     fieldAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -163,7 +165,7 @@ public class RobotContainer {
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
     driver.leftBumper().onTrue(
-        drivetrain.runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2, 4), new Rotation2d()))));
+        drivetrain.runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()))));
 
     // driver.rightBumper().whileTrue(
     // Commands.parallel(
@@ -175,14 +177,14 @@ public class RobotContainer {
     // drivetrain.getFuturePose())));
 
     driver.rightBumper().whileTrue(
-        Commands.parallel(
+        // Commands.parallel(
             drivetrain.applyRequest(
                 () -> fieldAngle.withVelocityX(-driver.getLeftY())
                     .withVelocityY(-driver.getLeftX())
                     .withTargetDirection(drivetrain.getDesiredAngle())
                     .withDeadband(RobotConstants.kMaxSpeed * 0.1)
-                    .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)),
-            new PrepShooter(drivetrain, shooterWrist, drivetrain.getFuturePose())));
+                    .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)));
+            // new PrepShooter(drivetrain, shooterWrist, drivetrain.getFuturePose())));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -203,7 +205,7 @@ public class RobotContainer {
     // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
     driver.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
-    operator.x().onTrue(raiseShooterWithMotionMagic);
+    // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
 
@@ -211,11 +213,7 @@ public class RobotContainer {
    * Configures the auton chooser selections
    */
   public void configAutonSelection() {
-    autonChooser.setDefaultOption("Test Auto", testAuto);
-    autonChooser.addOption("Square Auto", squareAuto);
-    autonChooser.addOption("Two Note Auto", twoNote);
-    autonChooser.addOption("Circle Auto", circleAuto);
-    autonChooser.addOption("Three Note", threeNoteAuto);
+    autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
   }
 
   /**
@@ -235,7 +233,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
     // return twoNote;
-    return threeNoteAuto;
+    // return threeNoteAuto;
     // return squareAuto;
+    return Auton1NoteUpdated;
   }
 }
