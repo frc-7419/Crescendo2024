@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
@@ -104,6 +105,7 @@ public class RobotContainer {
   private final Command squareAuto;
   private final Command circleAuto;
   private final Command twoNote;
+  private OneNote oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsytem, drivetrain);
   private final Command threeNoteAuto;
   private final Command Auton1NoteUpdated;
 
@@ -121,9 +123,10 @@ public class RobotContainer {
     testAuto = new PathPlannerAuto("Test Auto");
     squareAuto = new PathPlannerAuto("Square Auto");
     circleAuto = new PathPlannerAuto("Circle Auto");
-    twoNote = new PathPlannerAuto("TwoNote");
+    twoNote = new PathPlannerAuto("Auton2NoteUpdateLeft");
     threeNoteAuto = new PathPlannerAuto("Three Note Auto");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
+    drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()));
 
     fieldAngle.HeadingController.setPID(7.5, 0, 0);
     fieldAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -198,14 +201,12 @@ public class RobotContainer {
     operator.leftBumper().whileTrue(new RunShooter(shooterSubsystem, -1));
     // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
 
-    // operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
-    // operator.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
-    operator.y().whileTrue(runShooterWithPID);
+    // operator.b().onTrue(new RunShooterWristToSetpoint(sho/   eTrue(new RaiseShooter(drivetrain, shooterWrist));
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist,
     // intakeSubsytem));
     // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-    driver.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
@@ -236,6 +237,7 @@ public class RobotContainer {
     // return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    return Auton1NoteUpdated;
+    return oneNote;
+    // return twoNote;
   }
 }

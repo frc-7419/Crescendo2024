@@ -85,7 +85,8 @@ public class ShooterWrist extends SubsystemBase {
     return radians/(2 * Math.PI);
   }
 
-  public double getRadians(){
+  public double 
+  getRadians(){
     return rotationToRadians(getPosition());
   }
   public double rotationToDegrees(double rotations){
@@ -135,12 +136,11 @@ public class ShooterWrist extends SubsystemBase {
   }
   public double getPosition(){
     // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
-    return armMotor.getRotorPosition().getValueAsDouble();
+    return armMotor.getPosition().getValueAsDouble() / 75;
   }
   public void zeroEncoder(){
 
     armMotor.setPosition(0);
-// >>>>>>> 197e74c029af7ddb7f15ded9ac19cd00e7f552fe
   }
   @Override
   public void periodic() {
