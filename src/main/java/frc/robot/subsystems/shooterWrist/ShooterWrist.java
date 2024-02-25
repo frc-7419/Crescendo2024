@@ -137,7 +137,7 @@ public class ShooterWrist extends SubsystemBase {
     return encoder.getAbsolutePosition() - encoder.getPositionOffset();
   }
   public void zeroEncoder(){
-    encoder.reset();
+    armMotor.setPosition(0);
   }
   @Override
   public void periodic() {
