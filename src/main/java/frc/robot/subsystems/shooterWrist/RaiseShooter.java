@@ -29,11 +29,11 @@ public class RaiseShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    interpolatingDoubleTreeMap.put(2.06, 65.2/360);
-    interpolatingDoubleTreeMap.put(2.8, 50.2/360);
-    interpolatingDoubleTreeMap.put(3.4, 46.0/360);
-    interpolatingDoubleTreeMap.put(3.8, 41.0/360);
-    interpolatingDoubleTreeMap.put(4.0, 37.0/360);
+    // interpolatingDoubleTreeMap.put(2.06, 65.2/360);
+    // interpolatingDoubleTreeMap.put(2.8, 50.2/360);
+    // interpolatingDoubleTreeMap.put(3.4, 46.0/360);
+    // interpolatingDoubleTreeMap.put(3.8, 41.0/360);
+    // interpolatingDoubleTreeMap.put(4.0, 37.0/360);
     interpolatingDoubleTreeMap.put(4.5, 32.0/360);
     shooterWrist.coast();
     shooterWrist.setPower(0);
@@ -48,9 +48,9 @@ public class RaiseShooter extends Command {
     Translation2d speakerPose = drivetrain.getSpeakerPose();
 
     double distance = pose.getDistance(speakerPose);
-    double setpoint = interpolatingDoubleTreeMap.get(distance);
+    // double setpoint = interpolatingDoubleTreeMap.get(distance);
 
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
