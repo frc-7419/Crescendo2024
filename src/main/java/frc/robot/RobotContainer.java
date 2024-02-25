@@ -192,9 +192,10 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     // zero
-    operator.leftBumper().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
+    operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    operator.leftBumper().whileTrue(new RunShooter(shooterSubsystem, -1));
     // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
 
     // operator.b().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.17));
