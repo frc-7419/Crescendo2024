@@ -12,8 +12,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
   private ShooterSubsystem shooterSubsystem;
+  private PIDController topShooterPidController = new PIDController(0.001852, 0, 0);
+  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private PIDController bottomShooterPidController = new PIDController(0.001852, 0, 0);
+  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
-  private double topV, bottomV;
+  private double topV, bottomV, topPid, bottomPid, topFor, bottomFor;
 
   public RunShooterWithPID(ShooterSubsystem shooterSubsystem, double topVelocity, double bottomVelocity) {
     this.shooterSubsystem = shooterSubsystem;
@@ -33,7 +37,10 @@ public class RunShooterWithPID extends Command {
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
     shooterSubsystem.invertToggle();
-    
+    topShooterPidController.reset();
+    topShooterPidController.setSetpoint(topV);
+    bottomShooterPidController.reset();
+    bottomShooterPidController.setSetpoint(bottomV);
 
   }
 
@@ -41,7 +48,16 @@ public class RunShooterWithPID extends Command {
   @Override
   public void execute() {
     if(shooterSubsystem.getToggle()){
-      shooterSubsystem.setRPM(topV, bottomV);
+      topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
+      bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
+      topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
+      bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
+  
+      shooterSubsystem.setTopSpeed(topPid+topFor);
+      shooterSubsystem.setBottomSpeed(bottomPid + bottomFor);
+
+      SmartDashboard.putNumber("shooterTopPID", topPid);
+      SmartDashboard.putNumber("shooterTopPID", bottomPid);
     }
     else{
       shooterSubsystem.setBothSpeed(0.0);

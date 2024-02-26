@@ -198,7 +198,7 @@ public class RobotContainer {
     // zero
     operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem, 3000, 3000));
     operator.leftBumper().whileTrue(new RunShooter(shooterSubsystem, -1));
     // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
 
