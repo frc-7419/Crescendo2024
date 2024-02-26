@@ -36,6 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
   // setpoint needs to be set
   private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private boolean isRunning;
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
@@ -55,14 +56,15 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     invertMotors();
+    isRunning = false;
   }
 
   public void setRPM(double topRPM, double bottomRPM) {
     shooterMotorTop.getPIDController().setFF(topFeedforward.calculate(topRPM));
     shooterMotorBottom.getPIDController().setFF(bottomFeedforward.calculate(bottomRPM));
 
-    shooterMotorTop.getPIDController().setReference(topRPM, ControlType.kSmartVelocity);
-    shooterMotorBottom.getPIDController().setReference(bottomRPM, ControlType.kSmartVelocity);
+    shooterMotorTop.getPIDController().setReference(topRPM, ControlType.kVelocity);
+    shooterMotorBottom.getPIDController().setReference(bottomRPM, ControlType.kVelocity);
   }
   public void invertMotors() {
     shooterMotorBottom.setInverted(false);
@@ -145,6 +147,12 @@ public class ShooterSubsystem extends SubsystemBase {
   public TrapezoidProfile.State getSetpoint() {
     return setpoint;
   }
+  public boolean getToggle(){
+    return isRunning;
+  }
+  public void invertToggle(){
+    this.isRunning = !this.isRunning;
+  }
 
   @Override
   public void periodic() {
@@ -152,6 +160,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
+    SmartDashboard.putBoolean("shooterToggle", isRunning);
   }
   public Constraints getConstraints() {
       return constraints;

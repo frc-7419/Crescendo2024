@@ -32,13 +32,22 @@ public class RunShooterWithPID extends Command {
   public void initialize() {
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
+    shooterSubsystem.invertToggle();
+    
 
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   shooterSubsystem.setRPM(topV, bottomV);
+    if(shooterSubsystem.getToggle()){
+      shooterSubsystem.setRPM(topV, bottomV);
+    }
+    else{
+      shooterSubsystem.setBothSpeed(0.0);
+      shooterSubsystem.brake();
+    }
+   
 
     SmartDashboard.putNumber("Bottom Setpoint", bottomV);
     SmartDashboard.putNumber("Bottom Velocity", shooterSubsystem.getBottomVelocity());
@@ -49,8 +58,8 @@ public class RunShooterWithPID extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setBothSpeed(0.0);
-    shooterSubsystem.brake();
+    // shooterSubsystem.setBothSpeed(0.0);
+    // shooterSubsystem.brake();
   }
 
   // Returns true when the command should end.
