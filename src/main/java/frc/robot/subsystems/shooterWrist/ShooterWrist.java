@@ -66,7 +66,7 @@ public class ShooterWrist extends SubsystemBase {
         // WPILog with this subsystem's name ("drive")
         this));
 
-    public ShooterWrist() {
+  public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     dutyCycleOut = new DutyCycleOut(0);
     armMotor.setInverted(true);
@@ -75,8 +75,8 @@ public class ShooterWrist extends SubsystemBase {
     encoder.setPositionOffset(ArmConstants.armOffset);
   }
   public double getVelocity() {
-  return armMotor.getVelocity().getValueAsDouble() / 70;
-}
+  return armMotor.getVelocity().getValueAsDouble() / ArmConstants.armGearing;
+  }
 
   public double rotationToRadians(double rotations){
     return rotations * 2 * Math.PI;
@@ -136,7 +136,7 @@ public class ShooterWrist extends SubsystemBase {
   }
   public double getPosition(){
     // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
-    return armMotor.getPosition().getValueAsDouble() / 75;
+    return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing;
   }
   public void zeroEncoder(){
 

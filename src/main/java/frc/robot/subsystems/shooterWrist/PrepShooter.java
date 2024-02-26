@@ -32,12 +32,14 @@ public class PrepShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    interpolatingDoubleTreeMap.put(2.06, 65.2/360);
-    interpolatingDoubleTreeMap.put(2.8, 50.2/360);
-    interpolatingDoubleTreeMap.put(3.4, 46.0/360);
-    interpolatingDoubleTreeMap.put(3.8, 41.0/360);
-    interpolatingDoubleTreeMap.put(4.0, 37.0/360);
-    interpolatingDoubleTreeMap.put(4.5, 32.0/360);
+    interpolatingDoubleTreeMap.put(1.25, 46.06/360);
+    interpolatingDoubleTreeMap.put(1.51, 38.1/360);
+    interpolatingDoubleTreeMap.put(1.73, 39.1/360);
+    interpolatingDoubleTreeMap.put(2.02, 36.2/360);
+    interpolatingDoubleTreeMap.put(2.3, 32.55/360);
+    interpolatingDoubleTreeMap.put(2.58, 29.75/360);
+    interpolatingDoubleTreeMap.put(2.89, 27.44/360);
+    interpolatingDoubleTreeMap.put(3.23, 26.69/360);
     shooterWrist.coast();
     shooterWrist.setPower(0);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);

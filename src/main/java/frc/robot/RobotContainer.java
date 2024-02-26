@@ -73,7 +73,7 @@ public class RobotContainer {
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
-      ShooterConstants.shooterPower, ShooterConstants.shooterPower);
+      3000, 3000);
   private final RaiseShooterWithMotionMagic raiseShooterWithMotionMagic = new RaiseShooterWithMotionMagic(drivetrain, shooterWrist);
 
   // TELEOP COMMANDS
@@ -223,8 +223,8 @@ public class RobotContainer {
    */
   private void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
-    // wristSubsystem.setDefaultCommand(runWristWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+    shooterSubsystem.setDefaultCommand(runShooterWithPID);
   }
 
   /**

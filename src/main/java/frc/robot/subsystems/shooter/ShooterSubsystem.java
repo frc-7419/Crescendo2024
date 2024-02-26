@@ -39,7 +39,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void invertMotors() {
     shooterMotorBottom.setInverted(false);
-    shooterMotorTop.setInverted(false);    
+    shooterMotorTop.setInverted(true);    
   }
   
   public void setTopSpeed(double speed){
@@ -52,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setBothSpeed(double speed){
     setTopSpeed(speed);
-    setBottomSpeed(-speed);
+    setBottomSpeed(speed);
   }
 
   public void setTopVoltage(double voltage){

@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
@@ -50,10 +49,11 @@ public class RunShooterWithPID extends Command {
   public void execute() {
     double topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
     double bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
-    double topFor = topFeedforward.calculate(topV);
-    double bottomFor = bottomFeedforward.calculate(bottomV);
+    double topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
+    double bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
+
     shooterSubsystem.setTopSpeed(topPid+topFor);
-    shooterSubsystem.setBottomSpeed(-bottomPid-bottomFor);
+    shooterSubsystem.setBottomSpeed(bottomPid + bottomFor);
 
     SmartDashboard.putNumber("Bottom Setpoint", bottomV);
     SmartDashboard.putNumber("Bottom Velocity", shooterSubsystem.getBottomVelocity());
