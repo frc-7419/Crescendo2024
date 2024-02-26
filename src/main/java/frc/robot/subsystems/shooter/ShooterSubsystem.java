@@ -7,11 +7,14 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,6 +25,12 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
+
+  private SparkPIDController topShooterPidController;
+  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private SparkPIDController bottomShooterPidController;
+  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+
   private TalonFX shooterWrist;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
@@ -31,12 +40,30 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
+
+    topShooterPidController = shooterMotorTop.getPIDController();
+    bottomShooterPidController = shooterMotorBottom.getPIDController();
+
+    topShooterPidController.setP(0.001852);
+    topShooterPidController.setI(0);
+    topShooterPidController.setD(0);
+    bottomShooterPidController.setP(0.001852);
+    bottomShooterPidController.setI(0);
+    bottomShooterPidController.setD(0);
+
     constraints = ShooterConstants.Constraints;
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     invertMotors();
   }
 
+  public void setRPM(double topRPM, double bottomRPM) {
+    shooterMotorTop.getPIDController().setFF(topFeedforward.calculate(topRPM));
+    shooterMotorBottom.getPIDController().setFF(bottomFeedforward.calculate(bottomRPM));
+
+    shooterMotorTop.getPIDController().setReference(topRPM, ControlType.kSmartVelocity);
+    shooterMotorBottom.getPIDController().setReference(bottomRPM, ControlType.kSmartVelocity);
+  }
   public void invertMotors() {
     shooterMotorBottom.setInverted(false);
     shooterMotorTop.setInverted(true);    
@@ -122,6 +149,7 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
   }

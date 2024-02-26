@@ -12,10 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
   private ShooterSubsystem shooterSubsystem;
-  private PIDController topShooterPidController = new PIDController(0.001852, 0, 0);
-  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
-  private PIDController bottomShooterPidController = new PIDController(0.001852, 0, 0);
-  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private double topV, bottomV;
 
@@ -37,23 +33,12 @@ public class RunShooterWithPID extends Command {
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
     topV = SmartDashboard.getNumber("Top Setpoint", topV);
 
-    topShooterPidController.reset();
-    topShooterPidController.setSetpoint(topV);
-
-    bottomShooterPidController.reset();
-    bottomShooterPidController.setSetpoint(bottomV);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
-    double bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
-    double topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
-    double bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
-
-    shooterSubsystem.setTopSpeed(topPid+topFor);
-    shooterSubsystem.setBottomSpeed(bottomPid + bottomFor);
+   shooterSubsystem.setRPM(topV, bottomV);
 
     SmartDashboard.putNumber("Bottom Setpoint", bottomV);
     SmartDashboard.putNumber("Bottom Velocity", shooterSubsystem.getBottomVelocity());

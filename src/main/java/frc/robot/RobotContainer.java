@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
@@ -224,7 +225,10 @@ public class RobotContainer {
   private void setDefaultCommands() {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
-    shooterSubsystem.setDefaultCommand(runShooterWithPID);
+    
+    shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
+      shooterSubsystem.setRPM(1500, 1500);
+    }, shooterSubsystem));
   }
 
   /**
