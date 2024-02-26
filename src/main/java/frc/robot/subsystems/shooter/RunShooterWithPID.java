@@ -34,8 +34,6 @@ public class RunShooterWithPID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    topV = SmartDashboard.getNumber("Top Setpoint", topV);
-    topV = SmartDashboard.getNumber("Top Setpoint", topV);
     shooterSubsystem.invertToggle();
     topShooterPidController.reset();
     topShooterPidController.setSetpoint(topV);
