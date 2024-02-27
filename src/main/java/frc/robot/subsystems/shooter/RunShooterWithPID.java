@@ -46,17 +46,18 @@ public class RunShooterWithPID extends Command {
   @Override
   public void execute() {
     if(shooterSubsystem.getToggle()){
-      topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
-      bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
-      topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
-      bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
+      shooterSubsystem.setRPM(topV, bottomV);
+      // topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
+      // bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());
+      // topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
+      // bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
   
-      shooterSubsystem.setTopSpeed(-(topPid+topFor));
-      shooterSubsystem.setBottomSpeed(-(bottomPid + bottomFor));
+      // shooterSubsystem.setTopSpeed(-(topPid+topFor));
+      // shooterSubsystem.setBottomSpeed(-(bottomPid + bottomFor));
 
 
-      SmartDashboard.putNumber("shooterTopPID", topPid);
-      SmartDashboard.putNumber("shooterBottomPID", bottomPid);
+      // SmartDashboard.putNumber("shooterTopPID", topPid);
+      // SmartDashboard.putNumber("shooterBottomPID", bottomPid);
     }
     else{
       shooterSubsystem.setBothSpeed(0.0);

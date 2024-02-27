@@ -39,14 +39,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
-    topShooterEncoder = shooterMotorTop.getEncoder();
-
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
+
+    topShooterEncoder = shooterMotorTop.getEncoder();
     bottomShooterEncoder = shooterMotorBottom.getEncoder();
+
+    invertMotors();
+    isRunning = false;
 
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     topShooterPidController = shooterMotorTop.getPIDController();
-    topShooterPidController.setP(6e-5);
+    topShooterPidController.setP(6e-15);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
     topShooterPidController.setIZone(0);
@@ -54,19 +57,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     bottomShooterPidController = shooterMotorBottom.getPIDController();
-    bottomShooterPidController.setP(6e-5);
+    bottomShooterPidController.setP(6e-15);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
     bottomShooterPidController.setIZone(0);
     bottomShooterPidController.setOutputRange(-1, 1);
-
-    invertMotors();
-    isRunning = false;
   }
 
   public void setRPM(double topRPM, double bottomRPM) {
-    topShooterPidController.setFF(topFeedforward.calculate(topRPM));
-    bottomShooterPidController.setFF(bottomFeedforward.calculate(bottomRPM));
+    //topShooterPidController.setFF(topFeedforward.calculate(topRPM));
+    //bottomShooterPidController.setFF(bottomFeedforward.calculate(bottomRPM));
 
     topShooterPidController.setReference(topRPM, ControlType.kVelocity);
     bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
