@@ -31,7 +31,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private SparkPIDController bottomShooterPidController;
   private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
-  private TalonFX shooterWrist;
   private TrapezoidProfile.Constraints constraints;
   private TrapezoidProfile.State goal = new TrapezoidProfile.State();
   // setpoint needs to be set
