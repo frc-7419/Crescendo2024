@@ -7,6 +7,7 @@ package frc.robot.subsystems.shooter;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -25,39 +26,50 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
+  private RelativeEncoder topShooterEncoder;
+  private RelativeEncoder bottomShooterEncoder;
 
   private SparkPIDController topShooterPidController;
   private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+
   private SparkPIDController bottomShooterPidController;
   private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+
   private boolean isRunning;
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
+    topShooterEncoder = shooterMotorTop.getEncoder();
+
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
+    bottomShooterEncoder = shooterMotorBottom.getEncoder();
 
+    shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     topShooterPidController = shooterMotorTop.getPIDController();
-    bottomShooterPidController = shooterMotorBottom.getPIDController();
-
     topShooterPidController.setP(6e-5);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
+    topShooterPidController.setIZone(0);
+    topShooterPidController.setOutputRange(-1, 1);
+
+    shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
+    bottomShooterPidController = shooterMotorBottom.getPIDController();
     bottomShooterPidController.setP(6e-5);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
+    bottomShooterPidController.setIZone(0);
+    bottomShooterPidController.setOutputRange(-1, 1);
 
-    shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
-    shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     invertMotors();
     isRunning = false;
   }
 
   public void setRPM(double topRPM, double bottomRPM) {
-    shooterMotorTop.getPIDController().setFF(topFeedforward.calculate(topRPM));
-    shooterMotorBottom.getPIDController().setFF(bottomFeedforward.calculate(bottomRPM));
+    topShooterPidController.setFF(topFeedforward.calculate(topRPM));
+    bottomShooterPidController.setFF(bottomFeedforward.calculate(bottomRPM));
 
-    shooterMotorTop.getPIDController().setReference(topRPM, ControlType.kVelocity);
-    shooterMotorBottom.getPIDController().setReference(bottomRPM, ControlType.kVelocity);
+    topShooterPidController.setReference(topRPM, ControlType.kVelocity);
+    bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
   }
   public void invertMotors() {
     shooterMotorBottom.setInverted(false);
@@ -87,7 +99,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setBothVoltage(double voltage) {
     setTopVoltage(voltage);
-    setBottomVoltage(-voltage);
+    setBottomVoltage(voltage);
   }
   
   public double getTopVelocity() {
