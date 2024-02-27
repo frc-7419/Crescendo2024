@@ -45,11 +45,11 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooterEncoder = shooterMotorBottom.getEncoder();
 
     invertMotors();
-    isRunning = false;
+    isRunning = true;
 
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     topShooterPidController = shooterMotorTop.getPIDController();
-    topShooterPidController.setP(6e-15);
+    topShooterPidController.setP(0.005);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
     topShooterPidController.setIZone(0);
@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     bottomShooterPidController = shooterMotorBottom.getPIDController();
-    bottomShooterPidController.setP(6e-15);
+    bottomShooterPidController.setP(0.005);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
     bottomShooterPidController.setIZone(0);
@@ -65,15 +65,15 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setRPM(double topRPM, double bottomRPM) {
-    //topShooterPidController.setFF(topFeedforward.calculate(topRPM));
-    //bottomShooterPidController.setFF(bottomFeedforward.calculate(bottomRPM));
+    topShooterPidController.setFF(0.0003);
+    bottomShooterPidController.setFF(0.0003);
 
     topShooterPidController.setReference(topRPM, ControlType.kVelocity);
     bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
   }
   public void invertMotors() {
-    shooterMotorBottom.setInverted(false);
-    shooterMotorTop.setInverted(true);    
+    shooterMotorBottom.setInverted(true);
+    shooterMotorTop.setInverted(false);    
   }
   
   public void setTopSpeed(double speed){

@@ -34,11 +34,11 @@ public class RunShooterWithPID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.invertToggle();
     topShooterPidController.reset();
     topShooterPidController.setSetpoint(topV);
     bottomShooterPidController.reset();
     bottomShooterPidController.setSetpoint(bottomV);
+    shooterSubsystem.invertToggle();
 
   }
 
@@ -46,6 +46,7 @@ public class RunShooterWithPID extends Command {
   @Override
   public void execute() {
     if(shooterSubsystem.getToggle()){
+      shooterSubsystem.coast();
       shooterSubsystem.setRPM(topV, bottomV);
       // topPid = topShooterPidController.calculate(shooterSubsystem.getTopVelocity());
       // bottomPid = bottomShooterPidController.calculate(shooterSubsystem.getBottomVelocity());

@@ -81,6 +81,8 @@ public class RobotContainer {
   // TELEOP COMMANDS
   // END-------------------------------------------------------------------------------------------------------------
 
+  
+
   // SWERVE--------------------------------------------------------------------------------------------------------------------------
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -199,8 +201,15 @@ public class RobotContainer {
     // zero
     operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
-    operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem, 3000, 3000));
-    operator.leftBumper().whileTrue(new RunShooter(shooterSubsystem, -1));
+    // operator.rightBumper().onTrue(runShooterWithPID);
+    operator.leftBumper().onTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(2000, 2000);
+    }, shooterSubsystem));
+    operator.rightBumper().whileTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(4000, 4000);
+    }, shooterSubsystem));
+
+    
     driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
     driver.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 53.0/360));
 
@@ -229,7 +238,7 @@ public class RobotContainer {
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
     
     // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
-    //   shooterSubsystem.setRPM(1500, 1500);
+    //   shooterSubsystem.setRPM(2000, 2000);
     // }, shooterSubsystem));
   }
 
