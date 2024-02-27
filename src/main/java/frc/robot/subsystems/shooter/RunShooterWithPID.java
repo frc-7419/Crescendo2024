@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
   private ShooterSubsystem shooterSubsystem;
-  private PIDController topShooterPidController = new PIDController(0.001852, 0, 0);
+  private PIDController topShooterPidController = new PIDController(0.0001852, 0, 0);
   private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
-  private PIDController bottomShooterPidController = new PIDController(0.001852, 0, 0);
+  private PIDController bottomShooterPidController = new PIDController(0.0001852, 0, 0);
   private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private double topV, bottomV, topPid, bottomPid, topFor, bottomFor;
@@ -51,11 +51,12 @@ public class RunShooterWithPID extends Command {
       topFor = Math.copySign(topFeedforward.calculate(topV), topPid);
       bottomFor = Math.copySign(bottomFeedforward.calculate(bottomV), bottomPid);
   
-      shooterSubsystem.setTopSpeed(topPid+topFor);
-      shooterSubsystem.setBottomSpeed(bottomPid + bottomFor);
+      shooterSubsystem.setTopSpeed(-(topPid+topFor));
+      shooterSubsystem.setBottomSpeed(-(bottomPid + bottomFor));
+
 
       SmartDashboard.putNumber("shooterTopPID", topPid);
-      SmartDashboard.putNumber("shooterTopPID", bottomPid);
+      SmartDashboard.putNumber("shooterBottomPID", bottomPid);
     }
     else{
       shooterSubsystem.setBothSpeed(0.0);
@@ -72,8 +73,8 @@ public class RunShooterWithPID extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // shooterSubsystem.setBothSpeed(0.0);
-    // shooterSubsystem.brake();
+    shooterSubsystem.setBothSpeed(0.0);
+    shooterSubsystem.brake();
   }
 
   // Returns true when the command should end.

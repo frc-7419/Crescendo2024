@@ -41,6 +41,7 @@ import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.RaiseShooter;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithMotionMagic;
+import frc.robot.subsystems.shooterWrist.RaiseShooterWithPID;
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -200,7 +201,8 @@ public class RobotContainer {
 
     operator.rightBumper().whileTrue(new RunShooterWithPID(shooterSubsystem, 3000, 3000));
     operator.leftBumper().whileTrue(new RunShooter(shooterSubsystem, -1));
-    // driver.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1));
+    driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
+    driver.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 53.0/360));
 
     // operator.b().onTrue(new RunShooterWristToSetpoint(sho/   eTrue(new RaiseShooter(drivetrain, shooterWrist));
     // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist,

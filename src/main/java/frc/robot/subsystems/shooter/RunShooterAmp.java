@@ -6,14 +6,16 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunShooter extends Command {
+public class RunShooterAmp extends Command {
   /** Creates a new RunShooter. */
   private ShooterSubsystem shooterSubsystem;
-  private double power;
+  private double topPower;
+  private double bottomPower;
 
-  public RunShooter(ShooterSubsystem shooterSubsystem, double power) {
+  public RunShooterAmp(ShooterSubsystem shooterSubsystem, double topPower, double bottomPower) {
     this.shooterSubsystem = shooterSubsystem;
-    this.power = power;
+    this.topPower = topPower;
+    this.bottomPower = bottomPower;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
   }
@@ -22,8 +24,8 @@ public class RunShooter extends Command {
   @Override
   public void initialize() {
     shooterSubsystem.coast();
-    shooterSubsystem.setTopSpeed(power);
-    shooterSubsystem.setBottomSpeed(power);
+    shooterSubsystem.setTopSpeed(topPower);
+    shooterSubsystem.setBottomSpeed(bottomPower);
   }
 
 
