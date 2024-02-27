@@ -30,11 +30,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
   private SparkPIDController bottomShooterPidController;
   private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
-
-  private TrapezoidProfile.Constraints constraints;
-  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
-  // setpoint needs to be set
-  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
   private boolean isRunning;
 
   public ShooterSubsystem() {
@@ -44,14 +39,13 @@ public class ShooterSubsystem extends SubsystemBase {
     topShooterPidController = shooterMotorTop.getPIDController();
     bottomShooterPidController = shooterMotorBottom.getPIDController();
 
-    topShooterPidController.setP(0.001852);
+    topShooterPidController.setP(6e-5);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
-    bottomShooterPidController.setP(0.001852);
+    bottomShooterPidController.setP(6e-5);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
 
-    constraints = ShooterConstants.Constraints;
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     invertMotors();
@@ -114,38 +108,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterMotorBottom.setIdleMode(IdleMode.kCoast);
   }
 
-
-  public void setGoal(double goalState) {
-    goal = new TrapezoidProfile.State(goalState, 0);
-  }
-
-  public TrapezoidProfile.State getGoal() {
-    return goal;
-  }
-
-  public void setWristSpeed(double speed) {
-    shooterWrist.set(speed);
-  }
-
-  public void setWristVoltage(double voltage) {
-    shooterWrist.setVoltage(voltage);
-  }
-
-  public void brakeWrist() {
-    shooterWrist.setNeutralMode(NeutralModeValue.Brake);
-  }
-
-  public void coastWrist() {
-    shooterWrist.setNeutralMode(NeutralModeValue.Coast);
-  }
-
-  public void setSetpoint(double setpointState) {
-    setpoint = new TrapezoidProfile.State(setpointState, 0);
-  }
-
-  public TrapezoidProfile.State getSetpoint() {
-    return setpoint;
-  }
   public boolean getToggle(){
     return isRunning;
   }
@@ -160,9 +122,6 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
     SmartDashboard.putBoolean("shooterToggle", isRunning);
-  }
-  public Constraints getConstraints() {
-      return constraints;
   }
 }
 // 47
