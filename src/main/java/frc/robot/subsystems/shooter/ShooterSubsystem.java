@@ -49,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     topShooterPidController = shooterMotorTop.getPIDController();
-    topShooterPidController.setP(0.005);
+    topShooterPidController.setP(0.00065);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
     topShooterPidController.setIZone(0);
@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     bottomShooterPidController = shooterMotorBottom.getPIDController();
-    bottomShooterPidController.setP(0.005);
+    bottomShooterPidController.setP(0.00065);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
     bottomShooterPidController.setIZone(0);
@@ -65,8 +65,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setRPM(double topRPM, double bottomRPM) {
-    topShooterPidController.setFF(0.0003);
-    bottomShooterPidController.setFF(0.0003);
+    topShooterPidController.setFF(0.0003/2);
+    bottomShooterPidController.setFF(0.0003/2);
 
     topShooterPidController.setReference(topRPM, ControlType.kVelocity);
     bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);

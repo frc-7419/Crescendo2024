@@ -237,9 +237,9 @@ public class RobotContainer {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
     
-    // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
-    //   shooterSubsystem.setRPM(2000, 2000);
-    // }, shooterSubsystem));
+    shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
+      shooterSubsystem.setRPM(4000, 4000);
+    }, shooterSubsystem));
   }
 
   /**
