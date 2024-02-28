@@ -76,7 +76,6 @@ public class RobotContainer {
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
       3000, 3000);
-  private final RaiseShooterWithMotionMagic raiseShooterWithMotionMagic = new RaiseShooterWithMotionMagic(drivetrain, shooterWrist);
 
   // TELEOP COMMANDS
   // END-------------------------------------------------------------------------------------------------------------
@@ -202,12 +201,14 @@ public class RobotContainer {
     operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
     // operator.rightBumper().onTrue(runShooterWithPID);
-    operator.leftBumper().onTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(2000, 2000);
-    }, shooterSubsystem));
-    operator.rightBumper().whileTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(4000, 4000);
-    }, shooterSubsystem));
+    // operator.leftBumper().onTrue(new RunCommand(() -> {
+    //   shooterSubsystem.setRPM(2000, 2000);
+    // }, shooterSubsystem));
+    // operator.rightBumper().whileTrue(new RunCommand(() -> {
+    //   shooterSubsystem.setRPM(4000, 4000);
+    // }, shooterSubsystem));
+
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.5));
 
     
     driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
@@ -219,6 +220,9 @@ public class RobotContainer {
     // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
     operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    // operator.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 46.0/360));
+    operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist, 46.0/360));
+    operator.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,2000*0.7, 2400*0.7));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
@@ -237,9 +241,9 @@ public class RobotContainer {
     intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
     
-    shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
-      shooterSubsystem.setRPM(4000, 4000);
-    }, shooterSubsystem));
+    // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
+    //   shooterSubsystem.setRPM(2000, 4000);
+    // }, shooterSubsystem));
   }
 
   /**

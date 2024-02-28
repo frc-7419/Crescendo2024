@@ -11,56 +11,30 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class RaiseShooterWithMotionMagic extends Command {
   private ShooterWrist shooterWrist;
-  private CommandSwerveDrivetrain drivetrain;
   private ProfiledPIDController shooterWristPIDController;
-  private InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
   private double feedForward = (2.1/12)/2.67;
   private double feedForwardPower;
+  private double setpoint;
 
   /** Creates a new ShootNotes. */
-  public RaiseShooterWithMotionMagic(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
-    this.drivetrain = drivetrain;
+  public RaiseShooterWithMotionMagic(ShooterWrist shooterWrist, double setpoint) {
     this.shooterWrist = shooterWrist;
-    this.shooterWristPIDController 
-      = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
+    this.setpoint = setpoint;
     addRequirements(shooterWrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    interpolatingDoubleTreeMap.put(2.06, 65.2/360);
-    interpolatingDoubleTreeMap.put(2.8, 50.2/360);
-    interpolatingDoubleTreeMap.put(3.4, 46.0/360);
-    interpolatingDoubleTreeMap.put(3.8, 41.0/360);
-    interpolatingDoubleTreeMap.put(4.0, 37.0/360);
-    interpolatingDoubleTreeMap.put(4.5, 32.0/360);
-    shooterWrist.coast();
-    shooterWrist.setPower(0);
-    shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
+    shooterWrist.applyRequest(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d pose = drivetrain.getState().Pose.getTranslation();
-
-    Translation2d speakerPose = drivetrain.getSpeakerPose();
-
-    double distance = pose.getDistance(speakerPose);
-    double setpoint = interpolatingDoubleTreeMap.get(distance);
-
-    shooterWrist.applyRequest(setpoint); //moshun majic
-
-    // shooterWristPIDController.setGoal(setpoint);
-    //   feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
-    //   SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
-    //   double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
-    //   armPower += Math.copySign(feedForwardPower, armPower);
-    //   SmartDashboard.putNumber("armSetpointPower", armPower);
-    //   shooterWrist.setPower(armPower);
+    shooterWrist.applyRequest(48/360);
   }
-
+  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -71,6 +45,6 @@ public class RaiseShooterWithMotionMagic extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return shooterWristPIDController.atGoal();
+    return false;
   }
 }

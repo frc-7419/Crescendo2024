@@ -14,28 +14,33 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private CANSparkMax intakeMotor;
+  private CANSparkMax leftIntakeMotor;
+  private CANSparkMax rightIntakeMotor;
   // private CANSparkMax serializerFront;
   private CANSparkFlex serializerBack;
   
   public IntakeSubsystem() {
-    intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
+    leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
+    rightIntakeMotor = new CANSparkMax(CanIds.rightIntakeMotor.id, MotorType.kBrushless);
+
     serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
   public void invertMotors(){
-    serializerBack.setInverted(true);
-    intakeMotor.setInverted(true);
+    serializerBack.setInverted(false);
+    leftIntakeMotor.setInverted(true);
   }
   
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {
-    intakeMotor.set(speed);
+    leftIntakeMotor.set(speed);
+    rightIntakeMotor.set(speed);
   }
 
   public void setVoltage(double voltage) {
-    intakeMotor.setVoltage(voltage);
+    leftIntakeMotor.setVoltage(voltage);
+    rightIntakeMotor.setVoltage(voltage);
   }
 
   public void setSerializerVoltage(double voltage) {
@@ -57,7 +62,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void brake(){
-    intakeMotor.setIdleMode(IdleMode.kBrake);
+    leftIntakeMotor.setIdleMode(IdleMode.kBrake);
+    rightIntakeMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void brakeSerializer() {
@@ -66,7 +72,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void coast(){
-    intakeMotor.setIdleMode(IdleMode.kCoast);
+    leftIntakeMotor.setIdleMode(IdleMode.kCoast);
+    rightIntakeMotor.setIdleMode(IdleMode.kCoast);
   }
 
   public void coastSerializer() {
@@ -76,7 +83,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("IntakeSpeed", intakeMotor.get());
+      SmartDashboard.putNumber("LeftIntakeSpeed", leftIntakeMotor.get());
+      SmartDashboard.putNumber("RightIntakeSpeed", rightIntakeMotor.get());
       // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
   }
