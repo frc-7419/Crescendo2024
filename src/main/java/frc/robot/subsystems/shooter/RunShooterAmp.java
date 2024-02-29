@@ -1,15 +1,21 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunShooterVoltage extends Command {
+public class RunShooterAmp extends Command {
   /** Creates a new RunShooter. */
   private ShooterSubsystem shooterSubsystem;
-  private double voltage;
+  private double topPower;
+  private double bottomPower;
 
-  public RunShooterVoltage(ShooterSubsystem shooterSubsystem, double voltage) {
+  public RunShooterAmp(ShooterSubsystem shooterSubsystem, double topPower, double bottomPower) {
     this.shooterSubsystem = shooterSubsystem;
-    this.voltage = voltage;
+    this.topPower = topPower;
+    this.bottomPower = bottomPower;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
   }
@@ -18,12 +24,15 @@ public class RunShooterVoltage extends Command {
   @Override
   public void initialize() {
     shooterSubsystem.coast();
-    shooterSubsystem.setBothVoltage(voltage);
+    shooterSubsystem.setTopSpeed(topPower);
+    shooterSubsystem.setBottomSpeed(bottomPower);
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
   }
 
   // Called once the command ends or is interrupted.

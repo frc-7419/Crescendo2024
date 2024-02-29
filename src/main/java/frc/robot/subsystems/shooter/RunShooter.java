@@ -23,8 +23,9 @@ public class RunShooter extends Command {
   public void initialize() {
     shooterSubsystem.coast();
     shooterSubsystem.setTopSpeed(power);
-    shooterSubsystem.setBottomSpeed(-power);
+    shooterSubsystem.setBottomSpeed(power);
   }
+
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

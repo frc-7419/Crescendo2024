@@ -20,14 +20,13 @@ import frc.robot.subsystems.shooterWrist.ShooterWrist;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoShoot extends SequentialCommandGroup {
+public class OneNote extends SequentialCommandGroup {
   /** Creates a new AutoShoot. */
-  public AutoShoot(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
+  public OneNote(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
     addCommands(
-      
-      new RunShooter(shooterSubsystem, 0.7).withTimeout(2).deadlineWith(new WaitCommand(1).andThen(new RunIntake(intakeSubsystem, 1).withTimeout(0.5)))
-      
-
+      new RaiseShooter(drivetrain, shooterWrist),
+      new RunShooter(shooterSubsystem, 1)
+      .deadlineWith(Commands.sequence(new WaitCommand(3), new RunIntake(intakeSubsystem, 1))).withTimeout(5)
     );
   }
 }

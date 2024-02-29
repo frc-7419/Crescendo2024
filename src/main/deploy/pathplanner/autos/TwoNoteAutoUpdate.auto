@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3983141750744656,
-      "y": 4.732175880391861
+      "x": 1.450313294833529,
+      "y": 7.003033016289081
     },
     "rotation": 0
   },
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Three Note Right"
+            "pathName": "ToSpeakerLeft"
           }
         }
       ]

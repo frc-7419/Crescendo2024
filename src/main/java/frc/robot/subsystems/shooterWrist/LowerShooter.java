@@ -1,43 +1,56 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.shooterWrist;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
-public class RunShooterWristToSetpoint extends Command {
+public class LowerShooter extends Command {
   private ShooterWrist shooterWrist;
-  private double setpoint;
+  private CommandSwerveDrivetrain drivetrain;
   private ProfiledPIDController shooterWristPIDController;
-  private double feedForward = (0.6/12)/2.67;
+  private InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
+  private double feedForward = (2.1/12)/2.67;
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
-  public RunShooterWristToSetpoint(ShooterWrist shooterWrist, double setpoint) {
+  public LowerShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
+    this.drivetrain = drivetrain;
     this.shooterWrist = shooterWrist;
-    this.setpoint = setpoint;
     this.shooterWristPIDController 
-      = new ProfiledPIDController(1.5, 0, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
+      = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
     addRequirements(shooterWrist);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // interpolatingDoubleTreeMap.put(2.06, 65.2/360);
+    // interpolatingDoubleTreeMap.put(2.8, 50.2/360);
+    // interpolatingDoubleTreeMap.put(3.4, 46.0/360);
+    // interpolatingDoubleTreeMap.put(3.8, 41.0/360);
+    // interpolatingDoubleTreeMap.put(4.0, 37.0/360);
+    interpolatingDoubleTreeMap.put(4.5, 32.0/360);
     shooterWrist.coast();
     shooterWrist.setPower(0);
-    shooterWristPIDController.setGoal(setpoint);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    Translation2d pose = drivetrain.getState().Pose.getTranslation();
+
+    Translation2d speakerPose = drivetrain.getSpeakerPose();
+
+    double distance = pose.getDistance(speakerPose);
+    // double setpoint = interpolatingDoubleTreeMap.get(distance);
+
+    shooterWristPIDController.setGoal(0);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());

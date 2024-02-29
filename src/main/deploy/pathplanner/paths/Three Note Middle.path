@@ -1,0 +1,155 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.6891697441312707,
+        "y": 5.576861700042539
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.264405478925779,
+        "y": 5.567111941825681
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.6,
+        "y": 5.58
+      },
+      "prevControl": {
+        "x": 2.569321567987925,
+        "y": 5.576932156799184
+      },
+      "nextControl": {
+        "x": 2.6974975821725047,
+        "y": 5.5897497582160085
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6891697441312707,
+        "y": 5.576861700042539
+      },
+      "prevControl": {
+        "x": 1.5891827488780583,
+        "y": 5.575249006570712
+      },
+      "nextControl": {
+        "x": 1.7891567393844832,
+        "y": 5.578474393514365
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.8,
+        "y": 5.7133583150785245
+      },
+      "prevControl": {
+        "x": 7.75,
+        "y": 5.713358315079976
+      },
+      "nextControl": {
+        "x": 7.829249274654511,
+        "y": 5.713358315077675
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.6891697441312707,
+        "y": 5.576861700042539
+      },
+      "prevControl": {
+        "x": 1.689169744135214,
+        "y": 5.586611458258547
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RunIntake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.95,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "WristToPosition"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunShooter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 3.05,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RunIntake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 10.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}

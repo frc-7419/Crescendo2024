@@ -9,44 +9,54 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private CANSparkMax intakeMotor;
-  // private CANSparkMax serializerFront;
+  private CANSparkMax leftIntakeMotor;
+  private CANSparkMax rightIntakeMotor;
   private CANSparkFlex serializerBack;
+
+  private DigitalInput beamBreakFront = new DigitalInput(1);
+  private DigitalInput beamBreakBack = new DigitalInput(2);
   
   public IntakeSubsystem() {
-    intakeMotor = new CANSparkMax(CanIds.intakeMotor.id, MotorType.kBrushless);
-    // serializerFront = new CANSparkMax(CanIds.serializerFront.id, MotorType.kBrushless);
+    leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
+    rightIntakeMotor = new CANSparkMax(CanIds.rightIntakeMotor.id, MotorType.kBrushless);
+
     serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
+  public boolean frontBeamBreakIsTriggered(){
+    return beamBreakFront.get();
+  }
+  public boolean backBeamBreakIsTriggered(){
+    return beamBreakBack.get();
+  }
+
   public void invertMotors(){
-    // serializerFront.setInverted(false);
-    serializerBack.setInverted(true);
-    intakeMotor.setInverted(true);
+    serializerBack.setInverted(false);
+    leftIntakeMotor.setInverted(true);
+    rightIntakeMotor.setInverted(false);
   }
   
   //add voltage compensation and trapezoidal motion later
   public void setSpeed(double speed) {
-    intakeMotor.set(speed);
+    leftIntakeMotor.set(speed);
+    rightIntakeMotor.set(speed);
   }
 
   public void setVoltage(double voltage) {
-    intakeMotor.setVoltage(voltage);
+    leftIntakeMotor.setVoltage(voltage);
+    rightIntakeMotor.setVoltage(voltage);
   }
 
   public void setSerializerVoltage(double voltage) {
     // serializerFront.setVoltage(voltage);
     serializerBack.setVoltage(voltage);
-  }
-
-  public void setSerializerFrontSpeed(double speed) {
-    // serializerFront.set(speed);
   }
 
   public void setSerializerBackSpeed(double speed) {
@@ -59,7 +69,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void brake(){
-    intakeMotor.setIdleMode(IdleMode.kBrake);
+    leftIntakeMotor.setIdleMode(IdleMode.kBrake);
+    rightIntakeMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void brakeSerializer() {
@@ -68,7 +79,8 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void coast(){
-    intakeMotor.setIdleMode(IdleMode.kCoast);
+    leftIntakeMotor.setIdleMode(IdleMode.kCoast);
+    rightIntakeMotor.setIdleMode(IdleMode.kCoast);
   }
 
   public void coastSerializer() {
@@ -78,8 +90,12 @@ public class IntakeSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-      SmartDashboard.putNumber("IntakeSpeed", intakeMotor.get());
+      SmartDashboard.putNumber("LeftIntakeSpeed", leftIntakeMotor.get());
+      SmartDashboard.putNumber("RightIntakeSpeed", rightIntakeMotor.get());
       // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
+      
+      SmartDashboard.putBoolean("frontBeamBreakTripped", frontBeamBreakIsTriggered());
+      SmartDashboard.putBoolean("backBeamBreakTriggered", backBeamBreakIsTriggered());
   }
 }
