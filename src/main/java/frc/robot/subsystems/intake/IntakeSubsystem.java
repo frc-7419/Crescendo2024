@@ -31,10 +31,10 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean frontBeamBreakIsTriggered(){
-    return beamBreakFront.get();
+    return !beamBreakFront.get();
   }
   public boolean backBeamBreakIsTriggered(){
-    return beamBreakBack.get();
+    return !beamBreakBack.get();
   }
 
   public void invertMotors(){
