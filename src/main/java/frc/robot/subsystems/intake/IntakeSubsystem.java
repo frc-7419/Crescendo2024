@@ -16,7 +16,6 @@ import frc.robot.constants.DeviceIDs.CanIds;
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax leftIntakeMotor;
   private CANSparkMax rightIntakeMotor;
-  // private CANSparkMax serializerFront;
   private CANSparkFlex serializerBack;
   
   public IntakeSubsystem() {
@@ -30,6 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void invertMotors(){
     serializerBack.setInverted(false);
     leftIntakeMotor.setInverted(true);
+    rightIntakeMotor.setInverted(false);
   }
   
   //add voltage compensation and trapezoidal motion later
@@ -46,10 +46,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setSerializerVoltage(double voltage) {
     // serializerFront.setVoltage(voltage);
     serializerBack.setVoltage(voltage);
-  }
-
-  public void setSerializerFrontSpeed(double speed) {
-    // serializerFront.set(speed);
   }
 
   public void setSerializerBackSpeed(double speed) {
