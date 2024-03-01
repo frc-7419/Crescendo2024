@@ -43,13 +43,6 @@ public class LowerShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d pose = drivetrain.getState().Pose.getTranslation();
-
-    Translation2d speakerPose = drivetrain.getSpeakerPose();
-
-    double distance = pose.getDistance(speakerPose);
-    // double setpoint = interpolatingDoubleTreeMap.get(distance);
-
     shooterWristPIDController.setGoal(0);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);

@@ -185,8 +185,8 @@ public class RobotContainer {
     driver.rightBumper().whileTrue(
         // Commands.parallel(
             drivetrain.applyRequest(
-                () -> fieldAngle.withVelocityX(-driver.getLeftY())
-                    .withVelocityY(-driver.getLeftX())
+                () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
+                    .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
                     .withTargetDirection(drivetrain.getDesiredAngle())
                     .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                     .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)));
@@ -211,7 +211,7 @@ public class RobotContainer {
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.5));
 
     
-    driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
+    // driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
     driver.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 53.0/360));
 
     // operator.b().onTrue(new RunShooterWristToSetpoint(sho/   eTrue(new RaiseShooter(drivetrain, shooterWrist));
@@ -222,7 +222,10 @@ public class RobotContainer {
     operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     // operator.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 46.0/360));
     operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist, 46.0/360));
-    operator.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,2000*0.7, 2400*0.7));
+    operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
+    operator.povRight().toggleOnTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(2000, 2000);
+    }, shooterSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }

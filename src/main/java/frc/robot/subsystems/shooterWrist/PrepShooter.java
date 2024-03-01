@@ -20,12 +20,11 @@ public class PrepShooter extends Command {
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
-  public PrepShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist, Translation2d point) {
+  public PrepShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
     this.drivetrain = drivetrain;
     this.shooterWrist = shooterWrist;
     this.shooterWristPIDController 
       = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
-    this.futurePoint = point;
     addRequirements(shooterWrist);
   }
 
@@ -48,8 +47,8 @@ public class PrepShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d speakerPose = drivetrain.getSpeakerPose();
-    double distance = futurePoint.getDistance(speakerPose);
+    futurePoint = drivetrain.getFuturePose();
+    double distance = futurePoint.getDistance(drivetrain.getCurrentPose().getTranslation());
 
     double setpoint = interpolatingDoubleTreeMap.get(distance);
     shooterWristPIDController.setGoal(setpoint);
