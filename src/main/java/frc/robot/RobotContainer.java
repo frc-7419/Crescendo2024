@@ -28,6 +28,7 @@ import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.drive.TurnToSpeaker;
+import frc.robot.subsystems.intake.IntakeNote;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
@@ -38,6 +39,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.PrepShooter;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
+import frc.robot.subsystems.shooterWrist.ShootNote;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.RaiseShooter;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithMotionMagic;
@@ -62,7 +64,7 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
 
-  private final IntakeSubsystem intakeSubsytem = new IntakeSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
 
   // SUBSYSTEMS
@@ -71,7 +73,7 @@ public class RobotContainer {
   // TELEOP
   // COMMANDS-----------------------------------------------------------------------------------------------------------------
 
-  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsytem, operator);
+  private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
@@ -104,12 +106,9 @@ public class RobotContainer {
   // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
 
   private final SendableChooser<Command> autonChooser = new SendableChooser<>();
-  private final Command testAuto;
-  private final Command squareAuto;
-  private final Command circleAuto;
   private final Command twoNote;
-  private OneNote oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsytem, drivetrain);
-  private final Command threeNoteAuto;
+  private OneNote oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
+  private final Command threeNoteLeft;
   private final Command Auton1NoteUpdated;
 
   // AUTONOMOUS
@@ -123,11 +122,9 @@ public class RobotContainer {
     configureBindings();
     configAutonSelection();
     setDefaultCommands();
-    testAuto = new PathPlannerAuto("Test Auto");
-    squareAuto = new PathPlannerAuto("Square Auto");
-    circleAuto = new PathPlannerAuto("Circle Auto");
+
     twoNote = new PathPlannerAuto("Auton2NoteUpdateLeft");
-    threeNoteAuto = new PathPlannerAuto("Three Note Auto");
+    threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
     drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()));
 
@@ -140,11 +137,14 @@ public class RobotContainer {
    * paths
    */
   private void registerCommands() {
-    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsytem, -0.7));
+    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem, -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     // NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
     // NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
+    NamedCommands.registerCommand("ShootNote", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360));
+    //this jawn must be found experimentally
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
   }
 
   /**
@@ -238,7 +238,7 @@ public class RobotContainer {
    * Sets the default commands to run during teleop
    */
   private void setDefaultCommands() {
-    intakeSubsytem.setDefaultCommand(runIntakeWithJoystick);
+    intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
     
     // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
@@ -256,7 +256,7 @@ public class RobotContainer {
     // return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    return oneNote;
+    return threeNoteLeft;
     // return twoNote;
   }
 }
