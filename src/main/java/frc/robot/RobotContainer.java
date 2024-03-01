@@ -123,7 +123,7 @@ public class RobotContainer {
     configAutonSelection();
     setDefaultCommands();
 
-    twoNote = new PathPlannerAuto("Auton2NoteUpdateLeft");
+    twoNote = new PathPlannerAuto("TwoNote");
     threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
     drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()));
@@ -235,6 +235,7 @@ public class RobotContainer {
    */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
+    autonChooser.addOption("TwoNote(Tested)", twoNote);
   }
 
   /**
@@ -256,10 +257,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    // return twoNote;
+    return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    return threeNoteLeft;
+    //return threeNoteLeft;
     // return twoNote;
   }
 }
