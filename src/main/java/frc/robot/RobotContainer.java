@@ -272,7 +272,7 @@ public class RobotContainer {
     // return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    // return threeNoteLeft;
+    return threeNoteLeft;
 
     // return twoNote;
   }
