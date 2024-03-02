@@ -247,6 +247,7 @@ public class RobotContainer {
     autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
     autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
     autonChooser.addOption("threeNoteLeft", threeNoteLeft);
+    autonChooser.addOption("TwoNote(Tested)", twoNote);
   }
 
   /**
@@ -268,8 +269,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    //return threeNoteLeft;
-    return twoNote;
+    // return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
     // return threeNoteLeft;
