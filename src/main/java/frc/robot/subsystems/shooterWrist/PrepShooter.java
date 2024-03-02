@@ -7,6 +7,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
@@ -51,7 +52,7 @@ public class PrepShooter extends Command {
     double distance = futurePoint.getDistance(drivetrain.getCurrentPose().getTranslation());
 
     double setpoint = interpolatingDoubleTreeMap.get(distance);
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(setpoint - ArmConstants.armOffset);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());

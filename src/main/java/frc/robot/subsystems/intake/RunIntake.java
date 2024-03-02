@@ -28,14 +28,14 @@ public class RunIntake extends Command {
   @Override
   public void execute() {
     intakeSubsystem.setSpeed(power);
-    intakeSubsystem.setSerializerBackSpeed(-power);
+    intakeSubsystem.setSerializerSpeed(-power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intakeSubsystem.setSpeed(0);
-    intakeSubsystem.setSerializerBackSpeed(0);
+    intakeSubsystem.setSerializerSpeed(0);
     intakeSubsystem.brake();
   }
 

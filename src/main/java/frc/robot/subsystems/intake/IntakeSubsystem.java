@@ -17,7 +17,7 @@ import frc.robot.constants.DeviceIDs.CanIds;
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax leftIntakeMotor;
   private CANSparkMax rightIntakeMotor;
-  private CANSparkFlex serializerBack;
+  private CANSparkMax serializerBack;
 
   private DigitalInput beamBreakFront = new DigitalInput(1);
   private DigitalInput beamBreakBack = new DigitalInput(2);
@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
     leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
     rightIntakeMotor = new CANSparkMax(CanIds.rightIntakeMotor.id, MotorType.kBrushless);
 
-    serializerBack = new CANSparkFlex(CanIds.serializerBack.id, MotorType.kBrushless);
+    serializerBack = new CANSparkMax(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
@@ -57,10 +57,6 @@ public class IntakeSubsystem extends SubsystemBase {
   public void setSerializerVoltage(double voltage) {
     // serializerFront.setVoltage(voltage);
     serializerBack.setVoltage(voltage);
-  }
-
-  public void setSerializerBackSpeed(double speed) {
-    serializerBack.set(speed);
   }
 
   public void setSerializerSpeed(double speed) {
@@ -94,6 +90,7 @@ public class IntakeSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("RightIntakeSpeed", rightIntakeMotor.get());
       // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
+      SmartDashboard.putNumber("Current Draw", serializerBack.getOutputCurrent());
       
       SmartDashboard.putBoolean("frontBeamBreakTripped", frontBeamBreakIsTriggered());
       SmartDashboard.putBoolean("backBeamBreakTriggered", backBeamBreakIsTriggered());

@@ -33,9 +33,11 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.shooter.RunShooter;
+import frc.robot.subsystems.shooter.RunShooterWithIntake;
 
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooterWrist.LowerShooter;
 import frc.robot.subsystems.shooterWrist.PrepShooter;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
@@ -107,8 +109,9 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autonChooser = new SendableChooser<>();
   private final Command twoNote;
-  private OneNote oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
+  private OneNote oneNote;
   private final Command threeNoteLeft;
+  private final Command threeNoteMiddle;
   private final Command Auton1NoteUpdated;
 
   // AUTONOMOUS
@@ -123,8 +126,10 @@ public class RobotContainer {
     configAutonSelection();
     setDefaultCommands();
 
+    oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
     twoNote = new PathPlannerAuto("Auton2NoteUpdateLeft");
-    threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
+    threeNoteLeft = new PathPlannerAuto("JawnAuto");
+    threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
     drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()));
 
@@ -140,10 +145,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem, -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     // NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
-    // NamedCommands.registerCommand("ZeroWrist", new RunShooterWristToSetpoint(shooterWrist, 0.04));
+    NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
-    NamedCommands.registerCommand("ShootNote", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360));
-    //this jawn must be found experimentally
+    NamedCommands.registerCommand("ShootNoteMiddle", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360)); //tune
+    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360)); //tune
     NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
   }
 
@@ -208,7 +213,8 @@ public class RobotContainer {
     //   shooterSubsystem.setRPM(4000, 4000);
     // }, shooterSubsystem));
 
-    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.5));
+    operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
+    //operator.rightBumper().onTrue(new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 45/360));
 
     
     // driver.povRight().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,100, 500));
@@ -219,13 +225,17 @@ public class RobotContainer {
     // intakeSubsytem));
     // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-    operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    
     // operator.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 46.0/360));
-    operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist, 46.0/360));
+    // operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist, 46.0/360));
+    operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
+    operator.a().whileTrue(new LowerShooter( shooterWrist));
     operator.povRight().toggleOnTrue(new RunCommand(() -> {
       shooterSubsystem.setRPM(2000, 2000);
     }, shooterSubsystem));
+
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
@@ -235,6 +245,8 @@ public class RobotContainer {
    */
   public void configAutonSelection() {
     autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
+    autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
+    autonChooser.addOption("threeNoteLeft", threeNoteLeft);
   }
 
   /**
@@ -256,10 +268,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // return autonChooser.getSelected();
-    // return twoNote;
+    //return threeNoteLeft;
+    return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    return threeNoteLeft;
+    // return threeNoteLeft;
+
     // return twoNote;
   }
 }

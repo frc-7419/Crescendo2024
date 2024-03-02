@@ -5,6 +5,7 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class RunShooter extends Command {
   /** Creates a new RunShooter. */

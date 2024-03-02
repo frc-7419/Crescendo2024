@@ -40,8 +40,7 @@ public class RunShooterWristWithJoystick extends Command {
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       // SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
 
-      double armPower = armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower);
-      shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower));
       // SmartDashboard.putNumber("armJoystickPower", armPower);
     } else {
       double feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());

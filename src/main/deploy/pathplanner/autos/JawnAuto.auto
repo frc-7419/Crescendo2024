@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft0"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

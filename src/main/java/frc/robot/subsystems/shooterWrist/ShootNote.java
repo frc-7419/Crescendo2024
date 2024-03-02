@@ -18,15 +18,15 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class ShootNote extends SequentialCommandGroup {
   public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, double setpoint) {
     addCommands(
-      new ParallelCommandGroup(
-        new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
-        new RunShooterWithPID(shooterSubsystem, 3000, 3000)),
-      new ParallelCommandGroup(
-        new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
-        new RunShooterWithPID(shooterSubsystem, 3000, 3000),
-        new RunIntake(intakeSubsystem, 0.5)
-        ),
-      new RaiseShooterWithMotionMagic(shooterWrist, ArmConstants.armOffset + 2.0/360)
+      // new ParallelCommandGroup(
+      //   new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
+      //   new RunShooterWithPID(shooterSubsystem, 3000, 3000)),
+      // new ParallelCommandGroup(
+      //   new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
+      //   new RunShooterWithPID(shooterSubsystem, 3000, 3000),
+      //   new RunIntake(intakeSubsystem, 0.5)
+      //   ),
+      // new RaiseShooterWithMotionMagic(shooterWrist, ArmConstants.armOffset + 2.0/360)
     );
   }
 }

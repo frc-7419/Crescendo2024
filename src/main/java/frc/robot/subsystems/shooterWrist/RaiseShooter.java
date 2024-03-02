@@ -6,6 +6,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
@@ -52,7 +53,7 @@ public class RaiseShooter extends Command {
     double distance = pose.getDistance(speakerPose);
     double setpoint = interpolatingDoubleTreeMap.get(distance);
 
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(setpoint - ArmConstants.armOffset);
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);

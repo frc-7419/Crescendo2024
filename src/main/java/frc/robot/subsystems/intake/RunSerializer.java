@@ -24,14 +24,14 @@ public class RunSerializer extends Command {
   @Override
   public void execute() {
     if(!intakeSubsystem.frontBeamBreakIsTriggered()) {
-        intakeSubsystem.setSerializerBackSpeed(-0.1);
+        intakeSubsystem.setSerializerSpeed(-0.1);;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.setSerializerBackSpeed(0);
+    intakeSubsystem.setSerializerSpeed(0);
     intakeSubsystem.brakeSerializer();
   }
 
