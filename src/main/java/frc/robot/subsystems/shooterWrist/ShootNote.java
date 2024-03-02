@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunSerializer;
@@ -22,7 +23,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootNote extends SequentialCommandGroup {
-  public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, CommandSwerveDrivetrain drivetrain, IntakeSubsystem intakeSubsystem, double setpoint) {
+  public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, CommandSwerveDrivetrain drivetrain, IntakeSubsystem intakeSubsystem, double setpoint, BeamBreakSubsystem beamBreakSubsystem) {
     addCommands(
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
@@ -31,7 +32,7 @@ public class ShootNote extends SequentialCommandGroup {
             new RunShooter(shooterSubsystem, 0.7)
           ),
           new ParallelDeadlineGroup(
-            new RunSerializer(intakeSubsystem),
+            new RunSerializer(intakeSubsystem, beamBreakSubsystem),
             new RunShooter(shooterSubsystem, 0.7)
           )
           // new ParallelDeadlineGroup(

@@ -28,6 +28,7 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -73,6 +74,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
+  private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
 
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
@@ -156,14 +158,17 @@ public class RobotContainer {
     new SequentialCommandGroup(
       new RunShooter(shooterSubsystem, 0.7)
       .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0/360))
-      .deadlineWith(Commands.sequence(new WaitCommand(2), new RunSerializer(intakeSubsystem))).withTimeout(5)
+      .deadlineWith(Commands.sequence(new WaitCommand(2), new RunSerializer(intakeSubsystem, beamBreakSubsystem))).withTimeout(5)
     )); //tune
     NamedCommands.registerCommand("ShootNoteLeft", 
     new RunShooter(shooterSubsystem, 1.0)
       .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0/360))
-      .deadlineWith(Commands.sequence(new WaitCommand(2), new RunSerializer(intakeSubsystem))).withTimeout(5)
+      .deadlineWith(Commands.sequence(new WaitCommand(2), new RunSerializer(intakeSubsystem, beamBreakSubsystem))).withTimeout(5)
     ); //tune
-    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, beamBreakSubsystem));
+    NamedCommands.registerCommand("ShootNoteMiddle", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 46.0/360, beamBreakSubsystem)); //tune
+    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 46.0/360, beamBreakSubsystem)); //tune
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, beamBreakSubsystem));
   }
 
   /**
@@ -254,7 +259,7 @@ public class RobotContainer {
       shooterSubsystem.setRPM(2000, 2000);
     }, shooterSubsystem));
 
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, beamBreakSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }

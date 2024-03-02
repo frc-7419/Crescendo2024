@@ -39,7 +39,6 @@ public class RunShooterWithPID extends Command {
     bottomShooterPidController.reset();
     bottomShooterPidController.setSetpoint(bottomV);
     shooterSubsystem.invertToggle();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -66,6 +65,8 @@ public class RunShooterWithPID extends Command {
     }
    
 
+    shooterSubsystem.setTopPIDsetpoint(topV);
+    shooterSubsystem.setBottomPIDsetpoint(bottomV);
     SmartDashboard.putNumber("Bottom Setpoint", bottomV);
     SmartDashboard.putNumber("Bottom Velocity", shooterSubsystem.getBottomVelocity());
     SmartDashboard.putNumber("Top Setpoint", topV);
