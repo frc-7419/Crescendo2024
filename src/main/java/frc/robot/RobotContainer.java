@@ -244,10 +244,10 @@ public class RobotContainer {
    * Configures the auton chooser selections
    */
   public void configAutonSelection() {
-    autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
-    autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
-    autonChooser.addOption("threeNoteLeft", threeNoteLeft);
-    autonChooser.addOption("TwoNote(Tested)", twoNote);
+    // autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
+    // autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
+    // autonChooser.addOption("threeNoteLeft", threeNoteLeft);
+    // autonChooser.addOption("TwoNote(Tested)", twoNote);
   }
 
   /**
