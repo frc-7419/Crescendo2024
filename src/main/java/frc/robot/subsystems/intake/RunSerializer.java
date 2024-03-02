@@ -5,7 +5,6 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class RunSerializer extends Command {
   private IntakeSubsystem intakeSubsystem;
@@ -24,7 +23,7 @@ public class RunSerializer extends Command {
   @Override
   public void execute() {
     if(!intakeSubsystem.frontBeamBreakIsTriggered()) {
-        intakeSubsystem.setSerializerSpeed(-0.1);;
+        intakeSubsystem.setSerializerSpeed(0.4);
     }
   }
 

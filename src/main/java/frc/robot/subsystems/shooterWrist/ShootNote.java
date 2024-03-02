@@ -5,10 +5,13 @@
 package frc.robot.subsystems.shooterWrist;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.ArmConstants;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
+import frc.robot.subsystems.intake.RunSerializer;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -18,6 +21,15 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class ShootNote extends SequentialCommandGroup {
   public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, double setpoint) {
     addCommands(
+      new ParallelDeadlineGroup(
+        new WaitCommand(1.0),
+        new RunShooterWithPID(shooterSubsystem, 3000, 3000),
+          new ParallelDeadlineGroup(
+            new RunSerializer(intakeSubsystem),
+            new RunShooterWithPID(shooterSubsystem, 3000, 3000)
+          )
+      )
+
       // new ParallelCommandGroup(
       //   new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
       //   new RunShooterWithPID(shooterSubsystem, 3000, 3000)),
@@ -26,7 +38,7 @@ public class ShootNote extends SequentialCommandGroup {
       //   new RunShooterWithPID(shooterSubsystem, 3000, 3000),
       //   new RunIntake(intakeSubsystem, 0.5)
       //   ),
-      // new RaiseShooterWithMotionMagic(shooterWrist, ArmConstants.armOffset + 2.0/360)
+      // new RaiseShooterWithMotionMagic(shooterWrist, ArmConstants.armOffset + 2.0/360),
     );
   }
 }
