@@ -25,6 +25,7 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -68,6 +69,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
+  private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
 
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
@@ -147,9 +149,9 @@ public class RobotContainer {
     // NamedCommands.registerCommand("WristToPosition", new RunShooterWristToSetpoint(shooterWrist, 0.158));
     NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
-    NamedCommands.registerCommand("ShootNoteMiddle", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360)); //tune
-    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360)); //tune
-    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+    NamedCommands.registerCommand("ShootNoteMiddle", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360, beamBreakSubsystem)); //tune
+    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, intakeSubsystem, 46.0/360, beamBreakSubsystem)); //tune
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, beamBreakSubsystem));
   }
 
   /**
@@ -235,7 +237,7 @@ public class RobotContainer {
       shooterSubsystem.setRPM(2000, 2000);
     }, shooterSubsystem));
 
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, beamBreakSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }
