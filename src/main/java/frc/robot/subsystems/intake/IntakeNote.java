@@ -4,12 +4,17 @@
 
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class IntakeNote extends Command {
   private IntakeSubsystem intakeSubsystem;
-  public IntakeNote(IntakeSubsystem intakeSubsystem) {
+  private CommandXboxController joystick;
+  public IntakeNote(IntakeSubsystem intakeSubsystem, CommandXboxController joystick) {
     this.intakeSubsystem = intakeSubsystem;
+    this.joystick = joystick;
     addRequirements(intakeSubsystem);
   }
 

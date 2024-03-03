@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteLeft0"
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -28,6 +22,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft0"
           }
         },
         {

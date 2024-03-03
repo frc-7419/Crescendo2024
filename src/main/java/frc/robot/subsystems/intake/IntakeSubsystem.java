@@ -92,7 +92,6 @@ public class IntakeSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
       SmartDashboard.putNumber("Current Draw", serializerBack.getOutputCurrent());
       
-      SmartDashboard.putBoolean("frontBeamBreakTripped", frontBeamBreakIsTriggered());
-      SmartDashboard.putBoolean("backBeamBreakTriggered", backBeamBreakIsTriggered());
+      SmartDashboard.putBoolean("Has Note", frontBeamBreakIsTriggered());
   }
 }

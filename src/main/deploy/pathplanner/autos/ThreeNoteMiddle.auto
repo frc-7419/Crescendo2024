@@ -38,13 +38,19 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
                   "pathName": "ThreeNoteMiddle1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RevShooter"
                 }
               }
             ]

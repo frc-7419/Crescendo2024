@@ -75,7 +75,7 @@ public class RunShooterWithPID extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setBothVoltage(0);
+    //shooterSubsystem.setBothVoltage(0);
   }
 
   // Returns true when the command should end.
