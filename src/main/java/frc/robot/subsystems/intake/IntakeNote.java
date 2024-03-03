@@ -5,16 +5,12 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 
 public class IntakeNote extends Command {
   private IntakeSubsystem intakeSubsystem;
-  private BeamBreakSubsystem beamBreakSubsystem;
-  public IntakeNote(IntakeSubsystem intakeSubsystem, BeamBreakSubsystem beamBreakSubsystem) {
+  public IntakeNote(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
-    this.beamBreakSubsystem = beamBreakSubsystem;
     addRequirements(intakeSubsystem);
-    addRequirements(beamBreakSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -43,6 +39,6 @@ public class IntakeNote extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return beamBreakSubsystem.frontBeamBreakIsTriggered();
+    return intakeSubsystem.frontBeamBreakIsTriggered();
   }
 }

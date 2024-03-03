@@ -28,7 +28,6 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
-import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -74,7 +73,6 @@ public class RobotContainer {
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
-  private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
 
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
@@ -249,15 +247,14 @@ public class RobotContainer {
     
     // operator.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 46.0/360));
     // operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist, 46.0/360));
-    // operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
-    // operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
-    // //operator.a().whileTrue(new LowerShooter( shooterWrist));
-    // operator.povRight().toggleOnTrue(new RunCommand(() -> {
-    //   shooterSubsystem.setRPM(2000, 2000);
-    // }, shooterSubsystem));
-    operator.x().onTrue(new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 27.0/360));
+    operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
+    operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
+    operator.a().whileTrue(new LowerShooter( shooterWrist));
+    operator.povRight().toggleOnTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(2000, 2000);
+    }, shooterSubsystem));
 
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, beamBreakSubsystem));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }

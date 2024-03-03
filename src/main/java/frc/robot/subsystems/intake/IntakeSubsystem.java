@@ -18,6 +18,9 @@ public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax leftIntakeMotor;
   private CANSparkMax rightIntakeMotor;
   private CANSparkMax serializerBack;
+
+  private DigitalInput beamBreakFront = new DigitalInput(1);
+  private DigitalInput beamBreakBack = new DigitalInput(2);
   
   public IntakeSubsystem() {
     leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
@@ -25,6 +28,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     serializerBack = new CANSparkMax(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
+  }
+
+  public boolean frontBeamBreakIsTriggered(){
+    return !beamBreakFront.get();
+  }
+  public boolean backBeamBreakIsTriggered(){
+    return !beamBreakBack.get();
   }
 
   public void invertMotors(){
@@ -74,10 +84,6 @@ public class IntakeSubsystem extends SubsystemBase {
     serializerBack.setIdleMode(IdleMode.kCoast);
   }
 
-  public double getVoltage() {
-    return leftIntakeMotor.getBusVoltage();
-  }
-
   @Override
   public void periodic() {
       SmartDashboard.putNumber("LeftIntakeSpeed", leftIntakeMotor.get());
@@ -85,5 +91,8 @@ public class IntakeSubsystem extends SubsystemBase {
       // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
       SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
       SmartDashboard.putNumber("Current Draw", serializerBack.getOutputCurrent());
+      
+      SmartDashboard.putBoolean("frontBeamBreakTripped", frontBeamBreakIsTriggered());
+      SmartDashboard.putBoolean("backBeamBreakTriggered", backBeamBreakIsTriggered());
   }
 }

@@ -28,8 +28,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private CANSparkFlex shooterMotorBottom;
   private RelativeEncoder topShooterEncoder;
   private RelativeEncoder bottomShooterEncoder;
-  private Double topPIDsetpoint;
-  private Double bottomPIDsetpoint;
 
   private SparkPIDController topShooterPidController;
   private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
@@ -129,22 +127,6 @@ public class ShooterSubsystem extends SubsystemBase {
     this.isRunning = !this.isRunning;
   }
 
-
-  public void setTopPIDsetpoint(double setpoint) {
-    topPIDsetpoint = setpoint;
-  }
-
-  public void setBottomPIDsetpoint(double setpoint){
-    bottomPIDsetpoint = setpoint;
-  }
-
-  public double getTopPIDsetpoint(){
-    return topPIDsetpoint;
-  }
-
-  public double getBottomPIDsetpoint(){
-    return bottomPIDsetpoint;
-  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
