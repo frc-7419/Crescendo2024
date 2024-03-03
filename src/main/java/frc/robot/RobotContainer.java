@@ -233,6 +233,7 @@ public class RobotContainer {
     
     operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15));
     operator.b().onTrue(new RaiseShooterWithPID(shooterWrist, (22.0)/360));
+    
     // operator.b().(new SequentialCommandGroup(
     //   new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
     //   .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0/360))
