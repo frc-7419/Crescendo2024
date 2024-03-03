@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
-import frc.robot.subsystems.shooter.RunShooter;
+import frc.robot.subsystems.shooter.RunShooterWithIntake;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RaiseShooter;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
@@ -25,7 +25,7 @@ public class AutoShoot extends SequentialCommandGroup {
   public AutoShoot(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
     addCommands(
       
-      new RunShooter(shooterSubsystem, 0.7).withTimeout(2).deadlineWith(new WaitCommand(1).andThen(new RunIntake(intakeSubsystem, 1).withTimeout(0.5)))
+      // new RunShooter(shooterSubsystem, intakeSubsystem, 0.7).withTimeout(2).deadlineWith(new WaitCommand(1).andThen(new RunIntake(intakeSubsystem, 1).withTimeout(0.5)))
       
 
     );

@@ -18,8 +18,7 @@ public class LowerShooter extends Command {
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
-  public LowerShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
-    this.drivetrain = drivetrain;
+  public LowerShooter(ShooterWrist shooterWrist) {
     this.shooterWrist = shooterWrist;
     this.shooterWristPIDController 
       = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
@@ -29,12 +28,6 @@ public class LowerShooter extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // interpolatingDoubleTreeMap.put(2.06, 65.2/360);
-    // interpolatingDoubleTreeMap.put(2.8, 50.2/360);
-    // interpolatingDoubleTreeMap.put(3.4, 46.0/360);
-    // interpolatingDoubleTreeMap.put(3.8, 41.0/360);
-    // interpolatingDoubleTreeMap.put(4.0, 37.0/360);
-    interpolatingDoubleTreeMap.put(4.5, 32.0/360);
     shooterWrist.coast();
     shooterWrist.setPower(0);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
@@ -43,14 +36,7 @@ public class LowerShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d pose = drivetrain.getState().Pose.getTranslation();
-
-    Translation2d speakerPose = drivetrain.getSpeakerPose();
-
-    double distance = pose.getDistance(speakerPose);
-    // double setpoint = interpolatingDoubleTreeMap.get(distance);
-
-    shooterWristPIDController.setGoal(0);
+    shooterWristPIDController.setGoal(5.0 / 360);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());

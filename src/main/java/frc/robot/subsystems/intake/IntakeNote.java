@@ -17,19 +17,20 @@ public class IntakeNote extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.coast();
+    // intakeSubsystem.invertMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     intakeSubsystem.setSpeed(0.7);
-    intakeSubsystem.setSerializerBackSpeed(0.2);
+    intakeSubsystem.setSerializerSpeed(0.4);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.setSerializerBackSpeed(0);
+    intakeSubsystem.setSerializerSpeed(0);
     intakeSubsystem.setSpeed(0);
     intakeSubsystem.brakeSerializer();
     intakeSubsystem.brake();

@@ -7,6 +7,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
@@ -20,12 +21,11 @@ public class PrepShooter extends Command {
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
-  public PrepShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist, Translation2d point) {
+  public PrepShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
     this.drivetrain = drivetrain;
     this.shooterWrist = shooterWrist;
     this.shooterWristPIDController 
       = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
-    this.futurePoint = point;
     addRequirements(shooterWrist);
   }
 
@@ -48,11 +48,11 @@ public class PrepShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Translation2d speakerPose = drivetrain.getSpeakerPose();
-    double distance = futurePoint.getDistance(speakerPose);
+    futurePoint = drivetrain.getFuturePose();
+    double distance = futurePoint.getDistance(drivetrain.getCurrentPose().getTranslation());
 
     double setpoint = interpolatingDoubleTreeMap.get(distance);
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(setpoint - ArmConstants.armOffset);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());

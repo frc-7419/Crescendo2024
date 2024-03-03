@@ -6,43 +6,35 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunIntake extends Command {
+public class RunSerializer extends Command {
   private IntakeSubsystem intakeSubsystem;
-  private double power;
-  /** Creates a new RunIntake. */
-  public RunIntake(IntakeSubsystem intakeSubsystem, double power) {
+  public RunSerializer(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
-    this.power = power;
     addRequirements(intakeSubsystem);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     intakeSubsystem.coast();
-    intakeSubsystem.setSpeed(0);
-    // intakeSubsystem.invertMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubsystem.setSpeed(power);
-    intakeSubsystem.setSerializerSpeed(power);
+        intakeSubsystem.setSerializerSpeed(0.6);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intakeSubsystem.setSpeed(0);
     intakeSubsystem.setSerializerSpeed(0);
-    intakeSubsystem.brake();
+    intakeSubsystem.brakeSerializer();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return !intakeSubsystem.frontBeamBreakIsTriggered();
   }
 }

@@ -8,37 +8,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MoveForwardSpeakerLeft"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "RunIntake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Auto Shoot"
+            "pathName": "ThreeNoteLeft0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "MoveToSpeakerMiddle"
+            "pathName": "ThreeNoteLeft1"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "RunIntake"
+            "pathName": "ThreeNoteLeft2"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Auto Shoot"
+            "pathName": "ThreeNoteLeft3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteLeft5"
           }
         }
       ]

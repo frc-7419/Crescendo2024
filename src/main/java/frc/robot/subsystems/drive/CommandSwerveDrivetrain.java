@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import java.util.function.Supplier;
 
+import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
+import frc.robot.wrapper.VisionWrapper;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -40,9 +42,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private VisionWrapper visionWrapper;
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
+        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -50,6 +54,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
+        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -116,8 +121,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void setPoseStateToSpeaker(){
         this.m_odometry.resetPosition(new Rotation2d(0), m_modulePositions, new Pose2d(1.5, 5.5, new Rotation2d(0)));
     }
-    
+    public Pose2d getCurrentPose() {
+        return this.getState().Pose;
+    }
     public void periodic() {
+        if(visionWrapper.updatePoseEstimate() != null) {
+             EstimatedRobotPose estimatedPose = visionWrapper.updatePoseEstimate()[0];
+             if(estimatedPose != null) {
+                 this.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+             }
+        }
         SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
         SmartDashboard.putNumber("Desired Angle", getDesiredAngle().getRadians() * (180 / Math.PI));
     }

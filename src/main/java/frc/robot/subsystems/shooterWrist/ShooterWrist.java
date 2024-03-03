@@ -7,8 +7,11 @@ package frc.robot.subsystems.shooterWrist;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.configs.VoltageConfigs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -35,10 +38,11 @@ import frc.robot.constants.DeviceIDs.CanIds;
 public class ShooterWrist extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   private TalonFX armMotor;
-  private DutyCycleOut dutyCycleOut;
+  private VoltageOut voltageOut;
   private DutyCycleEncoder encoder;
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
+
   private final SysIdRoutine shooterWristSysIdRoutine =
     new SysIdRoutine(
       // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
@@ -69,11 +73,14 @@ public class ShooterWrist extends SubsystemBase {
 
   public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
-    dutyCycleOut = new DutyCycleOut(0);
+    voltageOut = new VoltageOut(12);
     armMotor.setInverted(true);
     armMotor.setPosition(0);
+    
+    
     encoder = new DutyCycleEncoder(0 );
     encoder.setPositionOffset(ArmConstants.armOffset);
+    //armMotor.enableVoltageCompensation(true);
   }
   public double getVelocity() {
   return armMotor.getVelocity().getValueAsDouble() / ArmConstants.armGearing;
@@ -96,14 +103,10 @@ public class ShooterWrist extends SubsystemBase {
   public double degreesToRotation(double degrees){
     return degrees/360;
   }
-  public void setPowerUp(double power){
-    dutyCycleOut.Output = -power;
-    armMotor.setControl(dutyCycleOut);
-  }
-  public void setPower(double power){
-    dutyCycleOut.Output = power;
-    dutyCycleOut.EnableFOC = true;
-    armMotor.setControl(dutyCycleOut);  
+  public void setPower(double voltage){
+    voltageOut.Output = voltage;
+    voltageOut.EnableFOC = true;
+    armMotor.setControl(voltageOut);  
   }
   public void setMMConfigs() {
   TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
@@ -138,6 +141,9 @@ public class ShooterWrist extends SubsystemBase {
   public double getPosition(){
     // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
     return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing;
+  }
+  public double getPositionInDegrees(){
+    return rotationToDegrees(getPosition());
   }
   public void zeroEncoder(){
     armMotor.setPosition(0);

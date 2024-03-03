@@ -5,27 +5,30 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
-public class RunShooterAmp extends Command {
+public class RunShooterWithIntake extends Command {
   /** Creates a new RunShooter. */
   private ShooterSubsystem shooterSubsystem;
-  private double topPower;
-  private double bottomPower;
+  private IntakeSubsystem intakeSubsystem;
+  private double power;
 
-  public RunShooterAmp(ShooterSubsystem shooterSubsystem, double topPower, double bottomPower) {
+  public RunShooterWithIntake(ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, double power) {
     this.shooterSubsystem = shooterSubsystem;
-    this.topPower = topPower;
-    this.bottomPower = bottomPower;
+    this.intakeSubsystem = intakeSubsystem;
+    this.power = power;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
+    addRequirements(intakeSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     shooterSubsystem.coast();
-    shooterSubsystem.setTopSpeed(topPower);
-    shooterSubsystem.setBottomSpeed(bottomPower);
+    shooterSubsystem.setTopSpeed(power);
+    shooterSubsystem.setBottomSpeed(power);
+    intakeSubsystem.setSerializerSpeed(power);
   }
 
 
@@ -40,6 +43,7 @@ public class RunShooterAmp extends Command {
   public void end(boolean interrupted) {
     shooterSubsystem.setBothSpeed(0);
     shooterSubsystem.brake();
+    intakeSubsystem.setSerializerSpeed(0);
   }
 
   // Returns true when the command should end.

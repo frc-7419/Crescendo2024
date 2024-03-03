@@ -39,12 +39,13 @@ public class RaiseShooterWithPID extends Command {
 
     shooterWristPIDController.setGoal(setpoint);
     // shooterWristPIDController.setGoal(7);
-      feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
+      feedForwardPower = feedForward*0.8;
+      //* Math.cos(shooterWrist.getRadians()-(52 * Math.PI/180));
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armPower * 12);
   }
   
   // Called once the command ends or is interrupted.

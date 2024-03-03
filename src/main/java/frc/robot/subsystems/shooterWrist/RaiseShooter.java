@@ -6,6 +6,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
@@ -50,16 +51,18 @@ public class RaiseShooter extends Command {
     Translation2d speakerPose = drivetrain.getSpeakerPose();
 
     double distance = pose.getDistance(speakerPose);
+    SmartDashboard.putNumber("Distance to Speaker", distance);
     double setpoint = interpolatingDoubleTreeMap.get(distance);
+     SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(setpoint );
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armPower * 12);
   }
   
   // Called once the command ends or is interrupted.
