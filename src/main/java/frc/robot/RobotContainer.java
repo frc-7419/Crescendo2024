@@ -28,6 +28,7 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -73,6 +74,7 @@ public class RobotContainer {
 
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
+  private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
 
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
@@ -255,7 +257,7 @@ public class RobotContainer {
     // }, shooterSubsystem));
     operator.x().onTrue(new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 27.0/360));
 
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, beamBreakSubsystem));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
 
   }

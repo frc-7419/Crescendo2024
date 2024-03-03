@@ -5,10 +5,12 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 
 public class RunSerializer extends Command {
   private IntakeSubsystem intakeSubsystem;
-  public RunSerializer(IntakeSubsystem intakeSubsystem) {
+  private BeamBreakSubsystem beamBreakSubsystem;
+  public RunSerializer(IntakeSubsystem intakeSubsystem, BeamBreakSubsystem beamBreakSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     addRequirements(intakeSubsystem);
   }

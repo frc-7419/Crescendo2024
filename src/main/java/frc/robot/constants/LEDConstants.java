@@ -1,6 +1,9 @@
 package frc.robot.constants;
 
 public final class LEDConstants {
+  // ports
+  public static final int PWMPORT = 9; // CHANGE THIS
+  public static final int BUFFERSIZE = 15; // CHANGE THIS
   // purple
   public static final int purpleH = 150;
   public static final int purpleS = 255;
