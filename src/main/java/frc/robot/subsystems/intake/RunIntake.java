@@ -22,13 +22,14 @@ public class RunIntake extends Command {
   public void initialize() {
     intakeSubsystem.coast();
     intakeSubsystem.setSpeed(0);
+    // intakeSubsystem.invertMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     intakeSubsystem.setSpeed(power);
-    intakeSubsystem.setSerializerSpeed(-power);
+    intakeSubsystem.setSerializerSpeed(power);
   }
 
   // Called once the command ends or is interrupted.

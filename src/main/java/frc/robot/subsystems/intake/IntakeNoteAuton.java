@@ -6,9 +6,9 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class RunSerializer extends Command {
+public class IntakeNoteAuton extends Command {
   private IntakeSubsystem intakeSubsystem;
-  public RunSerializer(IntakeSubsystem intakeSubsystem) {
+  public IntakeNoteAuton(IntakeSubsystem intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     addRequirements(intakeSubsystem);
   }
@@ -17,24 +17,28 @@ public class RunSerializer extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.coast();
+    // intakeSubsystem.invertMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        intakeSubsystem.setSerializerSpeed(0.6);
+    intakeSubsystem.setSpeed(-0.7);
+    intakeSubsystem.setSerializerSpeed(-0.4);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     intakeSubsystem.setSerializerSpeed(0);
+    intakeSubsystem.setSpeed(0);
     intakeSubsystem.brakeSerializer();
+    intakeSubsystem.brake();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !intakeSubsystem.frontBeamBreakIsTriggered();
+    return intakeSubsystem.frontBeamBreakIsTriggered();
   }
 }

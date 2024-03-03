@@ -49,7 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
     topShooterPidController = shooterMotorTop.getPIDController();
-    topShooterPidController.setP(0.00065);
+    topShooterPidController.setP(0.00065*2);
     topShooterPidController.setI(0);
     topShooterPidController.setD(0);
     topShooterPidController.setIZone(0);
@@ -57,7 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
     bottomShooterPidController = shooterMotorBottom.getPIDController();
-    bottomShooterPidController.setP(0.00065);
+    bottomShooterPidController.setP(0.00065*2);
     bottomShooterPidController.setI(0);
     bottomShooterPidController.setD(0);
     bottomShooterPidController.setIZone(0);

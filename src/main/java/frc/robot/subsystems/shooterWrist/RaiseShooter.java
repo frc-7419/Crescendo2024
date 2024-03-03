@@ -51,16 +51,18 @@ public class RaiseShooter extends Command {
     Translation2d speakerPose = drivetrain.getSpeakerPose();
 
     double distance = pose.getDistance(speakerPose);
+    SmartDashboard.putNumber("Distance to Speaker", distance);
     double setpoint = interpolatingDoubleTreeMap.get(distance);
+     SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
-    shooterWristPIDController.setGoal(setpoint - ArmConstants.armOffset);
+    shooterWristPIDController.setGoal(setpoint );
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armPower * 12);
   }
   
   // Called once the command ends or is interrupted.

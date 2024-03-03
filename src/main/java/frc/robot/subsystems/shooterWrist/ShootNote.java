@@ -6,12 +6,15 @@ package frc.robot.subsystems.shooterWrist;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.constants.ArmConstants;
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunSerializer;
+import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -19,26 +22,25 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ShootNote extends SequentialCommandGroup {
-  public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, double setpoint) {
+  public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, CommandSwerveDrivetrain drivetrain, IntakeSubsystem intakeSubsystem, double setpoint) {
     addCommands(
       new ParallelDeadlineGroup(
-        new WaitCommand(1.0),
-        new RunShooterWithPID(shooterSubsystem, 3000, 3000),
+        new SequentialCommandGroup(
+          new ParallelRaceGroup(
+            new WaitCommand(3.0),
+            new RunShooter(shooterSubsystem, 0.7)
+          ),
           new ParallelDeadlineGroup(
             new RunSerializer(intakeSubsystem),
-            new RunShooterWithPID(shooterSubsystem, 3000, 3000)
+            new RunShooter(shooterSubsystem, 0.7)
           )
-      )
-
-      // new ParallelCommandGroup(
-      //   new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
-      //   new RunShooterWithPID(shooterSubsystem, 3000, 3000)),
-      // new ParallelCommandGroup(
-      //   new RaiseShooterWithMotionMagic(shooterWrist, setpoint), 
-      //   new RunShooterWithPID(shooterSubsystem, 3000, 3000),
-      //   new RunIntake(intakeSubsystem, 0.5)
-      //   ),
-      // new RaiseShooterWithMotionMagic(shooterWrist, ArmConstants.armOffset + 2.0/360),
+          // new ParallelDeadlineGroup(
+          //   new RunSerializer(intakeSubsystem),
+          //   new RunShooterWithPID(shooterSubsystem, 3000, 3000)
+          // )
+      ),
+        new RaiseShooterWithPID(shooterWrist, setpoint)
+    )
     );
   }
 }

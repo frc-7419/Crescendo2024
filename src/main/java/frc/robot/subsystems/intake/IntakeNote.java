@@ -17,6 +17,7 @@ public class IntakeNote extends Command {
   @Override
   public void initialize() {
     intakeSubsystem.coast();
+    // intakeSubsystem.invertMotors();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
