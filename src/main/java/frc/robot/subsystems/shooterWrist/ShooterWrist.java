@@ -41,6 +41,7 @@ public class ShooterWrist extends SubsystemBase {
   private VoltageOut voltageOut;
   private DutyCycleEncoder encoder;
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+  private Double PIDSetpoint;
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
 
   private final SysIdRoutine shooterWristSysIdRoutine =
@@ -147,6 +148,12 @@ public class ShooterWrist extends SubsystemBase {
   }
   public void zeroEncoder(){
     armMotor.setPosition(0);
+  }
+  public void setPIDsetpoint(double setpoint){
+    PIDSetpoint = setpoint;
+  }
+  public double getPIDsetpoint(){
+    return PIDSetpoint;
   }
   @Override
   public void periodic() {

@@ -5,28 +5,33 @@
 package frc.robot.subsystems.led;
 
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color;
 
 public class DisabledPattern implements AddressableLEDWrapperPattern{
-	public DisabledPattern(){
+	private Color[] colors = {Color.kNavy, Color.kGold};
+	private int size;
+	private int offset;
+    
+    public DisabledPattern(){
 		super();
 		
 	}
 
 	@Override
 	public void setLEDs(AddressableLEDBuffer buffer) {
-        for (int index = 0; index < buffer.getLength(); index++) {
-            // Calculate the interpolation between gold and navy blue based on index
-            int currentHue = interpolate(45, 240, index, buffer.getLength() - 1);
-            buffer.setHSV(index, currentHue, 255, 128);
-        }
-    }
+		int numberOfColors = colors.length;
+		int effectiveIndex;
+		int colorIndex;
+		int bufferLength = buffer.getLength();
+		for (int index = 0; index < bufferLength; index++){
+			effectiveIndex = (index + offset) % bufferLength;
+			colorIndex =( index /size )% numberOfColors;
+			buffer.setLED(effectiveIndex, colors[colorIndex]);
+		}
 
-    // Linear interpolation function
-    private int interpolate(int start, int end, int step, int steps) {
-        return (int) (start + (end - start) * ((double) step / steps));
-    }
-
-    public boolean isAnimated() {
-        return false;
+		offset =(offset+1) %bufferLength;
+	}
+	public boolean isAnimated(){
+		return true;
     }
 }

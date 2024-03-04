@@ -60,6 +60,8 @@ public class RobotContainer {
 
   private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
   private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
+  private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
+
   private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
 
   // JOYSTICKS

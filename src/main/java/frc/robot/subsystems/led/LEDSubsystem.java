@@ -9,6 +9,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
@@ -20,13 +21,15 @@ import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.led.AddressableLEDWrapper;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
 public class LEDSubsystem extends SubsystemBase {
   private final AddressableLEDWrapper led = new AddressableLEDWrapper(LEDConstants.PWMPORT, LEDConstants.BUFFERSIZE);
   private final BeamBreakSubsystem beamBreakSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final IntakeSubsystem intakeSubsystem;
-
+  private final ShooterWrist shooterWrist;
+  private final XboxController operatorController;
   private AddressableLEDWrapperPattern blue = new SolidColor(Color.kBlue);
 	private AddressableLEDWrapperPattern red = new SolidColor(Color.kRed);
 	private AddressableLEDWrapperPattern disabled = new DisabledPattern();
@@ -36,12 +39,15 @@ public class LEDSubsystem extends SubsystemBase {
   private AddressableLEDWrapperPattern blinkingPurple = new Blinking(Color.kPurple, 0.25);
 	private AddressableLEDWrapperPattern blinkingGreen = new Blinking(Color.kGreen, 0.25);
   private AddressableLEDWrapperPattern blinkingYellow = new Blinking(Color.kYellow, 0.25);
+  private AddressableLEDWrapperPattern blinkingGold = new Blinking(Color.kGold, 1);
 
   /** Creates a new LEDSubsystem. */
-  public LEDSubsystem(BeamBreakSubsystem beamBreakSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem) {
+  public LEDSubsystem(BeamBreakSubsystem beamBreakSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, ShooterWrist shooterWrist, XboxController operatorController) {
     this.beamBreakSubsystem = beamBreakSubsystem;
     this.shooterSubsystem = shooterSubsystem;
     this.intakeSubsystem = intakeSubsystem;
+    this.shooterWrist = shooterWrist;
+    this.operatorController = operatorController;
   }
 
 
@@ -55,17 +61,24 @@ public class LEDSubsystem extends SubsystemBase {
       led.setPattern(yellow);
     } else if (intakeSubsystem.getVoltage() > 1){
       led.setPattern(blinkingYellow);
-    }
-    
-    else {
+    } else if (operatorController.getRightBumper()){
       Double bs =  shooterSubsystem.getBottomPIDsetpoint();
       Double ts = shooterSubsystem.getTopPIDsetpoint();
       Double difference = (bs+ts) - (shooterSubsystem.getTopVelocity() + shooterSubsystem.getBottomVelocity());
-      if(difference > 500){
+      if(difference > 200){
         led.setPattern(blinkingPurple);
       } else {
         led.setPattern(blinkingGreen);
+      } 
+    } else if (operatorController.getBButton() || operatorController.getAButton() || operatorController.getYButton()){
+      if((shooterWrist.getPIDsetpoint() - shooterWrist.getPosition() < 1)){
+        led.setPattern(green);
+      } else {
+        led.setPattern(blinkingRed);
       }
+    } else {
+      led.setPattern(blinkingGold);
+
     }
   }
 }
