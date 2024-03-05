@@ -250,7 +250,7 @@ public class RobotContainer {
     operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
     operator.a().whileTrue(new LowerShooter( shooterWrist));
     operator.povRight().toggleOnTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(800,  2000);
+      shooterSubsystem.setRPM(SmartDashboard.getNumber("topRPM", 1000), SmartDashboard.getNumber("bottomRPM", 1000));
     }, shooterSubsystem));
 
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
