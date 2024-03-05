@@ -6,6 +6,7 @@ import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
@@ -36,15 +37,12 @@ public class RaiseShooterWithPID extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.setGoal(setpoint + ArmConstants.armOffset);
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward*0.8;
       //* Math.cos(shooterWrist.getRadians()-(52 * Math.PI/180));
-      SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
       double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
-      SmartDashboard.putNumber("armSetpointPower", armPower);
       shooterWrist.setPower(armPower * 12);
   }
   

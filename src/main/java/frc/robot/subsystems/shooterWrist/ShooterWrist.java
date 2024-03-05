@@ -17,6 +17,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.units.Measure;
@@ -27,6 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import static edu.wpi.first.units.Units.Minute;
+import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
@@ -39,7 +41,7 @@ public class ShooterWrist extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
   private TalonFX armMotor;
   private VoltageOut voltageOut;
-  private DutyCycleEncoder encoder;
+  private DutyCycleEncoder encoder = new DutyCycleEncoder(9);
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
 
@@ -76,37 +78,19 @@ public class ShooterWrist extends SubsystemBase {
     voltageOut = new VoltageOut(12);
     armMotor.setInverted(true);
     armMotor.setPosition(0);
-    
-    
-    encoder = new DutyCycleEncoder(0 );
-    encoder.setPositionOffset(ArmConstants.armOffset);
-    //armMotor.enableVoltageCompensation(true);
+    encoder.setPositionOffset(0.961);
+
+    // armMotor.enableVoltageCompensation(true);
   }
   public double getVelocity() {
   return armMotor.getVelocity().getValueAsDouble() / ArmConstants.armGearing;
   }
 
-  public double rotationToRadians(double rotations){
-    return rotations * 2 * Math.PI;
-  }
-  public double radiansToRotations(double radians){
-    return radians/(2 * Math.PI);
-  }
-
-  public double 
-  getRadians(){
-    return rotationToRadians(getPosition());
-  }
-  public double rotationToDegrees(double rotations){
-    return rotations * 360;
-  }
-  public double degreesToRotation(double degrees){
-    return degrees/360;
-  }
   public void setPower(double voltage){
     voltageOut.Output = voltage;
     voltageOut.EnableFOC = true;
     armMotor.setControl(voltageOut);  
+
   }
   public void setMMConfigs() {
   TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
@@ -139,19 +123,24 @@ public class ShooterWrist extends SubsystemBase {
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   public double getPosition(){
-    // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
-    return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + 42.0/360;
+    return MathUtil.angleModulus((encoder.getAbsolutePosition()-encoder.getPositionOffset()) * 2 * Math.PI);
+    // - encoder.getPositionOffset();
+    // return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + ArmConstants.armOffset;
   }
-  public double getPositionInDegrees(){
-    return rotationToDegrees(getPosition());
-  }
+
   public void zeroEncoder(){
     armMotor.setPosition(0);
   }
+  public double getRadians() {
+    return Rotations.of(getPosition()).in(Radians);
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm position", getPosition());
-    SmartDashboard.putNumber("Arm in Degrees", rotationToDegrees(getPosition()));
+    // // This method will be called once per scheduler run
+    // SmartDashboard.putNumber("Arm position", getPosition());
+    // SmartDashboard.putNumber("Arm in Degrees", getPosition()*360);
+    SmartDashboard.putNumber("Absolute Encoder", getPosition());
+    SmartDashboard.putNumber("EncoderInDegrees", getPosition()*360);
   }
 }
