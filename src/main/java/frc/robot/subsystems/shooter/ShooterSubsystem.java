@@ -68,6 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     topShooterPidController.setFF(0.0003/2);
     bottomShooterPidController.setFF(0.0003/2);
 
+    System.out.println("changing rpm" + topRPM + bottomRPM);
     topShooterPidController.setReference(topRPM, ControlType.kVelocity);
     bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
   }

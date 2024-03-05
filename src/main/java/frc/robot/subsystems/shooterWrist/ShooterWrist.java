@@ -140,7 +140,7 @@ public class ShooterWrist extends SubsystemBase {
   }
   public double getPosition(){
     // return encoder.getAbsolutePosition() - encoder.getPositionOffset();
-    return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing;
+    return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + 42.0/360;
   }
   public double getPositionInDegrees(){
     return rotationToDegrees(getPosition());

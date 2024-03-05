@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -84,7 +85,7 @@ public class RobotContainer {
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
   private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
-      3000, 3000);
+      5500, 3000);
 
   // TELEOP COMMANDS
   // END-------------------------------------------------------------------------------------------------------------
@@ -130,6 +131,8 @@ public class RobotContainer {
     configureBindings();
     configAutonSelection();
     setDefaultCommands();
+    SmartDashboard.putNumber("top RPM", 1000);
+    SmartDashboard.putNumber("bottom RPM", 1000);
 
     oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
     twoNote = new PathPlannerAuto("TwoNote");
@@ -154,8 +157,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 20.0/360));
     NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
-    NamedCommands.registerCommand("ShootNoteMid", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 22.0/360));
-    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 22.0/360));
+    NamedCommands.registerCommand("ShootNoteMid", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0/360));
+    NamedCommands.registerCommand("ShootNoteLeft", new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0/360));
     NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, operator));
     NamedCommands.registerCommand("RevShooter", new RunShooter(shooterSubsystem, 0.4));
   }
@@ -227,7 +230,7 @@ public class RobotContainer {
     
     // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15));
 
-    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, (21.0)/360));
+    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, (24.0)/360));
     
     // operator.b().(new SequentialCommandGroup(
     //   new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
@@ -246,9 +249,9 @@ public class RobotContainer {
     // operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
     operator.a().whileTrue(new LowerShooter( shooterWrist));
-    // operator.povRight().toggleOnTrue(new RunCommand(() -> {
-    //   shooterSubsystem.setRPM(2000, 2000);
-    // }, shooterSubsystem));
+    operator.povRight().toggleOnTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(SmartDashboard.getNumber("topRPM", 1000), SmartDashboard.getNumber("bottomRPM", 1000));
+    }, shooterSubsystem));
 
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
@@ -271,9 +274,9 @@ public class RobotContainer {
   private void setDefaultCommands() {
     intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
     shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
-    shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
-      shooterSubsystem.setRPM(2000, 2000);
-    }, shooterSubsystem));
+    // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
+    //   shooterSubsystem.setRPM(2000, 2000);
+    // }, shooterSubsystem));
   }
 
   /**
