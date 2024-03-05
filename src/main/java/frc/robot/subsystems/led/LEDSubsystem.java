@@ -32,7 +32,7 @@ public class LEDSubsystem extends SubsystemBase {
   private final XboxController operatorController;
   private AddressableLEDWrapperPattern blue = new SolidColor(Color.kBlue);
 	private AddressableLEDWrapperPattern red = new SolidColor(Color.kRed);
-	private AddressableLEDWrapperPattern disabled = new DisabledPattern();
+	// private AddressableLEDWrapperPattern disabled = new DisabledPattern();
 	private AddressableLEDWrapperPattern green = new SolidColor(Color.kGreen);
 	private AddressableLEDWrapperPattern yellow = new SolidColor(Color.kLightYellow);
 	private AddressableLEDWrapperPattern blinkingRed = new Blinking(Color.kRed, 0.25);
@@ -54,7 +54,7 @@ public class LEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (DriverStation.isDisabled()) {
-			led.setPattern(disabled);
+			led.setPattern(blinkingGold);
     } else if (beamBreakSubsystem.frontBeamBreakIsTriggered()) {
       led.setPattern(green);
     } else if (beamBreakSubsystem.backBeamBreakIsTriggered()) {

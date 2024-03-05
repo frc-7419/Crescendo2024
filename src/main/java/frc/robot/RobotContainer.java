@@ -38,6 +38,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithIntake;
 
@@ -77,7 +78,7 @@ public class RobotContainer {
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
   private final VisionWrapper vision = new VisionWrapper();
   private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
-
+  // private final LEDSubsystem ledSubsystem = new LEDSubsystem(beamBreakSubsystem, shooterSubsystem, intakeSubsystem, shooterWrist, operatorRaw);
   // SUBSYSTEMS
   // END------------------------------------------------------------------------------------------------------------------
 
