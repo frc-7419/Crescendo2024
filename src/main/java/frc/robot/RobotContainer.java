@@ -35,6 +35,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.TurnToAmp;
 import frc.robot.subsystems.drive.TurnToSpeaker;
 
 import frc.robot.subsystems.intake.IntakeNote;
@@ -241,6 +242,7 @@ public class RobotContainer {
     // RunSerializer(intakeSubsystem))).withTimeout(5)
     // ));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
+    driver.povLeft().onTrue(new TurnToAmp(drivetrain));
 
   }
 
