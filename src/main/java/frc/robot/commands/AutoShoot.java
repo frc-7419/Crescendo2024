@@ -13,7 +13,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.shooter.RunShooterWithIntake;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterWrist.RaiseShooter;
+import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 

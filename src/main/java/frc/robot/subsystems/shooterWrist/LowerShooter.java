@@ -1,5 +1,8 @@
 package frc.robot.subsystems.shooterWrist;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -11,9 +14,7 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class LowerShooter extends Command {
   private ShooterWrist shooterWrist;
-  private CommandSwerveDrivetrain drivetrain;
   private ProfiledPIDController shooterWristPIDController;
-  private InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
   private double feedForward = (2.1/12)/2.67;
   private double feedForwardPower;
 
@@ -37,9 +38,9 @@ public class LowerShooter extends Command {
   @Override
   public void execute() {
     shooterWristPIDController.setGoal(5.0 / 360);
-      feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
+      feedForwardPower = feedForward * Math.cos(shooterWrist.getPosition().in(Radians));
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Rotations));
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
       shooterWrist.setPower(armPower);

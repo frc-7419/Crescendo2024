@@ -14,7 +14,7 @@ import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithIntake;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterWrist.RaiseShooter;
+import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -25,7 +25,7 @@ public class OneNote extends SequentialCommandGroup {
   /** Creates a new AutoShoot. */
   public OneNote(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
     addCommands(
-      new RaiseShooter(drivetrain, shooterWrist),
+      new RaiseShooterWithVision(drivetrain, shooterWrist),
       new RunShooter(shooterSubsystem, 1)
       .deadlineWith(Commands.sequence(new WaitCommand(3), new RunIntake(intakeSubsystem, 1))).withTimeout(5)
     );

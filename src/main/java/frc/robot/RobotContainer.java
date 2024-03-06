@@ -44,12 +44,11 @@ import frc.robot.subsystems.shooter.RunShooterWithIntake;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.LowerShooter;
-import frc.robot.subsystems.shooterWrist.PrepShooter;
 // import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShootNote;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
-import frc.robot.subsystems.shooterWrist.RaiseShooter;
+import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithPID;
 import frc.robot.wrapper.VisionWrapper;
 
@@ -154,7 +153,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 20.0 / 360));
     NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
-    NamedCommands.registerCommand("Auto Shoot", new RaiseShooter(drivetrain, shooterWrist));
+    NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
     NamedCommands.registerCommand("ShootNoteMid",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0 / 360));
     NamedCommands.registerCommand("ShootNoteLeft",
@@ -252,7 +251,7 @@ public class RobotContainer {
     // operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist,
     // 46.0/360));
     // operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
-    operator.b().whileTrue(new PrepShooter(drivetrain, shooterWrist));
+    operator.b().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
     operator.a().whileTrue(new LowerShooter(shooterWrist));
     operator.povRight().onTrue(new RunCommand(() -> {
       shooterSubsystem.setRPM(1000, 1200);

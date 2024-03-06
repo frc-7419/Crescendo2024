@@ -1,7 +1,9 @@
 package frc.robot.subsystems.shooterWrist;
 
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.Rotations;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -11,17 +13,16 @@ import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
-public class PrepShooter extends Command {
+public class RaiseShooterWithVision extends Command {
   private ShooterWrist shooterWrist;
   private CommandSwerveDrivetrain drivetrain;
   private ProfiledPIDController shooterWristPIDController;
-  private Translation2d futurePoint;
   private InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
   private double feedForward = (2.1/12)/2.67;
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */
-  public PrepShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
+  public RaiseShooterWithVision(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
     this.drivetrain = drivetrain;
     this.shooterWrist = shooterWrist;
     this.shooterWristPIDController 
@@ -48,19 +49,25 @@ public class PrepShooter extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    futurePoint = drivetrain.getFuturePose();
-    double distance = futurePoint.getDistance(drivetrain.getCurrentPose().getTranslation());
+    Translation2d pose = drivetrain.getState().Pose.getTranslation();
 
+    Translation2d speakerPose = drivetrain.getSpeakerPose();
+
+    double distance = pose.getDistance(speakerPose);
+    SmartDashboard.putNumber("Distance to Speaker", distance);
     double setpoint = interpolatingDoubleTreeMap.get(distance);
-    shooterWristPIDController.setGoal(setpoint - ArmConstants.armOffset);
-      feedForwardPower = feedForward * Math.cos(shooterWrist.getRadians());
+     SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
+
+    shooterWristPIDController.setGoal(setpoint );
+    // shooterWristPIDController.setGoal(7);
+      feedForwardPower = feedForward * Math.cos(shooterWrist.getPosition().in(Radians));
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Rotations));
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
-      shooterWrist.setPower(armPower);
+      shooterWrist.setPower(armPower * 12);
   }
-
+  
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

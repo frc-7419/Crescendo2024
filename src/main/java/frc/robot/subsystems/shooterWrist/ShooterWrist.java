@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
@@ -34,7 +36,6 @@ import static edu.wpi.first.units.Units.Volts;
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.DeviceIDs.CanIds;
-
 
 
 public class ShooterWrist extends SubsystemBase {
@@ -45,6 +46,7 @@ public class ShooterWrist extends SubsystemBase {
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
 
+  /*
   private final SysIdRoutine shooterWristSysIdRoutine =
     new SysIdRoutine(
       // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
@@ -65,7 +67,7 @@ public class ShooterWrist extends SubsystemBase {
                 armMotor.getDutyCycle().getValueAsDouble() * RobotController.getBatteryVoltage(), Volts))
             // .angularPosition(shooterDistance)
             .angularVelocity(RotationsPerMinute.of(getVelocity()))
-           .angularPosition(Rotations.of(getPosition()));
+           .angularPosition(getPosition().in(Rotations));
           // Record a frame for the right motors.  Since these share an encoder, we consider
           // the entire group to be one motor.
         },
@@ -73,6 +75,7 @@ public class ShooterWrist extends SubsystemBase {
         // WPILog with this subsystem's name ("drive")
         this));
 
+        */
   public ShooterWrist() {
     armMotor = new TalonFX(CanIds.shooterWrist.id, "Ryan Biggee");
     voltageOut = new VoltageOut(12);
@@ -122,25 +125,21 @@ public class ShooterWrist extends SubsystemBase {
   public void brake(){
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
-  public double getPosition(){
-    return MathUtil.angleModulus((encoder.getAbsolutePosition()-encoder.getPositionOffset()) * 2 * Math.PI);
+  public Measure<Angle> getPosition(){
+    return Rotations.of(encoder.getAbsolutePosition()-encoder.getPositionOffset());
     // - encoder.getPositionOffset();
     // return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + ArmConstants.armOffset;
   }
 
   public void zeroEncoder(){
     armMotor.setPosition(0);
-  }
-  public double getRadians() {
-    return Rotations.of(getPosition()).in(Radians);
+    encoder.setPositionOffset(encoder.getAbsolutePosition() - ArmConstants.armOffset.in(Rotations));
   }
 
   @Override
   public void periodic() {
-    // // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("Arm position", getPosition());
-    // SmartDashboard.putNumber("Arm in Degrees", getPosition()*360);
-    SmartDashboard.putNumber("Absolute Encoder", getPosition());
-    SmartDashboard.putNumber("EncoderInDegrees", getPosition()*360);
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Arm position", getPosition().in(Rotations));
+    SmartDashboard.putNumber("Arm in Degrees", getPosition().in(Degrees));
   }
 }

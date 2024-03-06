@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooterWrist;
 
+import static edu.wpi.first.units.Units.Degrees;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -37,11 +39,11 @@ public class RaiseShooterWithPID extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterWristPIDController.setGoal(setpoint + ArmConstants.armOffset);
+    shooterWristPIDController.setGoal(setpoint);
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward*0.8;
       //* Math.cos(shooterWrist.getRadians()-(52 * Math.PI/180));
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Degrees));
       armPower += Math.copySign(feedForwardPower, armPower);
       shooterWrist.setPower(armPower * 12);
   }
