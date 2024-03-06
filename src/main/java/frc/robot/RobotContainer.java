@@ -12,7 +12,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+
 import edu.wpi.first.wpilibj.XboxController;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,33 +25,34 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import frc.robot.commands.OneNote;
+
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
+import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToSpeaker;
+
 import frc.robot.subsystems.intake.IntakeNote;
-import frc.robot.subsystems.intake.IntakeNoteAuton;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
-import frc.robot.subsystems.shooter.RunShooter;
-import frc.robot.subsystems.shooter.RunShooterWithIntake;
 
+import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterWrist.LowerShooter;
-// import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpointWithCalculatedAngle;
+
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShootNote;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithPID;
+
 import frc.robot.wrapper.VisionWrapper;
 
 public class RobotContainer {
@@ -152,7 +155,7 @@ public class RobotContainer {
     // -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 20.0 / 360));
-    NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
+    // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
     NamedCommands.registerCommand("ShootNoteMid",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0 / 360));
@@ -252,14 +255,12 @@ public class RobotContainer {
     // 46.0/360));
     // operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
     operator.b().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
-    operator.a().whileTrue(new LowerShooter(shooterWrist));
     operator.povRight().onTrue(new RunCommand(() -> {
       shooterSubsystem.setRPM(1000, 1000);
     }, shooterSubsystem));
     operator.povLeft().onTrue(new RunCommand(() -> {
       shooterSubsystem.setBothSpeed(0);
     }));
-    operator.a().whileTrue(new LowerShooter( shooterWrist));
 
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
