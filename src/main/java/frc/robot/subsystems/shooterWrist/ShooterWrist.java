@@ -18,6 +18,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.units.Measure;
