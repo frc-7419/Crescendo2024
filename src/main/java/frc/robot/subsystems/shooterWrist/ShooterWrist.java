@@ -138,8 +138,6 @@ public class ShooterWrist extends SubsystemBase {
   }
   public double getPosition(){
     return encoder.getAbsolutePosition() - encoder.getPositionOffset();
-    // - encoder.getPositionOffset();
-    // return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + ArmConstants.armOffset;
   }
   public double getPositionInRadians(){
     return getPosition() * 2 * Math.PI;

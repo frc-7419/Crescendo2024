@@ -22,17 +22,16 @@ public class RaiseShooterWithPID extends Command {
   private double feedForwardPower;
   private ArmFeedforward armFeedforward = new ArmFeedforward(0, 2.7/2.67, 0);
   private double setpoint;
-
-
+  private double setpointInDegrees;
 
   /** Creates a new ShootNotes. */
   public RaiseShooterWithPID(ShooterWrist shooterWrist, double setpoint) {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
+    this.setpointInDegrees = setpoint * 360;
     // this.shooterWristPIDController 
     //   = new ProfiledPIDController(Rotations.of(1.9).in(Degrees), Rotations.of(0.07).in(Degrees), Rotations.of(0.05).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
-    this.shooterWristPIDController 
-      = new ProfiledPIDController(0.1,0,0, new TrapezoidProfile.Constraints(0.01,0.001));
+    this.shooterWristPIDController = new ProfiledPIDController(0.01,0,0, new TrapezoidProfile.Constraints(0.01,0.001));
     addRequirements(shooterWrist);
   }
 
@@ -42,20 +41,22 @@ public class RaiseShooterWithPID extends Command {
     shooterWrist.coast();
     shooterWrist.setPower(0);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
-    // shooterWristPIDController.setGoal(Degrees.of(setpoint).in(Degrees));
-    shooterWristPIDController.setGoal(setpoint * 360);
-    SmartDashboard.putNumber("Arm Setpoint", setpoint * 360);
+    shooterWristPIDController.setGoal(setpointInDegrees);
+    SmartDashboard.putNumber("Arm Setpoint", setpointInDegrees);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      //feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
-      double armPower = -shooterWristPIDController.calculate(shooterWrist.getPositionInDegrees());
-      SmartDashboard.putNumber("Arm Error", setpoint*360 - shooterWrist.getPositionInDegrees());
-      SmartDashboard.putNumber("armie power", armPower);
+      // feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
+      double armError = setpointInDegrees - shooterWrist.getPositionInDegrees();
+      double armPower = 0.1 * armError;
+      // double armPower = shooterWristPIDController.calculate(shooterWrist.getPositionInDegrees());
+      // SmartDashboard.putNumber("Arm Error", setpointInDegrees - shooterWrist.getPositionInDegrees());
+      SmartDashboard.putNumber("Arm Error", armError);
+      SmartDashboard.putNumber("Arm power", armPower);
       armPower += Math.copySign(feedForward, armPower);
-      SmartDashboard.putNumber("arm power with ff", armPower);
+      SmartDashboard.putNumber("Arm power with ff", armPower);
       shooterWrist.setPower(armPower);
   }
   
