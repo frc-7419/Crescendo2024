@@ -259,7 +259,8 @@ public class RobotContainer {
     }, shooterSubsystem));
     operator.povLeft().onTrue(new RunCommand(() -> {
       shooterSubsystem.setBothSpeed(0);
-    }, shooterSubsystem));
+    }));
+    operator.a().whileTrue(new LowerShooter( shooterWrist));
 
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
     // operator.x().onTrue(raiseShooterWithMotionMagic);
