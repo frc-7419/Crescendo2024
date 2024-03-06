@@ -214,7 +214,7 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
 
     // zero
-    operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
+    // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
 
     // operator.rightBumper().onTrue(runShooterWithPID);
     // operator.leftBumper().onTrue(new RunCommand(() -> {
@@ -231,7 +231,7 @@ public class RobotContainer {
     // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15,
     // 1200*1.15));
 
-    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, (24.0 / 360)));
+    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, 58));
 
     // operator.b().(new SequentialCommandGroup(
     // new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
@@ -254,7 +254,7 @@ public class RobotContainer {
     operator.b().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
     operator.a().whileTrue(new LowerShooter(shooterWrist));
     operator.povRight().onTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(1000, 1200);
+      shooterSubsystem.setRPM(1000, 1000);
     }, shooterSubsystem));
     operator.povLeft().onTrue(new RunCommand(() -> {
       shooterSubsystem.setBothSpeed(0);

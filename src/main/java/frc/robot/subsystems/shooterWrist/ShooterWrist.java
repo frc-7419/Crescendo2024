@@ -82,7 +82,7 @@ public class ShooterWrist extends SubsystemBase {
     voltageOut = new VoltageOut(12);
     armMotor.setInverted(true);
     armMotor.setPosition(0);
-    encoder.setPositionOffset(0.961);
+    encoder.setPositionOffset(0.587 - ArmConstants.armOffset.in(Rotations));
 
     // armMotor.enableVoltageCompensation(true);
   }
@@ -127,15 +127,11 @@ public class ShooterWrist extends SubsystemBase {
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
   public Measure<Angle> getPosition(){
-    return Rotations.of(encoder.getAbsolutePosition()-encoder.getPositionOffset());
+    return Rotations.of(encoder.getAbsolutePosition() - encoder.getPositionOffset() );
     // - encoder.getPositionOffset();
     // return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + ArmConstants.armOffset;
   }
 
-  public void zeroEncoder(){
-    armMotor.setPosition(0);
-    encoder.setPositionOffset(encoder.getAbsolutePosition() - ArmConstants.armOffset.in(Rotations));
-  }
 
   @Override
   public void periodic() {
