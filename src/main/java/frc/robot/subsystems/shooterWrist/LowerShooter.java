@@ -38,9 +38,9 @@ public class LowerShooter extends Command {
   @Override
   public void execute() {
     shooterWristPIDController.setGoal(5.0 / 360);
-      feedForwardPower = feedForward * Math.cos(shooterWrist.getPosition().in(Radians));
+      feedForwardPower = feedForward * Math.cos(shooterWrist.getPositionInRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Rotations));
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
       shooterWrist.setPower(armPower);

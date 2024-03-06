@@ -34,6 +34,9 @@ import static edu.wpi.first.units.Units.Minute;
 import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
+
+import org.opencv.core.Mat;
+
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.DeviceIDs.CanIds;
@@ -90,11 +93,18 @@ public class ShooterWrist extends SubsystemBase {
   return armMotor.getVelocity().getValueAsDouble() / ArmConstants.armGearing;
   }
 
+  public double getVelocityInRadians(){
+    return getVelocity() * 2 * Math.PI;
+  }
+
   public void setPower(double voltage){
     voltageOut.Output = voltage;
     voltageOut.EnableFOC = true;
     armMotor.setControl(voltageOut);  
 
+  }
+  public void setPowerUpward(double voltage){
+    setPower(voltage);
   }
   public void setMMConfigs() {
   TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
@@ -126,17 +136,23 @@ public class ShooterWrist extends SubsystemBase {
   public void brake(){
     armMotor.setNeutralMode(NeutralModeValue.Brake);
   }
-  public Measure<Angle> getPosition(){
-    return Rotations.of(encoder.getAbsolutePosition() - encoder.getPositionOffset() );
+  public double getPosition(){
+    return encoder.getAbsolutePosition() - encoder.getPositionOffset();
     // - encoder.getPositionOffset();
     // return armMotor.getPosition().getValueAsDouble() / ArmConstants.armGearing + ArmConstants.armOffset;
   }
+  public double getPositionInRadians(){
+    return getPosition() * 2 * Math.PI;
+  }
 
+  public double getPositionInDegrees(){
+    return getPosition() * 360.0;
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm position", getPosition().in(Rotations));
-    SmartDashboard.putNumber("Arm in Degrees", getPosition().in(Degrees));
+    SmartDashboard.putNumber("Arm position", getPosition());
+    SmartDashboard.putNumber("Arm in Degrees", getPositionInDegrees());
   }
 }

@@ -231,7 +231,7 @@ public class RobotContainer {
     // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15,
     // 1200*1.15));
 
-    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, 58));
+    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, 60.0/360));
 
     // operator.b().(new SequentialCommandGroup(
     // new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
@@ -258,7 +258,7 @@ public class RobotContainer {
     }, shooterSubsystem));
     operator.povLeft().onTrue(new RunCommand(() -> {
       shooterSubsystem.setBothSpeed(0);
-    }));
+    }));  
     operator.a().whileTrue(new LowerShooter( shooterWrist));
 
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
