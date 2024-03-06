@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.shooterWrist;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -15,6 +16,7 @@ public class RunShooterWristWithJoystick extends Command {
   // private ArmFeedforward armFeedforward;
   private double maxPower = 0.1;
   private double feedForward = (0.9/12)/2.67 * 1;
+  private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0, 0);
   
   public RunShooterWristWithJoystick(ShooterWrist shooterWrist, CommandXboxController joystick) {
     this.shooterWrist = shooterWrist;
@@ -37,17 +39,16 @@ public class RunShooterWristWithJoystick extends Command {
     if (Math.abs(joystick.getLeftY()) > 0.05){
       shooterWrist.coast();
       double armJoystickPower = maxPower * -joystick.getLeftY() * 12;
-      double feedForwardPower = feedForward;
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition(), shooterWrist.getVelocity());
       //* Math.cos(shooterWrist.getRadians()) * 12;
       // SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
 
       shooterWrist.setPower(armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower));
       // SmartDashboard.putNumber("armJoystickPower", armPower);
     } else {
-      double feedForwardPower = feedForward;
-      //* Math.cos(shooterWrist.getRadians()) * 12;
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition(), shooterWrist.getVelocity());
       shooterWrist.setPower(feedForwardPower);
-      // SmartDashboard.putNumber("armJoystickPower", feedForwardPower);
+      SmartDashboard.putNumber("armFeedForward", feedForwardPower);
       shooterWrist.brake();
 
     }
