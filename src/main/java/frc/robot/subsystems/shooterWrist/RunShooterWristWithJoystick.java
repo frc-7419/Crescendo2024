@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.shooterWrist;
 
+import static edu.wpi.first.units.Units.Rotations;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,14 +41,14 @@ public class RunShooterWristWithJoystick extends Command {
     if (Math.abs(joystick.getLeftY()) > 0.05){
       shooterWrist.coast();
       double armJoystickPower = maxPower * -joystick.getLeftY() * 12;
-      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition(), shooterWrist.getVelocity());
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition().in(Rotations), shooterWrist.getVelocity());
       //* Math.cos(shooterWrist.getRadians()) * 12;
       // SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
 
       shooterWrist.setPower(armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower));
       // SmartDashboard.putNumber("armJoystickPower", armPower);
     } else {
-      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition(), shooterWrist.getVelocity());
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition().in(Rotations), shooterWrist.getVelocity());
       shooterWrist.setPower(feedForwardPower);
       SmartDashboard.putNumber("armFeedForward", feedForwardPower);
       shooterWrist.brake();
