@@ -21,7 +21,7 @@ public class TurnToAmp extends Command {
   private VisionWrapper vision;
 
   /** Creates a new TurnToSpeaker. */
-  public TurnToAmp(CommandSwerveDrivetrain drivetrain) {
+  public TurnToAmp(CommandSwerveDrivetrain drivetrain, VisionWrapper vision) {
     this.drivetrain = drivetrain;
     this.vision = vision;
     // Use addRequirements() here to declare subsystem dependencies.

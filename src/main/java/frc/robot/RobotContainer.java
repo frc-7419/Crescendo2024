@@ -221,9 +221,9 @@ public class RobotContainer {
     // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
     operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
-    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, 60.0/360));
+    operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0/360));
     operator.povRight().onTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(1000, 1000);
+      shooterSubsystem.setRPM(800/1.5, 2400/1.5);
     }, shooterSubsystem));
     operator.povLeft().onTrue(new RunCommand(() -> {
       shooterSubsystem.setBothSpeed(0);
@@ -242,7 +242,7 @@ public class RobotContainer {
     // RunSerializer(intakeSubsystem))).withTimeout(5)
     // ));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-    driver.povLeft().onTrue(new TurnToAmp(drivetrain));
+    driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
 
   }
 
