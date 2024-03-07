@@ -36,6 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
   private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private boolean isRunning;
+  private double topPIDsetpoint;
+  private double bottomPIDsetpoint;
 
   public ShooterSubsystem() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
@@ -90,6 +92,22 @@ public class ShooterSubsystem extends SubsystemBase {
     setBottomSpeed(speed);
   }
 
+  public void setTopPIDsetpoint(double setpoint){
+    this.topPIDsetpoint = setpoint;
+  }
+
+  public void setBottomPIDsetpoint(double setpoint){
+    this.bottomPIDsetpoint = setpoint;
+  }
+
+  public double getTopPIDsetpoint(){
+    return this.topPIDsetpoint;
+  }
+
+  public double getBottomPIDsetpoint(){
+    return this.bottomPIDsetpoint;
+  }
+  
   public void setTopVoltage(double voltage){
     shooterMotorTop.setVoltage(voltage);
   }

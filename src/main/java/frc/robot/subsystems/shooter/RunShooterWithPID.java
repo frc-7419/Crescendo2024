@@ -36,6 +36,8 @@ public class RunShooterWithPID extends Command {
     topShooterPidController.setSetpoint(topV);
     bottomShooterPidController.reset();
     bottomShooterPidController.setSetpoint(bottomV);
+    shooterSubsystem.setTopPIDsetpoint(topV);
+    shooterSubsystem.setBottomPIDsetpoint(bottomV);
     shooterSubsystem.invertToggle();
   }
 

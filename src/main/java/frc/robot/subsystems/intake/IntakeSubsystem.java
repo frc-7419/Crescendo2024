@@ -13,28 +13,29 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 
 public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax leftIntakeMotor;
   private CANSparkMax rightIntakeMotor;
   private CANSparkMax serializerBack;
 
-  private DigitalInput beamBreakFront = new DigitalInput(1);
-  private DigitalInput beamBreakBack = new DigitalInput(2);
+  private final BeamBreakSubsystem beamBreakSubsystem;
   
-  public IntakeSubsystem() {
+  public IntakeSubsystem(BeamBreakSubsystem beamBreakSubsystem) {
     leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
     rightIntakeMotor = new CANSparkMax(CanIds.rightIntakeMotor.id, MotorType.kBrushless);
-
+    
+    this.beamBreakSubsystem = beamBreakSubsystem;
     serializerBack = new CANSparkMax(CanIds.serializerBack.id, MotorType.kBrushless);
     invertMotors();
   }
 
   public boolean frontBeamBreakIsTriggered(){
-    return !beamBreakFront.get();
+    return !beamBreakSubsystem.frontBeamBreakIsTriggered();
   }
   public boolean backBeamBreakIsTriggered(){
-    return !beamBreakBack.get();
+    return !beamBreakSubsystem.backBeamBreakIsTriggered();
   }
 
   public void invertMotors(){
@@ -82,6 +83,10 @@ public class IntakeSubsystem extends SubsystemBase {
   public void coastSerializer() {
     // serializerFront.setIdleMode(IdleMode.kCoast);
     serializerBack.setIdleMode(IdleMode.kCoast);
+  }
+
+  public double getVoltage(){
+    return leftIntakeMotor.getBusVoltage();
   }
 
   @Override

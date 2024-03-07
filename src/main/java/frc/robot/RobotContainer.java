@@ -33,7 +33,7 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
-
+import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToAmp;
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -74,7 +74,8 @@ public class RobotContainer {
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
 
-  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+  private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
+  private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(beamBreakSubsystem);
   private final VisionWrapper vision = new VisionWrapper();
 
   // SUBSYSTEMS

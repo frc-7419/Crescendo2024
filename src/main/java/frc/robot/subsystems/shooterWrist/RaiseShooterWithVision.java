@@ -59,6 +59,7 @@ public class RaiseShooterWithVision extends Command {
      SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
     shooterWristPIDController.setGoal(setpoint );
+    shooterWrist.setPIDsetpoint(setpoint);
     // shooterWristPIDController.setGoal(7);
       feedForwardPower = feedForward * Math.cos(shooterWrist.getPositionInRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);

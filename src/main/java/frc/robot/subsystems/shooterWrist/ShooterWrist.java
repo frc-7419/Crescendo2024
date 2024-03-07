@@ -49,7 +49,7 @@ public class ShooterWrist extends SubsystemBase {
   private DutyCycleEncoder encoder = new DutyCycleEncoder(9);
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
-
+  private double PIDsetpoint;
   /*
   private final SysIdRoutine shooterWristSysIdRoutine =
     new SysIdRoutine(
@@ -147,6 +147,14 @@ public class ShooterWrist extends SubsystemBase {
     return getPosition() * 360.0;
   }
 
+  public void setPIDsetpoint(double setpoint){
+    this.PIDsetpoint = setpoint;
+  }
+
+  public double getPIDsetpoint(){
+    return this.PIDsetpoint;
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

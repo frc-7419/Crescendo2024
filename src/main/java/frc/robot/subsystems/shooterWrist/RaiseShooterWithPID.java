@@ -39,6 +39,7 @@ public class RaiseShooterWithPID extends Command {
   public void initialize() {
     shooterWrist.coast();
     shooterWrist.setPower(0);
+    shooterWrist.setPIDsetpoint(setpoint);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
     shooterWristPIDController.setGoal(setpoint);
     shooterWristPIDController.reset(shooterWrist.getPosition());
