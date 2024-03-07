@@ -4,22 +4,14 @@
 
 package frc.robot.subsystems.led;
 
-import org.photonvision.targeting.PhotonPipelineResult;
-
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.constants.LEDConstants;
-import frc.robot.constants.RobotConstants;
 import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.led.AddressableLEDWrapper;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
@@ -32,7 +24,7 @@ public class LEDSubsystem extends SubsystemBase {
   private final XboxController operatorController;
   private AddressableLEDWrapperPattern blue = new SolidColor(Color.kBlue);
 	private AddressableLEDWrapperPattern red = new SolidColor(Color.kRed);
-	// private AddressableLEDWrapperPattern disabled = new DisabledPattern();
+	private AddressableLEDWrapperPattern disabled = new DisabledPattern();
 	private AddressableLEDWrapperPattern green = new SolidColor(Color.kGreen);
 	private AddressableLEDWrapperPattern yellow = new SolidColor(Color.kLightYellow);
 	private AddressableLEDWrapperPattern blinkingRed = new Blinking(Color.kRed, 0.25);
@@ -54,8 +46,8 @@ public class LEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (DriverStation.isDisabled()) {
-			led.setPattern(blinkingGold);
-      SmartDashboard.putString("LED Pattern", "blinkingGold");
+			led.setPattern(disabled);
+      SmartDashboard.putString("LED Pattern", "disabled pattern");
     } else if (beamBreakSubsystem.frontBeamBreakIsTriggered()) {
       led.setPattern(green);
             SmartDashboard.putString("LED Pattern", "green");
