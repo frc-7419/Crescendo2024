@@ -69,7 +69,7 @@ public class RobotContainer {
 
   // SUBSYSTEMS----------------------------------------------------------------------------------------------------------------------
 
-  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain;
 
   private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
   private final ShooterWrist shooterWrist = new ShooterWrist();
