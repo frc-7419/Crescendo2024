@@ -45,7 +45,7 @@ public class TurnToAmp extends Command {
       if (estimate != null) {
         tagSeen = true;
         double angle = vision.headingToTag(9);
-        System.out.println(angle + "hello");
+        System.out.println(angle);
         drivetrain.setControl(driveRequest.withRotationalRate(-angle*0.1));
       }
     }
