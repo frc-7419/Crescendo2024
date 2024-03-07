@@ -13,14 +13,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-import edu.wpi.first.wpilibj.XboxController;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -28,18 +26,18 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.commands.OneNote;
 
-import frc.robot.constants.ArmConstants;
+
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.Action;
-import frc.robot.constants.RobotConstants.ShooterConstants;
+
 
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 import frc.robot.subsystems.intake.IntakeNote;
 import frc.robot.subsystems.intake.Intake;
-import frc.robot.subsystems.intake.RunIntake;
+
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
 
@@ -47,7 +45,7 @@ import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.wrist.RaiseShooter;
 import frc.robot.subsystems.wrist.RunWristWithJoystick;
-import frc.robot.subsystems.wrist.ShootNote;
+
 import frc.robot.subsystems.wrist.Wrist;
 import frc.robot.wrapper.VisionWrapper;
 
@@ -56,7 +54,6 @@ public class RobotContainer {
   // JOYSTICKS-----------------------------------------------------------------------------------------------------------------------
 
   private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
-  private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
   private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
 
   // JOYSTICKS

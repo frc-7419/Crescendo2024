@@ -4,11 +4,7 @@
 
 package frc.robot.subsystems.wrist;
 
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -18,7 +14,6 @@ public class RunWristWithJoystick extends Command {
   private Wrist shooterWrist;
   // private ArmFeedforward armFeedforward;
   private double maxPower = 0.1;
-  private double feedForward = (0.9/12)/2.67 * 1;
   private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.3, 0);
   
   public RunWristWithJoystick(Wrist shooterWrist, CommandXboxController joystick) {

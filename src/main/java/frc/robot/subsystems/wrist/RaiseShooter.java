@@ -2,19 +2,19 @@ package frc.robot.subsystems.wrist;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.Radians;
+
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.geometry.Translation2d;
+
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Units;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ArmConstants;
+
 import frc.robot.constants.RobotConstants.Action;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
