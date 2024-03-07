@@ -26,8 +26,6 @@ public class RunShooterWithPID extends Command {
     bottomV = bottomVelocity;
     SmartDashboard.putNumber("Top Setpoint", topV);
     SmartDashboard.putNumber("Bottom Setpoint", bottomV);
-
-
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -39,7 +37,6 @@ public class RunShooterWithPID extends Command {
     bottomShooterPidController.reset();
     bottomShooterPidController.setSetpoint(bottomV);
     shooterSubsystem.invertToggle();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.

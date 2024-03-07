@@ -19,7 +19,7 @@ public class RunShooterWristWithJoystick extends Command {
   // private ArmFeedforward armFeedforward;
   private double maxPower = 0.1;
   private double feedForward = (0.9/12)/2.67 * 1;
-  private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.3, 0);
+  private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809, 0.001);
   
   public RunShooterWristWithJoystick(ShooterWrist shooterWrist, CommandXboxController joystick) {
     this.shooterWrist = shooterWrist;
@@ -42,21 +42,18 @@ public class RunShooterWristWithJoystick extends Command {
     if (Math.abs(joystick.getLeftY()) > 0.05){
       shooterWrist.coast();
       double armJoystickPower = maxPower * -joystick.getLeftY() * 12;
-      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition().in(Radians), shooterWrist.getVelocity());
-      //* Math.cos(shooterWrist.getRadians()) * 12;
-      // SmartDashboard.putNumber("feedForwardPower", feedForwardPower);
-      double powerWithFeedforward = armJoystickPower + Math.copySign(feedForwardPower, armJoystickPower);
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
+      double powerWithFeedforward = armJoystickPower + feedForwardPower;
+      SmartDashboard.putNumber("powerWithFeedforward", powerWithFeedforward);
       shooterWrist.setPower(powerWithFeedforward);
-      // SmartDashboard.putNumber("armJoystickPower", armPower);
+      //SmartDashboard.putNumber("armJoystickPower", armPower);
       SmartDashboard.putNumber("armFeedForward", powerWithFeedforward);
 
     } else {
-      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPosition().in(Radians), shooterWrist.getVelocity());
+      double feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
       shooterWrist.setPower(feedForwardPower);
       SmartDashboard.putNumber("armFeedForward", feedForwardPower);
-      // shooterWrist.brake();
     }
-    // shooterWrist.setPower(joystick.getLeftY());
   }
 
   // Called once the command ends or is interrupted.

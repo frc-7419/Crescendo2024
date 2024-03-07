@@ -60,9 +60,9 @@ public class RaiseShooterWithVision extends Command {
 
     shooterWristPIDController.setGoal(setpoint );
     // shooterWristPIDController.setGoal(7);
-      feedForwardPower = feedForward * Math.cos(shooterWrist.getPosition().in(Radians));
+      feedForwardPower = feedForward * Math.cos(shooterWrist.getPositionInRadians());
       SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Rotations));
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
       armPower += Math.copySign(feedForwardPower, armPower);
       SmartDashboard.putNumber("armSetpointPower", armPower);
       shooterWrist.setPower(armPower * 12);

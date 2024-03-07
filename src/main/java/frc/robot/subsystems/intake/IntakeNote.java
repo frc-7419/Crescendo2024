@@ -28,7 +28,7 @@ public class IntakeNote extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubsystem.setSpeed(0.7);
+    intakeSubsystem.setSpeed(0.8);
     intakeSubsystem.setSerializerSpeed(0.4);
   }
 

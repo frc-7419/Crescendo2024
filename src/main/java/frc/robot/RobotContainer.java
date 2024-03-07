@@ -35,6 +35,7 @@ import frc.robot.constants.TunerConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
+import frc.robot.subsystems.drive.TurnToAmp;
 import frc.robot.subsystems.drive.TurnToSpeaker;
 
 import frc.robot.subsystems.intake.IntakeNote;
@@ -218,52 +219,30 @@ public class RobotContainer {
 
     // zero
     // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
-
-    // operator.rightBumper().onTrue(runShooterWithPID);
-    // operator.leftBumper().onTrue(new RunCommand(() -> {
-    // shooterSubsystem.setRPM(2000, 2000);
-    // }, shooterSubsystem));
-    // operator.rightBumper().whileTrue(new RunCommand(() -> {
-    // shooterSubsystem.setRPM(4000, 4000);
-    // }, shooterSubsystem));
-
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
+    operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0/360));
+    operator.povRight().onTrue(new RunCommand(() -> {
+      shooterSubsystem.setRPM(800/1.5, 2400/1.5);
+    }, shooterSubsystem));
+    operator.povLeft().onTrue(new RunCommand(() -> {
+      shooterSubsystem.setBothSpeed(0);
+    }));  
     // operator.rightBumper().onTrue(new ShootNote(shooterWrist, shooterSubsystem,
     // intakeSubsystem, 45/360));
 
     // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15,
     // 1200*1.15));
 
-    operator.y().onTrue(new RaiseShooterWithPID(shooterWrist, 58));
-
+    
     // operator.b().(new SequentialCommandGroup(
     // new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
     // .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0/360))
     // .deadlineWith(Commands.sequence(new WaitCommand(3), new
     // RunSerializer(intakeSubsystem))).withTimeout(5)
     // ));
-
-    // operator.b().onTrue(new RunShooterWristToSetpoint(sho/ eTrue(new
-    // RaiseShooter(drivetrain, shooterWrist));
-    // operator.x().onTrue(new AutoShoot(shooterSubsystem, shooterWrist,
-    // intakeSubsytem));
-    // driver.a().onTrue(new RunShooterWristToSetpoint(shooterWrist, 0.005));
     driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-
-    // operator.povLeft().onTrue(new RaiseShooterWithPID(shooterWrist, 46.0/360));
-    // operator.a().whileTrue(new RaiseShooterWithMotionMagic(shooterWrist,
-    // 46.0/360));
-    // operator.y().onTrue(new RaiseShooter(drivetrain, shooterWrist));
-    operator.b().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
-    operator.povRight().onTrue(new RunCommand(() -> {
-      shooterSubsystem.setRPM(1000, 1000);
-    }, shooterSubsystem));
-    operator.povLeft().onTrue(new RunCommand(() -> {
-      shooterSubsystem.setBothSpeed(0);
-    }));
-
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
-    // operator.x().onTrue(raiseShooterWithMotionMagic);
+    driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
 
   }
 

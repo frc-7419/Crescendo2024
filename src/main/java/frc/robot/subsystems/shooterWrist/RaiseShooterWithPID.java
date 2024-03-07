@@ -1,8 +1,11 @@
 package frc.robot.subsystems.shooterWrist;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.Radians;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -15,16 +18,19 @@ import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 public class RaiseShooterWithPID extends Command {
   private ShooterWrist shooterWrist;
   private ProfiledPIDController shooterWristPIDController;
-  private double feedForward = (2.1/12)/2.67;
+  private double feedForward = (0.9/12)/2.67;
   private double feedForwardPower;
+  private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809, 0.0000001/1.5);
   private double setpoint;
+  private double setpointInDegrees;
 
   /** Creates a new ShootNotes. */
   public RaiseShooterWithPID(ShooterWrist shooterWrist, double setpoint) {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
-    this.shooterWristPIDController 
-      = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
+    this.shooterWristPIDController = new ProfiledPIDController(2.0, 0, 0, new TrapezoidProfile.Constraints(20,1.5));
+    // this.shooterWristPIDController 
+    //   = new ProfiledPIDController(Rotations.of(1.9).in(Degrees), Rotations.of(0.07).in(Degrees), Rotations.of(0.05).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
     addRequirements(shooterWrist);
   }
 
@@ -34,18 +40,27 @@ public class RaiseShooterWithPID extends Command {
     shooterWrist.coast();
     shooterWrist.setPower(0);
     shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
+    shooterWristPIDController.setGoal(setpoint);
+    shooterWristPIDController.reset(shooterWrist.getPosition());
+    SmartDashboard.putNumber("Arm Setpoint", setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterWristPIDController.setGoal(setpoint);
-    // shooterWristPIDController.setGoal(7);
-      feedForwardPower = feedForward*0.8;
-      //* Math.cos(shooterWrist.getRadians()-(52 * Math.PI/180));
-      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition().in(Degrees));
-      armPower += Math.copySign(feedForwardPower, armPower);
-      shooterWrist.setPower(armPower * 12);
+      // feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
+      // double armError = setpointInDegrees - shooterWrist.getPositionInDegrees();
+      double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
+      double armError = setpoint - shooterWrist.getPosition();
+      
+      // double armPower = shooterWristPIDController.calculate(shooterWrist.getPositionInDegrees());
+      // SmartDashboard.putNumber("Arm Error", setpointInDegrees - shooterWrist.getPositionInDegrees());
+      SmartDashboard.putNumber("Arm Error", armError);
+      // SmartDashboard.putNumber("Arm power", armPower);
+      // armPower = armPower + feedForward*Math.cos(shooterWrist.getPositionInRadians());
+      armPower = armPower + armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
+      SmartDashboard.putNumber("Arm power with ff", armPower);
+      shooterWrist.setPower(armPower*12);
   }
   
   // Called once the command ends or is interrupted.
