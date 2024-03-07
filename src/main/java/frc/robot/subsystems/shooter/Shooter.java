@@ -4,45 +4,32 @@
 
 package frc.robot.subsystems.shooter;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.DeviceIDs.CanIds;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
   private CANSparkFlex shooterMotorTop;
   private CANSparkFlex shooterMotorBottom;
-  private RelativeEncoder topShooterEncoder;
-  private RelativeEncoder bottomShooterEncoder;
+
 
   private SparkPIDController topShooterPidController;
-  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private SparkPIDController bottomShooterPidController;
-  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private boolean isRunning;
 
-  public ShooterSubsystem() {
+  public Shooter() {
     shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
     shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
-
-    topShooterEncoder = shooterMotorTop.getEncoder();
-    bottomShooterEncoder = shooterMotorBottom.getEncoder();
 
     invertMotors();
     isRunning = true;
@@ -72,6 +59,7 @@ public class ShooterSubsystem extends SubsystemBase {
     topShooterPidController.setReference(topRPM, ControlType.kVelocity);
     bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
   }
+
   public void invertMotors() {
     shooterMotorBottom.setInverted(true);
     shooterMotorTop.setInverted(false);    
@@ -131,7 +119,6 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
     SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
     SmartDashboard.putBoolean("shooterToggle", isRunning);

@@ -134,6 +134,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
         SmartDashboard.putNumber("Desired Angle", getDesiredAngle().getRadians() * (180 / Math.PI));
     }
+    public double getDistance() {
+        return getCurrentPose().getTranslation().getDistance(getFuturePose());
+    }
     public Rotation2d getDesiredAngle() {
         Translation2d currentPose = getState().Pose.getTranslation();
         double desiredAngle = MathUtil.angleModulus(currentPose.minus(getFuturePose()).getAngle().getRadians());
@@ -157,23 +160,5 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
         return new Translation2d(futureX, futureY);
     }
-
-    // public Command driveAroundPoint(double xVelocity, double yVelocity, Translation2d point) {
-
-    //     double desiredAngle = getDesiredAngle();
-        
-    //     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-    //     .withVelocityX(xVelocity)
-    //     .withVelocityY(yVelocity)
-    //     .withTargetDirection(new Rotation2d(desiredAngle));
-
-    //     request.HeadingController.setPID(0.2, 0, 0);
-    //     request.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
-        
-    //     SmartDashboard.putNumber("Request Desired Angle", desiredAngle * (180 / Math.PI));
-
-    //     return this.applyRequest(() -> request);
-
-    // }   
 
 }

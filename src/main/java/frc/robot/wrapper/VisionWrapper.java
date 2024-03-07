@@ -112,31 +112,7 @@ public class VisionWrapper extends SubsystemBase {
     return new PhotonPipelineResult[] { frontResult };
   }
 
-  // code needs to be fixed
-  // all of this needs to be in meters
-  public double calculateRotation(int tag) {
-    double angle = headingToTag(tag)-6;
-    if(headingToTag(tag) == 0){
-      angle = 0;
-    }
-    System.out.println(angle + "fjkdsjfkdsfldsf;lkdsafl;saf;lsdfdsaf");
-    // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(),
-    // estimate.timestampSeconds);
-    double driveTrainPower = (-0.1 * angle);
-    return driveTrainPower;
-  }
+ 
 
-  // public double calculateAngle(Pose2d estimatedRobotPose) {
-  //   SmartDashboard.putNumber("yValue", drivetrain.getSpeakerPose.getY() - RobotConstants.shooterWristHeight);
-  //   SmartDashboard.putNumber("xValue", (estimatedRobotPose.getX() - 0.25));
-  //   SmartDashboard.putNumber("Robot X Poseothy", estimatedRobotPose.getX());
-  //   SmartDashboard.putNumber("Robot Y Poseothy", estimatedRobotPose.getY());
-
-  //   double angle = Math.atan((FieldConstants.speakerPose.getY() - RobotConstants.shooterWristHeight)
-  //       / (estimatedRobotPose.getX() - FieldConstants.speakerPose.getX()));
-  //   SmartDashboard.putNumber("ShooterCalcothy", angle / (2 * Math.PI));
-
-  //   return (angle / (2 * Math.PI));
-  // }
 
 }

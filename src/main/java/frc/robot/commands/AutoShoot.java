@@ -9,19 +9,17 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
-import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.RunIntake;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
-import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
-// import frc.robot.subsystems.shooterWrist.RunShooterWristToSetpoint;
-import frc.robot.subsystems.shooterWrist.ShooterWrist;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.wrist.Wrist;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoShoot extends SequentialCommandGroup {
   /** Creates a new AutoShoot. */
-  public AutoShoot(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
+  public AutoShoot(Shooter shooterSubsystem, Wrist shooterWrist, Intake intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
     addCommands(
       
       // new RunShooter(shooterSubsystem, intakeSubsystem, 0.7).withTimeout(2).deadlineWith(new WaitCommand(1).andThen(new RunIntake(intakeSubsystem, 1).withTimeout(0.5)))

@@ -69,6 +69,13 @@ public final class RobotConstants {
     public static final int topShooterFreeLimit = 20;
     public static final int bottomShooterStallLimit = 20;
     public static final int bottomShooterFreeLimit = 20;
+  }
+  public static enum Action {
+    SPEAKER(),
+    STOW(),
+    AMP();
 
+    private Action() {
+    }
   }
 }

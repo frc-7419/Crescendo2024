@@ -7,8 +7,8 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunSerializer extends Command {
-  private IntakeSubsystem intakeSubsystem;
-  public RunSerializer(IntakeSubsystem intakeSubsystem) {
+  private Intake intakeSubsystem;
+  public RunSerializer(Intake intakeSubsystem) {
     this.intakeSubsystem = intakeSubsystem;
     addRequirements(intakeSubsystem);
   }
@@ -36,6 +36,5 @@ public class RunSerializer extends Command {
   @Override
   public boolean isFinished() {
     return false;
-    // return !intakeSubsystem.frontBeamBreakIsTriggered();
   }
 }

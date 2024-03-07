@@ -7,10 +7,10 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunIntake extends Command {
-  private IntakeSubsystem intakeSubsystem;
+  private Intake intakeSubsystem;
   private double power;
   /** Creates a new RunIntake. */
-  public RunIntake(IntakeSubsystem intakeSubsystem, double power) {
+  public RunIntake(Intake intakeSubsystem, double power) {
     this.intakeSubsystem = intakeSubsystem;
     this.power = power;
     addRequirements(intakeSubsystem);

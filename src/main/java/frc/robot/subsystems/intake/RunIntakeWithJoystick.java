@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.IntakeConstants;
 
 public class RunIntakeWithJoystick extends Command {
-  private IntakeSubsystem intakeSubsystem;
+  private Intake intakeSubsystem;
   private CommandXboxController joystick;
-  public RunIntakeWithJoystick(IntakeSubsystem intakeSubsystem, CommandXboxController joystick) {
+  public RunIntakeWithJoystick(Intake intakeSubsystem, CommandXboxController joystick) {
     this.intakeSubsystem = intakeSubsystem;
     this.joystick = joystick;
     addRequirements(intakeSubsystem);

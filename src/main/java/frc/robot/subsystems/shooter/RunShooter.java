@@ -5,26 +5,25 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class RunShooter extends Command {
   /** Creates a new RunShooter. */
-  private ShooterSubsystem shooterSubsystem;
+  private Shooter shooter;
   private double power;
 
-  public RunShooter(ShooterSubsystem shooterSubsystem, double power) {
-    this.shooterSubsystem = shooterSubsystem;
+  public RunShooter(Shooter shooter, double power) {
+    this.shooter = shooter;
     this.power = power;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.coast();
-    shooterSubsystem.setTopSpeed(power);
-    shooterSubsystem.setBottomSpeed(power);
+    shooter.coast();
+    shooter.setTopSpeed(power);
+    shooter.setBottomSpeed(power);
   }
 
 
@@ -37,8 +36,8 @@ public class RunShooter extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setBothSpeed(0);
-    //shooterSubsystem.setBothVoltage(0);
+    shooter.setBothSpeed(0);
+    //shooter.setBothVoltage(0);
   }
 
   // Returns true when the command should end.
