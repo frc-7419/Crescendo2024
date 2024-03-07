@@ -39,13 +39,19 @@ public class TurnToAmp extends Command {
   @Override
   public void execute() {
     EstimatedRobotPose[] estimates = vision.updatePoseEstimate();
+    boolean tagSeen = false;
+    
     for (EstimatedRobotPose estimate : estimates) {
       if (estimate != null) {
+        tagSeen = true;
         double angle = vision.headingToTag(9);
         System.out.println(angle + "hello");
-        // drivetrain.addVisionMeasurement(estimate.estimatedPose.toPose2d(), estimate.timestampSeconds);
         drivetrain.setControl(driveRequest.withRotationalRate(-angle*0.1));
       }
+    }
+  
+    if (!tagSeen) {
+      drivetrain.applyRequest(() -> new SwerveRequest.SwerveDriveBrake());
     }
   }
 
