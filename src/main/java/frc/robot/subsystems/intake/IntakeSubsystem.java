@@ -32,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean frontBeamBreakIsTriggered(){
-    return !beamBreakSubsystem.frontBeamBreakIsTriggered();
+    return beamBreakSubsystem.frontBeamBreakIsTriggered();
   }
   public boolean backBeamBreakIsTriggered(){
     return !beamBreakSubsystem.backBeamBreakIsTriggered();
