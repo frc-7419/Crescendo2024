@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.drive;
 
-import org.photonvision.EstimatedRobotPose;
-
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -13,21 +11,19 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
-import frc.robot.wrapper.VisionWrapper;
 
 public class TurnToSpeaker extends Command {
-  private CommandSwerveDrivetrain drivetrain;
-  private PIDController turnPID;
+  private final CommandSwerveDrivetrain drivetrain;
+  private final PIDController turnPID;
   private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
       .withDeadband(RobotConstants.kMaxSpeed * 0.05);
 
   /** Creates a new TurnToSpeaker. */
   public TurnToSpeaker(CommandSwerveDrivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    // Use addRequirements() here to declare subsystem dependencies.
+    turnPID = new PIDController(0.08, 0, 0);
     addRequirements(drivetrain);
   }
 
@@ -35,7 +31,6 @@ public class TurnToSpeaker extends Command {
   @Override
   public void initialize() {
     drivetrain.setVisionMeasurementStdDevs(VisionConstants.VISION_STDS);
-    turnPID = new PIDController(0.08, 0, 0);
     turnPID.setTolerance(3);
     turnPID.enableContinuousInput(-180, 180);
   }

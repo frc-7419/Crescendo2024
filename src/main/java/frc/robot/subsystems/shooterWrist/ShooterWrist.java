@@ -7,35 +7,21 @@ package frc.robot.subsystems.shooterWrist;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.configs.VoltageConfigs;
-import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.units.Angle;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Minute;
-import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.Volts;
-
-import org.opencv.core.Mat;
 
 import static edu.wpi.first.units.MutableMeasure.mutable;
 import frc.robot.constants.ArmConstants;
@@ -44,9 +30,9 @@ import frc.robot.constants.DeviceIDs.CanIds;
 
 public class ShooterWrist extends SubsystemBase {
   /** Creates a new ArmSubsystem. */
-  private TalonFX armMotor;
+  private final TalonFX armMotor;
   private VoltageOut voltageOut;
-  private DutyCycleEncoder encoder = new DutyCycleEncoder(9);
+  private final DutyCycleEncoder encoder = new DutyCycleEncoder(9);
   private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
   Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
   private double PIDsetpoint;

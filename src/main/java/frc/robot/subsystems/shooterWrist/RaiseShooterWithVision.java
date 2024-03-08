@@ -1,24 +1,20 @@
 package frc.robot.subsystems.shooterWrist;
 
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class RaiseShooterWithVision extends Command {
-  private ShooterWrist shooterWrist;
-  private CommandSwerveDrivetrain drivetrain;
-  private ProfiledPIDController shooterWristPIDController;
-  private InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
-  private double feedForward = (2.1/12)/2.67;
+  private final ShooterWrist shooterWrist;
+  private final CommandSwerveDrivetrain drivetrain;
+  private final ProfiledPIDController shooterWristPIDController;
+  private final InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
+  private final double feedForward = (2.1/12)/2.67;
   private double feedForwardPower;
 
   /** Creates a new ShootNotes. */

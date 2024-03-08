@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BeamBreakSubsystem extends SubsystemBase {
-  private DigitalInput beamBreakFront; 
-  private DigitalInput beamBreakBack;
+  private final DigitalInput beamBreakFront; 
+  private final DigitalInput beamBreakBack;
 
   public BeamBreakSubsystem() {
     beamBreakFront = new DigitalInput(1);
@@ -26,7 +26,7 @@ public class BeamBreakSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-      SmartDashboard.putBoolean("frontBeamBreakTripped", frontBeamBreakIsTriggered());
+      SmartDashboard.putBoolean("frontBeamBreakTriggered", frontBeamBreakIsTriggered());
       SmartDashboard.putBoolean("backBeamBreakTriggered", backBeamBreakIsTriggered());
   }
 }

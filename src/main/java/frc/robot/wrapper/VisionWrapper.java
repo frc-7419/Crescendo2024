@@ -14,12 +14,8 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.FieldConstants;
-import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
 
 /**
@@ -59,7 +55,7 @@ public class VisionWrapper extends SubsystemBase {
     return out;
   }
 
-  public double headingToTag(int id) {
+  public double headingToTag(final int id) {
     PhotonPipelineResult[] results = latestResults();
     PhotonTrackedTarget best = null;
     double bestAmb = 2.0;
@@ -85,7 +81,7 @@ public class VisionWrapper extends SubsystemBase {
     return best.getYaw();
   }
 
-  public double distanceToTag(int id) {
+  public double distanceToTag(final int id) {
     var result = frontCam.getLatestResult();
     final double CAMERA_HEIGHT_METERS = Units.inchesToMeters(10);
     final double TARGET_HEIGHT_METERS = Units.feetToMeters(6.5);
@@ -114,7 +110,7 @@ public class VisionWrapper extends SubsystemBase {
 
   // code needs to be fixed
   // all of this needs to be in meters
-  public double calculateRotation(int tag) {
+  public double calculateRotation(final int tag) {
     double angle = headingToTag(tag)-6;
     if(headingToTag(tag) == 0){
       angle = 0;

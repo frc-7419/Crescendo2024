@@ -8,14 +8,13 @@ import org.photonvision.EstimatedRobotPose;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
 
 public class TurnToAmp extends Command {
-  private CommandSwerveDrivetrain drivetrain;
+  private final CommandSwerveDrivetrain drivetrain;
   private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
       .withDeadband(RobotConstants.kMaxSpeed * 0.05);
   private VisionWrapper vision;

@@ -1,24 +1,16 @@
 package frc.robot.subsystems.shooterWrist;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Rotations;
-import static edu.wpi.first.units.Units.Radians;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.constants.ArmConstants;
 import frc.robot.constants.RobotConstants.ShooterConstants;
-import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
 public class RaiseShooterWithPID extends Command {
-  private ShooterWrist shooterWrist;
-  private ProfiledPIDController shooterWristPIDController;
-  private double feedForward = (0.9/12)/2.67;
+  private final ShooterWrist shooterWrist;
+  private final ProfiledPIDController shooterWristPIDController;
+  private final double feedForward = (0.9/12)/2.67;
   private double feedForwardPower;
   private ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809, 0.0000001/1.5);
   private double setpoint;
