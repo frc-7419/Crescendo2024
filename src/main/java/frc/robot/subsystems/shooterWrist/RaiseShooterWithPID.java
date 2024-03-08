@@ -28,7 +28,7 @@ public class RaiseShooterWithPID extends Command {
   public RaiseShooterWithPID(ShooterWrist shooterWrist, double setpoint) {
     this.shooterWrist = shooterWrist;
     this.setpoint = setpoint;
-    this.shooterWristPIDController = new ProfiledPIDController(2.5, 0, 0, new TrapezoidProfile.Constraints(20,1.5));
+    this.shooterWristPIDController = new ProfiledPIDController(2.0, 0, 0, new TrapezoidProfile.Constraints(20,1.5));
     // this.shooterWristPIDController 
     //   = new ProfiledPIDController(Rotations.of(1.9).in(Degrees), Rotations.of(0.07).in(Degrees), Rotations.of(0.05).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
     addRequirements(shooterWrist);
@@ -36,8 +36,6 @@ public class RaiseShooterWithPID extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-
-
   public void initialize() {
     shooterWrist.coast();
     shooterWrist.setPower(0);
@@ -61,8 +59,7 @@ public class RaiseShooterWithPID extends Command {
       SmartDashboard.putNumber("Arm Error", armError);
       // SmartDashboard.putNumber("Arm power", armPower);
       // armPower = armPower + feedForward*Math.cos(shooterWrist.getPositionInRadians());
-      // armPower = armPower + armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
-      armPower = armPower + feedForward;
+      armPower = armPower + armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
       SmartDashboard.putNumber("Arm power with ff", armPower);
       shooterWrist.setPower(armPower*12);
   }
