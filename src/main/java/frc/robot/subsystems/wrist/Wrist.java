@@ -43,7 +43,7 @@ public class Wrist extends SubsystemBase {
     armMotor.setPosition(0);
 
     // 0.587 should be a constant
-    encoder.setPositionOffset(0.587 - ArmConstants.armOffset.in(Rotations));
+    encoder.setPositionOffset(ArmConstants.armOffset.in(Rotations));
   }
 
   public void coast() {
@@ -105,7 +105,7 @@ public class Wrist extends SubsystemBase {
   public double getVelocityInRadians() {
     return getVelocity().in(RadiansPerSecond);
   }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

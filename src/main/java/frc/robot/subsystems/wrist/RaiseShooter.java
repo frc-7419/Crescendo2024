@@ -28,10 +28,11 @@ public class RaiseShooter extends Command {
   private Action state;
 
   public RaiseShooter(CommandSwerveDrivetrain drivetrain, Wrist wrist, Action state) {
+    this.drivetrain = drivetrain;
     this.wrist = wrist;
     this.controller 
-      = new ProfiledPIDController(Rotations.of(1.9).in(Degrees), Rotations.of(0.07).in(Degrees), Rotations.of(0.05).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
-
+      = new ProfiledPIDController(Rotations.of(0.005).in(Degrees), Rotations.of(0).in(Degrees), Rotations.of(0).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
+    this.state = state;
     interpolatingDoubleTreeMap.put(1.25, 46.06/360);
     interpolatingDoubleTreeMap.put(1.51, 38.1/360);
     interpolatingDoubleTreeMap.put(1.73, 39.1/360);
@@ -41,7 +42,7 @@ public class RaiseShooter extends Command {
     interpolatingDoubleTreeMap.put(2.89, 27.44/360);
     interpolatingDoubleTreeMap.put(3.23, 26.69/360);
 
-    addRequirements(wrist);
+    addRequirements(drivetrain, wrist);
   }
 
   // Called when the command is initially scheduled.
@@ -61,19 +62,20 @@ public class RaiseShooter extends Command {
         setpoint = Rotations.of(interpolatingDoubleTreeMap.get(drivetrain.getDistance()));
     }
 
-    controller.setGoal(setpoint.in(Degrees));
+    controller.setGoal(50);
+    SmartDashboard.putString("Arm State", state.toString());
     SmartDashboard.putNumber("Arm Setpoint", setpoint.in(Degrees));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      double feedForward = armFeedforward.calculate(wrist.getPositionInRadians(), wrist.getVelocityInRadians());
+      // double feedForward = -armFeedforward.calculate(wrist.getPositionInRadians(), wrist.getVelocityInRadians());
       double armPower = controller.calculate(wrist.getPositionInDegrees());
-      armPower += Math.copySign(feedForward, armPower);
+      // armPower += Math.copySign(feedForward, armPower);
       
       wrist.setPower(armPower);
-  }
+  } 
   
   // Called once the command ends or is interrupted.
   @Override
