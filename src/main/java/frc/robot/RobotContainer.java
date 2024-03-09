@@ -63,6 +63,7 @@ public class RobotContainer {
   private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
   private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
   private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
+  private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
 
   // JOYSTICKS
   // END-------------------------------------------------------------------------------------------------------------------
@@ -76,7 +77,7 @@ public class RobotContainer {
 
   private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(beamBreakSubsystem);
-  private final LEDSubsystem ledSubsystem = new LEDSubsystem(beamBreakSubsystem, shooterSubsystem, intakeSubsystem, shooterWrist, driverRaw);
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem(beamBreakSubsystem, shooterSubsystem, intakeSubsystem, shooterWrist, operatorRaw);
   private final VisionWrapper vision = new VisionWrapper();
 
   // SUBSYSTEMS
