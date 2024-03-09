@@ -43,7 +43,7 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
-
+import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -76,6 +76,7 @@ public class RobotContainer {
 
   private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
   private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(beamBreakSubsystem);
+  private final LEDSubsystem ledSubsystem = new LEDSubsystem(beamBreakSubsystem, shooterSubsystem, intakeSubsystem, shooterWrist, driverRaw);
   private final VisionWrapper vision = new VisionWrapper();
 
   // SUBSYSTEMS
@@ -119,7 +120,10 @@ public class RobotContainer {
   private OneNote oneNote;
   private final Command threeNoteLeft;
   private final Command threeNoteMiddle;
+  private final Command threeNoteRight;
+  private final Command fourNoteMiddle;
   private final Command Auton1NoteUpdated;
+
 
   // AUTONOMOUS
   // END------------------------------------------------------------------------------------------------------------------
@@ -137,12 +141,14 @@ public class RobotContainer {
 
     oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
     twoNote = new PathPlannerAuto("TwoNote");
-    threeNoteLeft = new PathPlannerAuto("JawnAuto");
+    threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
     threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
+    threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
+    fourNoteMiddle = new PathPlannerAuto("FourNoteMiddle");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
     drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.40, 5.5), new Rotation2d()));
-    // drivetrain.seedFieldRelative(new Pose2d(new Translation2d(0.68, 6.75), new
-    // Rotation2d(Math.PI/3)));
+    // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.68, 6.75), new Rotation2d(Math.PI/3)));
+    // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.67, 4.37), new Rotation2d(-Math.PI/3)));
 
     fieldAngle.HeadingController.setPID(7.5, 0, 0);
     fieldAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -156,15 +162,21 @@ public class RobotContainer {
     // NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem,
     // -0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
-    NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 20.0 / 360));
+    NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
     // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
     NamedCommands.registerCommand("ShootNoteMid",
-        new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0 / 360));
+        new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 60.0 / 360));
     NamedCommands.registerCommand("ShootNoteLeft",
-        new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 25.0 / 360));
+        new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
+    NamedCommands.registerCommand("ShootNoteRight",
+        new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
     NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, operator));
-    NamedCommands.registerCommand("RevShooter", new RunShooter(shooterSubsystem, 0.4));
+    NamedCommands.registerCommand("RevShooter", 
+    new RunCommand(() -> {
+      shooterSubsystem.setRPM(2000, 2000);
+    }, shooterSubsystem)
+    );
   }
 
   /**
@@ -252,10 +264,10 @@ public class RobotContainer {
    * selectionsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\[]
    */
   public void configAutonSelection() {
-    // autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
-    // autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
-    // autonChooser.addOption("threeNoteLeft", threeNoteLeft);
-    // autonChooser.addOption("TwoNote(Tested)", twoNote);
+    //  autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
+    //  autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
+    //  autonChooser.addOption("threeNoteLeft", threeNoteLeft);
+    //  autonChooser.addOption("TwoNote(Tested)", twoNote);
   }
 
   /**
@@ -279,13 +291,14 @@ public class RobotContainer {
     // return twoNote;
     // return threeNoteAuto;
     // return squareAuto;
-    // return threeNoteLeft;
+    // return threeNoteRight;
     // return threeNoteMiddle;
+    return fourNoteMiddle;
     // return new IntakeNote(intakeSubsystem);
-    return new SequentialCommandGroup(
-        new RunShooter(shooterSubsystem, 1.0)
-            .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0 / 360))
-            .deadlineWith(Commands.sequence(new WaitCommand(3), new RunSerializer(intakeSubsystem))).withTimeout(5));
+    // return new SequentialCommandGroup(
+    //     new RunShooter(shooterSubsystem, 1.0)
+    //         .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0 / 360))
+    //         .deadlineWith(Commands.sequence(new WaitCommand(3), new RunSerializer(intakeSubsystem))).withTimeout(5));
     // return new ShootNote(shooterWrist, shooterSubsystem, drivetrain,
     // intakeSubsystem, 25.0/360);
     // return twoNote;
