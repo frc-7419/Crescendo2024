@@ -10,28 +10,37 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.LEDConstants;
+import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
 public class LEDSubsystem extends SubsystemBase {
+  // BLUE AND GREEN ARE FLIPPED FOR SOME REASON
   private final AddressableLEDWrapper led = new AddressableLEDWrapper(LEDConstants.PWMPORT, LEDConstants.BUFFERSIZE);
   private final BeamBreakSubsystem beamBreakSubsystem;
   private final ShooterSubsystem shooterSubsystem;
   private final IntakeSubsystem intakeSubsystem;
   private final ShooterWrist shooterWrist;
   private final XboxController operatorController;
-  private AddressableLEDWrapperPattern blue = new SolidColor(Color.kBlue);
-	private AddressableLEDWrapperPattern red = new SolidColor(Color.kRed);
+
+  private Color RGBtoRBG(Color hex){
+    String rgb = hex.toHexString();
+    String rbg = rgb.substring(0,3) + rgb.substring(5,7) + rgb.substring(3,5);
+    return new Color(rbg);
+  }
+  private AddressableLEDWrapperPattern blue = new SolidColor(RGBtoRBG(Color.kBlue));
+	private AddressableLEDWrapperPattern red = new SolidColor(RGBtoRBG(Color.kRed));
 	private AddressableLEDWrapperPattern disabled = new DisabledPattern();
-	private AddressableLEDWrapperPattern green = new SolidColor(Color.kGreen);
-	private AddressableLEDWrapperPattern yellow = new SolidColor(Color.kLightYellow);
-	private AddressableLEDWrapperPattern blinkingRed = new Blinking(Color.kRed, 0.25);
-  private AddressableLEDWrapperPattern blinkingPurple = new Blinking(Color.kPurple, 0.25);
-	private AddressableLEDWrapperPattern blinkingGreen = new Blinking(Color.kGreen, 0.25);
-  private AddressableLEDWrapperPattern blinkingYellow = new Blinking(Color.kYellow, 0.25);
-  private AddressableLEDWrapperPattern blinkingGold = new Blinking(Color.kGold, 1);
+	private AddressableLEDWrapperPattern green = new SolidColor(RGBtoRBG(Color.kGreen));
+	private AddressableLEDWrapperPattern yellow = new SolidColor(RGBtoRBG(Color.kLightYellow));
+	private AddressableLEDWrapperPattern blinkingRed = new Blinking(RGBtoRBG(Color.kRed), 0.25);
+  private AddressableLEDWrapperPattern blinkingPurple = new Blinking(RGBtoRBG(Color.kPurple), 0.25);
+	private AddressableLEDWrapperPattern blinkingGreen = new Blinking(RGBtoRBG(Color.kGreen), 0.25);
+  private AddressableLEDWrapperPattern blinkingYellow = new Blinking(RGBtoRBG(Color.kYellow), 0.25);
+  private AddressableLEDWrapperPattern blinkingGold = new Blinking(RGBtoRBG(Color.kGold), 1);
+  private AddressableLEDWrapperPattern off = new SolidColor(Color.kBlack);
 
   /** Creates a new LEDSubsystem. */
   public LEDSubsystem(BeamBreakSubsystem beamBreakSubsystem, ShooterSubsystem shooterSubsystem, IntakeSubsystem intakeSubsystem, ShooterWrist shooterWrist, XboxController operatorController) {
@@ -46,18 +55,9 @@ public class LEDSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     if (DriverStation.isDisabled()) {
-			led.setPattern(disabled);
+			// led.setPattern(disabled);
+      led.setPattern(off); // save power
       SmartDashboard.putString("LED Pattern", "disabled pattern");
-    } else if (beamBreakSubsystem.frontBeamBreakIsTriggered()) {
-      led.setPattern(green);
-            SmartDashboard.putString("LED Pattern", "green");
-    } else if (beamBreakSubsystem.backBeamBreakIsTriggered()) {
-      led.setPattern(yellow);
-            SmartDashboard.putString("LED Pattern", "yellow");
-
-    } else if (Math.abs(intakeSubsystem.getVoltage()) > 1){
-      led.setPattern(blinkingYellow);
-      SmartDashboard.putString("LED Pattern", "blinkingYellow");
     } else if (operatorController.getRightBumper()){
       Double bs =  shooterSubsystem.getBottomPIDsetpoint();
       Double ts = shooterSubsystem.getTopPIDsetpoint();
@@ -70,13 +70,23 @@ public class LEDSubsystem extends SubsystemBase {
         SmartDashboard.putString("LED Pattern", "blinkingGreen");
       } 
     } else if (operatorController.getBButton() || operatorController.getAButton() || operatorController.getYButton()){
-      if((shooterWrist.getPIDsetpoint() - shooterWrist.getPosition() < 1)){
+      SmartDashboard.putNumber("shooter wrist difference", Math.abs(shooterWrist.getPIDsetpoint() - shooterWrist.getPosition()));
+      if(Math.abs(shooterWrist.getPIDsetpoint() - shooterWrist.getPosition()) < 0.008){
         led.setPattern(green);
         SmartDashboard.putString("LED Pattern", "green");
       } else {
         led.setPattern(blinkingRed);
         SmartDashboard.putString("LED Pattern", "blinkingRed");
       }
+    } else if (beamBreakSubsystem.frontBeamBreakIsTriggered()) {
+      led.setPattern(green);
+            SmartDashboard.putString("LED Pattern", "green");
+    } else if (beamBreakSubsystem.backBeamBreakIsTriggered()) {
+      led.setPattern(yellow);
+            SmartDashboard.putString("LED Pattern", "yellow");
+    } else if (Math.abs(intakeSubsystem.getVelocity()) > 0.3){
+      led.setPattern(blinkingYellow);
+      SmartDashboard.putString("LED Pattern", "blinkingYellow");
     } else {
       led.setPattern(blinkingGold);
       SmartDashboard.putString("LED Pattern", "blinkingGold");

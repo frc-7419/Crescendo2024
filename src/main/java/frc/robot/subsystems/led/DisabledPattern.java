@@ -8,7 +8,13 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class DisabledPattern implements AddressableLEDWrapperPattern{
-	private Color[] colors = {Color.kNavy, Color.kGold};
+	private Color RGBtoRBG(Color hex){
+		String rgb = hex.toHexString();
+		String rbg = rgb.substring(0,3) + rgb.substring(5,7) + rgb.substring(3,5);
+		return new Color(rbg);
+	  }
+	  
+	private Color[] colors = {RGBtoRBG(Color.kNavy), RGBtoRBG(Color.kGold)};
 	private int size;
 	private int offset;
     

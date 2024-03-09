@@ -6,16 +6,28 @@
     "data": {
       "commands": [
         {
-          "type": "sequential",
+          "type": "race",
           "data": {
             "commands": [
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoteMid"
+                  "name": "RevShooter"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteMid"
           }
         },
         {
@@ -38,7 +50,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -57,26 +69,13 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteMid"
-                }
-              }
-            ]
+            "name": "ShootNoteMid"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteMiddle2"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -88,42 +87,79 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ThreeNoteMiddle3"
+                  "pathName": "FourNoteMiddle0"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ThreeNoteMiddle4"
+                  "pathName": "FourNoteMiddle1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RevShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "ShootNoteMid"
+          }
+        },
+        {
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoteMid"
+                  "name": "IntakeNote"
                 }
               },
               {
-                "type": "wait",
+                "type": "path",
                 "data": {
-                  "waitTime": 1.0
+                  "pathName": "FourNoteMiddle2"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FourNoteMiddle3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RevShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteMid"
           }
         }
       ]

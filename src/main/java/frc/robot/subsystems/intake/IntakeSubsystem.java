@@ -83,8 +83,8 @@ public class IntakeSubsystem extends SubsystemBase {
     serializerBack.setIdleMode(IdleMode.kCoast);
   }
 
-  public double getVoltage(){
-    return leftIntakeMotor.getBusVoltage();
+  public double getVelocity(){
+    return leftIntakeMotor.get();
   }
 
   @Override
