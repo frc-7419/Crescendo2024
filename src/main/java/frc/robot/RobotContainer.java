@@ -35,6 +35,7 @@ import frc.robot.subsystems.drive.TurnToSpeaker;
 
 import frc.robot.subsystems.intake.IntakeNote;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
 
@@ -145,8 +146,7 @@ public class RobotContainer {
    * paths
    */
   private void registerCommands() {
-    // NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem,
-    // -0.7));
+    NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem, 0.7));
     NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
     NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 20.0 / 360));
     // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
