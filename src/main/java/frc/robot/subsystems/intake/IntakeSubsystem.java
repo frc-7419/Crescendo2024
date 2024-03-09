@@ -4,21 +4,19 @@
 
 package frc.robot.subsystems.intake;
 
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
 import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private CANSparkMax leftIntakeMotor;
-  private CANSparkMax rightIntakeMotor;
-  private CANSparkMax serializerBack;
+  private final CANSparkMax leftIntakeMotor;
+  private final CANSparkMax rightIntakeMotor;
+  private final CANSparkMax serializerBack;
 
   private final BeamBreakSubsystem beamBreakSubsystem;
   

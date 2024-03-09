@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunShooterWithPID extends Command {
   /** Creates a new RunShooterWithPID. */
-  private ShooterSubsystem shooterSubsystem;
-  private PIDController topShooterPidController = new PIDController(0.0001852, 0, 0);
-  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
-  private PIDController bottomShooterPidController = new PIDController(0.0001852, 0, 0);
-  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private final ShooterSubsystem shooterSubsystem;
+  private final PIDController topShooterPidController = new PIDController(0.0001852, 0, 0);
+  private final SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private final PIDController bottomShooterPidController = new PIDController(0.0001852, 0, 0);
+  private final SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private double topV, bottomV, topPid, bottomPid, topFor, bottomFor;
 

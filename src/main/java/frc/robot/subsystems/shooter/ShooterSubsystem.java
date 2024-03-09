@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.shooter;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -14,26 +12,23 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.DeviceIDs.CanIds;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new Shooter. */
-  private CANSparkFlex shooterMotorTop;
-  private CANSparkFlex shooterMotorBottom;
-  private RelativeEncoder topShooterEncoder;
-  private RelativeEncoder bottomShooterEncoder;
+  private final CANSparkFlex shooterMotorTop;
+  private final CANSparkFlex shooterMotorBottom;
+  private final RelativeEncoder topShooterEncoder;
+  private final RelativeEncoder bottomShooterEncoder;
 
-  private SparkPIDController topShooterPidController;
-  private SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private final SparkPIDController topShooterPidController;
+  private final SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
-  private SparkPIDController bottomShooterPidController;
-  private SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
+  private final SparkPIDController bottomShooterPidController;
+  private final SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806,0.015777);
 
   private boolean isRunning;
   private double topPIDsetpoint;

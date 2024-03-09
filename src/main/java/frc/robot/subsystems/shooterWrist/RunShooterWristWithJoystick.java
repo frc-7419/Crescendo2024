@@ -4,9 +4,6 @@
 
 package frc.robot.subsystems.shooterWrist;
 
-import static edu.wpi.first.units.Units.Radians;
-import static edu.wpi.first.units.Units.Rotations;
-
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,8 +11,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RunShooterWristWithJoystick extends Command {
   /** Creates a new RunArmWithJoystick. */
-  private CommandXboxController joystick;
-  private ShooterWrist shooterWrist;
+  private final CommandXboxController joystick;
+  private final ShooterWrist shooterWrist;
   // private ArmFeedforward armFeedforward;
   private double maxPower = 0.1;
   private double feedForward = (0.9/12)/2.67 * 1;

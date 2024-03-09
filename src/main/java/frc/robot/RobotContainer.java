@@ -13,14 +13,11 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 
-import edu.wpi.first.wpilibj.XboxController;
-
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -28,11 +25,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.commands.OneNote;
 
-import frc.robot.constants.ArmConstants;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
-import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToAmp;
@@ -40,7 +35,6 @@ import frc.robot.subsystems.drive.TurnToSpeaker;
 
 import frc.robot.subsystems.intake.IntakeNote;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
 import frc.robot.subsystems.intake.RunSerializer;
 import frc.robot.subsystems.led.LEDSubsystem;
@@ -61,7 +55,6 @@ public class RobotContainer {
   // JOYSTICKS-----------------------------------------------------------------------------------------------------------------------
 
   private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverJoystickPort);
-  private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
   private final CommandXboxController operator = new CommandXboxController(OperatorConstants.kOperatorJoystickPort);
   private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
 
@@ -89,8 +82,7 @@ public class RobotContainer {
   private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, operator);
   private final RunShooterWristWithJoystick runShooterWristWithJoystick = new RunShooterWristWithJoystick(shooterWrist,
       operator);
-  private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,
-      5500, 3000);
+  private final RunShooterWithPID runShooterWithPID = new RunShooterWithPID(shooterSubsystem,5500, 3000);
 
   // TELEOP COMMANDS
   // END-------------------------------------------------------------------------------------------------------------
@@ -118,7 +110,7 @@ public class RobotContainer {
 
   private final SendableChooser<Command> autonChooser = new SendableChooser<>();
   private final Command twoNote;
-  private OneNote oneNote;
+  private final OneNote oneNote;
   private final Command threeNoteLeft;
   private final Command threeNoteMiddle;
   private final Command threeNoteRight;
@@ -172,7 +164,7 @@ public class RobotContainer {
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
     NamedCommands.registerCommand("ShootNoteRight",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
-    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, operator));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
     NamedCommands.registerCommand("RevShooter", 
     new RunCommand(() -> {
       shooterSubsystem.setRPM(2000, 2000);
@@ -234,7 +226,7 @@ public class RobotContainer {
     // zero
     // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
     operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 0.7));
-    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, operator));
+    operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
     operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0/360));
     operator.povRight().onTrue(new RunCommand(() -> {
       shooterSubsystem.setRPM(800/1.5, 2400/1.5);
