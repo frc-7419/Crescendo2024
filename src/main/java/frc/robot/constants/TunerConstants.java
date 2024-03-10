@@ -92,6 +92,7 @@ public class TunerConstants {
     private static final int kFrontLeftEncoderId = 10;
     private static final double kFrontLeftEncoderOffset = 0.464599609375;
 
+    
     private static final double kFrontLeftXPosInches = 13.25;
     private static final double kFrontLeftYPosInches = 15.75;
 

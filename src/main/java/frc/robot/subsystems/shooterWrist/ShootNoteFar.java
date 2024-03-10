@@ -21,15 +21,11 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ShootNote extends SequentialCommandGroup {
-  public ShootNote(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, CommandSwerveDrivetrain drivetrain, IntakeSubsystem intakeSubsystem, double setpoint) {
+public class ShootNoteFar extends SequentialCommandGroup {
+  public ShootNoteFar(ShooterWrist shooterWrist, ShooterSubsystem shooterSubsystem, CommandSwerveDrivetrain drivetrain, IntakeSubsystem intakeSubsystem, double setpoint) {
     addCommands(
       new ParallelDeadlineGroup(
         new SequentialCommandGroup(
-          new ParallelRaceGroup(
-            new WaitCommand(0.5),
-            new RunShooter(shooterSubsystem, 0.6)
-          ),
           new ParallelDeadlineGroup(
             new RunSerializer(intakeSubsystem).withTimeout(0.5),
             new RunShooter(shooterSubsystem, 0.6)

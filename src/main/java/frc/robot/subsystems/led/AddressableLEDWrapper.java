@@ -71,6 +71,7 @@ public class AddressableLEDWrapper {
 		}
 	}
 
+
 	public void update() {
 		m_pattern.setLEDs(getBuffer());
 		getLED().setData(getBuffer());

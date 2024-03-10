@@ -45,6 +45,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 import frc.robot.subsystems.shooterWrist.RunShooterWristWithJoystick;
 import frc.robot.subsystems.shooterWrist.ShootNote;
+import frc.robot.subsystems.shooterWrist.ShootNoteFar;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithPID;
@@ -116,6 +117,7 @@ public class RobotContainer {
   private final Command threeNoteMiddle;
   private final Command threeNoteRight;
   private final Command fourNoteMiddle;
+  private final Command fiveNoteMiddle;
   private final Command Auton1NoteUpdated;
 
 
@@ -139,6 +141,7 @@ public class RobotContainer {
     threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
     threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
     fourNoteMiddle = new PathPlannerAuto("FourNoteMiddle");
+    fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
     Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
     drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.40, 5.5), new Rotation2d()));
     // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.68, 6.75), new Rotation2d(Math.PI/3)));
@@ -160,14 +163,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
     NamedCommands.registerCommand("ShootNoteMid",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 60.0 / 360));
+    NamedCommands.registerCommand("ShootNoteFar",
+        new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
     NamedCommands.registerCommand("ShootNoteLeft",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
     NamedCommands.registerCommand("ShootNoteRight",
         new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
+    NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 40.0 / 360));
     NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
     NamedCommands.registerCommand("RevShooter", 
     new RunCommand(() -> {
-      shooterSubsystem.setRPM(2000, 2000);
+      shooterSubsystem.setRPM(3000, 3000);
     }, shooterSubsystem)
     );
   }
@@ -286,7 +292,8 @@ public class RobotContainer {
     // return squareAuto;
     // return threeNoteRight;
     // return threeNoteMiddle;
-    return fourNoteMiddle;
+    // return fourNoteMiddle;
+    return fiveNoteMiddle;
     // return new IntakeNote(intakeSubsystem);
     // return new SequentialCommandGroup(
     //     new RunShooter(shooterSubsystem, 1.0)
