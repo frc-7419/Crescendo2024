@@ -31,19 +31,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RevShooter"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "5NoteMiddle0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RevShooter"
                 }
               },
               {
