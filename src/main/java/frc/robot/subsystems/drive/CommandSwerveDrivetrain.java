@@ -10,11 +10,16 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.team7419.util.SwerveVoltageRequest;
+import com.team7419.util.SysIdSignalLogger;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -22,11 +27,14 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.wrapper.VisionWrapper;
 import org.photonvision.EstimatedRobotPose;
+import static edu.wpi.first.units.Units.*;
 
 import java.util.function.Supplier;
 
@@ -162,23 +170,50 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
         return new Translation2d(futureX, futureY);
     }
+    private SwerveVoltageRequest driveVoltageRequest = new SwerveVoltageRequest(true);
 
-    // public Command driveAroundPoint(double xVelocity, double yVelocity, Translation2d point) {
+    private SysIdRoutine driveRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(null, null, null, SysIdSignalLogger.logState()), 
+        new SysIdRoutine.Mechanism(
+            (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
+            null, 
+            this));
+    
+    private SwerveVoltageRequest steerVoltageRequest = new SwerveVoltageRequest(false);
 
-    //     double desiredAngle = getDesiredAngle();
+    private SysIdRoutine steerRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(null, null, null, SysIdSignalLogger.logState()), 
+        new SysIdRoutine.Mechanism(
+            (Measure<Voltage> volts) -> setControl(steerVoltageRequest.withVoltage(volts.in(Volts))) ,
+            null, 
+            this));
 
-    //     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle()
-    //     .withVelocityX(xVelocity)
-    //     .withVelocityY(yVelocity)
-    //     .withTargetDirection(new Rotation2d(desiredAngle));
+    private SysIdRoutine slipRoutine = new SysIdRoutine(
+        new SysIdRoutine.Config(Volts.of(0.25).per(Seconds.of(1)), null, null, SysIdSignalLogger.logState()), 
+        new SysIdRoutine.Mechanism(
+            (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
+            null, 
+            this));
+    
+    public Command runDriveQuasistaticTest(Direction direction) {
+        return driveRoutine.quasistatic(direction);
+    }
 
-    //     request.HeadingController.setPID(0.2, 0, 0);
-    //     request.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
+    public Command runDriveDynamicTest(Direction direction) {
+        return driveRoutine.dynamic(direction);
+    }
+    public Command runSteerQuasistaticiTest(Direction direction) {
+        return steerRoutine.quasistatic(direction);
+    }
+    public Command runSteerDynamicTest(Direction direction) {
+        return steerRoutine.dynamic(direction);
+    }
 
-    //     SmartDashboard.putNumber("Request Desired Angle", desiredAngle * (180 / Math.PI));
+    public Command runSlipTest() {
+        return slipRoutine.quasistatic(Direction.kForward);
+    }
 
-    //     return this.applyRequest(() -> request);
 
-    // }   
+ 
 
 }

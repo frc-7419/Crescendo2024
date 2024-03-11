@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
@@ -237,6 +238,18 @@ public class RobotContainer {
         driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
         driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
 
+        driver.a().and(driver.povUp()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kForward));
+        driver.a().and(driver.povDown()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kReverse));
+
+        driver.x().and(driver.povUp()).whileTrue(drivetrain.runDriveDynamicTest(Direction.kForward));
+        driver.x().and(driver.povDown()).whileTrue(drivetrain.runDriveDynamicTest(Direction.kReverse));
+
+        driver.y().and(driver.povUp()).whileTrue(drivetrain.runSteerQuasistaticiTest(Direction.kForward));
+        driver.y().and(driver.povDown()).whileTrue(drivetrain.runSteerQuasistaticiTest(Direction.kReverse));
+
+        driver.b().and(driver.povUp()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kForward));
+        driver.b().and(driver.povDown()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kReverse));
+
     }
 
     /**
@@ -273,8 +286,8 @@ public class RobotContainer {
         // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
-        // return fourNoteMiddle;
-        return fiveNoteMiddle;
+        return fourNoteMiddle;
+        // return fiveNoteMiddle;
         // return new IntakeNote(intakeSubsystem);
         // return new SequentialCommandGroup(
         //     new RunShooter(shooterSubsystem, 1.0)
