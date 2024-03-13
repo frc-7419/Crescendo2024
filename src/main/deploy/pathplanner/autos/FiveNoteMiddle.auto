@@ -49,12 +49,6 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
                   "name": "LowerShooter"
                 }
               }
@@ -62,9 +56,15 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "driveandshoot"
+                }
+              },
               {
                 "type": "named",
                 "data": {
