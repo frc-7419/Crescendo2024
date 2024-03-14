@@ -297,8 +297,8 @@ public class RobotContainer {
         // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
-        // return fourNoteMiddle;
-        return fiveNoteMiddle;
+        return fourNoteMiddle;
+        // return fiveNoteMiddle;
         // return new IntakeNote(intakeSubsystem);
         // return new SequentialCommandGroup(
         //     new RunShooter(shooterSubsystem, 1.0)
