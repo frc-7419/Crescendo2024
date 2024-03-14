@@ -88,7 +88,7 @@ public class ShooterWrist extends SubsystemBase {
         voltageOut.Output = voltage;
         voltageOut.EnableFOC = true;
         armMotor.setControl(voltageOut);
-
+  
     }
 
     public void setPowerUpward(double voltage) {

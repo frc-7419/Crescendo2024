@@ -14,9 +14,9 @@ public class RunShooterWithPID extends Command {
      * Creates a new RunShooterWithPID.
      */
     private final ShooterSubsystem shooterSubsystem;
-    private final PIDController topShooterPidController = new PIDController(0.0001852, 0, 0);
+    private final PIDController topShooterPidController = new PIDController(0.067, 0, 0.1);
     private final SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806, 0.015777);
-    private final PIDController bottomShooterPidController = new PIDController(0.0001852, 0, 0);
+    private final PIDController bottomShooterPidController = new PIDController(0.067, 0, 0.1);
     private final SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806, 0.015777);
 
     private final double topV;

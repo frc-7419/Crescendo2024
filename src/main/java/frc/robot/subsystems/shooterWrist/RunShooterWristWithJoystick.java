@@ -16,7 +16,7 @@ public class RunShooterWristWithJoystick extends Command {
     private final CommandXboxController joystick;
     private final ShooterWrist shooterWrist;
     // private ArmFeedforward armFeedforward;
-    private final double maxPower = 0.1;
+    private final double maxPower = 1.0;
     private final double feedForward = (0.9 / 12) / 2.67 * 1;
     private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
 
