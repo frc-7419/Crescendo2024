@@ -30,7 +30,7 @@ public class ShooterWrist extends SubsystemBase {
      * Creates a new ArmSubsystem.
      */
     private final TalonFX armMotor;
-    private final DutyCycleEncoder encoder = new DutyCycleEncoder(9);
+    private final DutyCycleEncoder encoder = new DutyCycleEncoder(5);
     private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
     private final VoltageOut voltageOut;
     Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);

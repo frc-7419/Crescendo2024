@@ -18,7 +18,7 @@ public class RunShooterWristWithJoystick extends Command {
     // private ArmFeedforward armFeedforward;
     private final double maxPower = 1.0;
     private final double feedForward = (0.9 / 12) / 2.67 * 1;
-    private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
+    private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.2689, 0);
 
     public RunShooterWristWithJoystick(ShooterWrist shooterWrist, CommandXboxController joystick) {
         this.shooterWrist = shooterWrist;
@@ -50,7 +50,8 @@ public class RunShooterWristWithJoystick extends Command {
 
         } else {
             double feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
-            shooterWrist.setPower(feedForwardPower);
+            shooterWrist.setPower(0);
+            shooterWrist.brake();
             SmartDashboard.putNumber("armFeedForward", feedForwardPower);
         }
     }

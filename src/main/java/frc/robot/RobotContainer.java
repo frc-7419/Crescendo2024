@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -124,7 +126,7 @@ public class RobotContainer {
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
-        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddle");
+        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
         fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
         Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
         poleAuto = new PathPlannerAuto("1m pole");
@@ -151,7 +153,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteMid",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 60.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
-                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));        
         NamedCommands.registerCommand("ShootNoteLeft",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("ShootNoteRight",
@@ -160,7 +162,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
-                    shooterSubsystem.setRPM(3000, 3000);
+                    shooterSubsystem.setRPM(3500, 3500);
                 }, shooterSubsystem)
         );
     }
@@ -185,6 +187,7 @@ public class RobotContainer {
 
         driver.y().whileTrue(turn);
 
+
         driver.b().whileTrue(drivetrain
                 .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
@@ -200,8 +203,15 @@ public class RobotContainer {
         // drivetrain.getFuturePose()),
         // new PrepShooterForPoint(drivetrain, shooterWrist,
         // drivetrain.getFuturePose())));
-
         driver.rightBumper().whileTrue(
+                drivetrain.applyRequest(
+                        () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
+                                .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
+                                .withTargetDirection(new Rotation2d(Math.atan2(-driver.getLeftX(), -driver.getLeftY())))
+                                .withDeadband(RobotConstants.kMaxSpeed * 0.1)
+                                .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)).until(() -> beamBreakSubsystem.frontBeamBreakIsTriggered())
+                );
+        driver.x().whileTrue(
                 // Commands.parallel(
                 drivetrain.applyRequest(
                         () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
@@ -228,8 +238,7 @@ public class RobotContainer {
                 shooterSubsystem.setRPM(900, 1000);
             }, shooterSubsystem));
         operator.povLeft().onTrue(new RunCommand(() -> {
-            shooterSubsystem.setBothSpeed(0);
-            shooterSubsystem.setRPM(0, 0);
+           shooterSubsystem.setBothVoltage(0);
         }));
         // operator.rightBumper().onTrue(new ShootNote(shooterWrist, shooterSubsystem,
         // intakeSubsystem, 45/360));
@@ -271,6 +280,16 @@ public class RobotContainer {
         //  autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
         //  autonChooser.addOption("threeNoteLeft", threeNoteLeft);
         //  autonChooser.addOption("TwoNote(Tested)", twoNote);
+    }
+
+    public Command autoFaceNote(){
+        // if intakeSubsystem
+        return drivetrain.applyRequest(
+                        () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
+                                .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
+                                .withTargetDirection(new Rotation2d(Math.atan2(-driver.getLeftX(), -driver.getLeftY())))
+                                .withDeadband(RobotConstants.kMaxSpeed * 0.1)
+                                .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1));
     }
 
     /**

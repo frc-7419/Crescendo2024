@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.814316809189174,
-        "y": 6.94025226013415
+        "x": 2.751893389772529,
+        "y": 6.893079059317263
       },
       "prevControl": {
-        "x": 1.8769344020169525,
-        "y": 6.181201140180058
+        "x": 1.8841649084723355,
+        "y": 6.093598885535062
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "5NoteEnd"
     }
   ],
   "rotationTargets": [
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 34.844913450289546,
+    "rotation": 29.744881296942307,
     "rotateFast": false
   },
   "reversed": false,
