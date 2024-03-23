@@ -31,9 +31,16 @@
           }
         },
         {
-          "type": "named",
+          "type": "sequential",
           "data": {
-            "name": "ShootNoteMid"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteMid"
+                }
+              }
+            ]
           }
         },
         {
@@ -41,15 +48,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "ThreeNoteRight0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
                 }
               },
               {
@@ -68,40 +75,16 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteFar"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteRight2"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "ThreeNoteRight3"
+                  "name": "ShootNoteFar"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteRight4"
           }
         }
       ]

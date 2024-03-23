@@ -50,12 +50,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteLeft2"
-          }
-        },
-        {
           "type": "sequential",
           "data": {
             "commands": [
@@ -69,25 +63,19 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteLeft3"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "ThreeNoteLeft4"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ThreeNoteLeft3"
                 }
               }
             ]

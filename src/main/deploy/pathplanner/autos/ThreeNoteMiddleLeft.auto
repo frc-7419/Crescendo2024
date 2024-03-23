@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.2601803825935456,
-      "y": 5.547612425391122
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -37,13 +31,57 @@
           }
         },
         {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5NoteMiddle0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RevShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LowerShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteFar"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MoveForwardSpeakerMiddle"
+                  "pathName": "5NoteMiddle2"
                 }
               },
               {
@@ -56,22 +94,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "MoveBackSpeakerMiddle"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RevShooter"
-                }
-              }
-            ]
+            "pathName": "4NoteEnd"
           }
         },
         {

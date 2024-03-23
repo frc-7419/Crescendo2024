@@ -11,6 +11,7 @@ public final class DeviceIDs {
         wrist(18),
         leftIntakeMotor(7),
         rightIntakeMotor(8),
+        climber(30),
 
         topShooter(19),
         bottomShooter(20),

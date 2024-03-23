@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.GoToShootPosition;
@@ -27,6 +29,8 @@ import frc.robot.constants.OperatorConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
 import frc.robot.subsystems.beambreak.BeamBreakSubsystem;
+import frc.robot.subsystems.climber.Climber;
+import frc.robot.subsystems.climber.RunClimberWithJoystick;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.drive.TurnToAmp;
 import frc.robot.subsystems.drive.TurnToSpeaker;
@@ -34,6 +38,7 @@ import frc.robot.subsystems.intake.IntakeNote;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
 import frc.robot.subsystems.intake.RunIntakeWithJoystick;
+import frc.robot.subsystems.intake.RunSerializer;
 import frc.robot.subsystems.led.LEDSubsystem;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.RunShooterWithPID;
@@ -56,11 +61,13 @@ public class RobotContainer {
     private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final ShooterWrist shooterWrist = new ShooterWrist();
+    private final Climber climber = new Climber();
 
     private final BeamBreakSubsystem beamBreakSubsystem = new BeamBreakSubsystem();
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem(beamBreakSubsystem);
     private final LEDSubsystem ledSubsystem = new LEDSubsystem(beamBreakSubsystem, shooterSubsystem, intakeSubsystem, shooterWrist, operatorRaw);
     private final RunIntakeWithJoystick runIntakeWithJoystick = new RunIntakeWithJoystick(intakeSubsystem, operator);
+    private final RunClimberWithJoystick runClimberWithJoystick = new RunClimberWithJoystick(climber, operator);
 
     // SUBSYSTEMS
     // END------------------------------------------------------------------------------------------------------------------
@@ -97,10 +104,12 @@ public class RobotContainer {
     // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
     private final Command twoNote;
     private final OneNote oneNote;
+    private final Command oneNoteRight;
+    private final Command threeNoteMiddleLeft;
     private final Command threeNoteLeft;
     private final Command threeNoteMiddle;
     private final Command threeNoteRight;
-    private final Command       fourNoteMiddle;
+    private final Command fourNoteMiddle;
     private final Command fiveNoteMiddle;
     private final Command Auton1NoteUpdated;
     private final Command poleAuto;
@@ -112,7 +121,7 @@ public class RobotContainer {
 
     /**
      * Creates a new RobotContainer
-     */
+     */ 
     public RobotContainer() {
         registerCommands();
         configureBindings();
@@ -120,21 +129,52 @@ public class RobotContainer {
         setDefaultCommands();
         SmartDashboard.putNumber("top RPM", 1000);
         SmartDashboard.putNumber("bottom RPM", 1000);
-
+ 
         oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
+        oneNoteRight = new PathPlannerAuto("OneNoteRight");
+        threeNoteMiddleLeft = new PathPlannerAuto("ThreeNoteMiddleLeft");
         twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
-        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
+        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddle");
         fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
         Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
         poleAuto = new PathPlannerAuto("1m pole");
-        drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.4,5.55), new Rotation2d(0)));
 
-        // drivetrain.seedFieldRelative(new Pose2d(new Translation2d(2.51,6.3), new Rotation2d(-Math.PI/2)));
+        // middle
+
+        // blue
+        drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
+
+        // red
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
+
+        // ****************************************************************************************************** //
+
+        // left
+
+        // blue 
         // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.68, 6.75), new Rotation2d(Math.PI/3)));
-        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.67, 4.37), new Rotation2d(-Math.PI/3)));
+        
+      
+        // red
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.68, 6.75), new Rotation2d(-Math.PI/3)));
+
+        // ****************************************************************************************************** //
+
+        
+        // right
+
+        // blue
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(0.68, 4.25), new Rotation2d(-Math.PI/3)));
+
+        // red
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.68, 4.25), new Rotation2d(Math.PI/3)));
+
+
+
+
 
         fieldAngle.HeadingController.setPID(7.5, 0, 0);
         fieldAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
@@ -162,7 +202,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
-                    shooterSubsystem.setRPM(3500, 3500);
+                    shooterSubsystem.setRPM(2750, 2750);
                 }, shooterSubsystem)
         );
     }
@@ -231,21 +271,22 @@ public class RobotContainer {
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
         operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
-        operator.povRight().onTrue(new RunCommand(() -> {
-            shooterSubsystem.setRPM(5500, 5500);
+        operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 50.0 / 360));
+        operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
+        operator.povRight().toggleOnTrue(new RunCommand(() -> {
+            shooterSubsystem.setRPM(2000, 2000);
         }, shooterSubsystem));
-        operator.povUp().onTrue(new RunCommand(() -> {
+        operator.povUp().whileTrue(new RunCommand(() -> {
                 shooterSubsystem.setRPM(900, 1000);
             }, shooterSubsystem));
         operator.povLeft().onTrue(new RunCommand(() -> {
            shooterSubsystem.setBothVoltage(0);
-        }));
+        }).withTimeout(1));
         // operator.rightBumper().onTrue(new ShootNote(shooterWrist, shooterSubsystem,
         // intakeSubsystem, 45/360));
 
         // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15,
         // 1200*1.15));
-
 
         // operator.b().(new SequentialCommandGroup(
         // new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
@@ -298,6 +339,7 @@ public class RobotContainer {
     private void setDefaultCommands() {
         intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
         shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
+        climber.setDefaultCommand(runClimberWithJoystick);
         // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
         // shooterSubsystem.setRPM(2000, 2000);
         // }, shooterSubsystem));
@@ -311,17 +353,19 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // return autonChooser.getSelected();
+        // return oneNoteRight;
         // return t1oNote;
         // return threeNoteAuto;
         // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
+        // return threeNoteMiddleLeft;
         return fourNoteMiddle;
         // return fiveNoteMiddle;
         // return new IntakeNote(intakeSubsystem);
-        // return new SequentialCommandGroup(
-        //     new RunShooter(shooterSubsystem, 1.0)
-        //         .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0 / 360))
+        // return Commands.sequence(
+        //     new RunShooter(shooterSubsystem, 0.8)
+        //         .deadlineWith(new RaiseShooterWithPID(shooterWrist, 58.0 / 360))
         //         .deadlineWith(Commands.sequence(new WaitCommand(3), new RunSerializer(intakeSubsystem))).withTimeout(5));
         // return new ShootNote(shooterWrist, shooterSubsystem, drivetrain,
         // intakeSubsystem, 25.0/360);

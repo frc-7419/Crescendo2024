@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 4.25
+      "x": 1.26,
+      "y": 5.55
     },
-    "rotation": -60.0
+    "rotation": 0.5380004847871879
   },
   "command": {
     "type": "sequential",
@@ -49,7 +49,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ThreeNoteRight0"
+                  "pathName": "MoveForwardSpeakerMiddle"
                 }
               },
               {
@@ -68,40 +68,16 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteFar"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteRight2"
-          }
-        },
-        {
-          "type": "deadline",
+          "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "ThreeNoteRight3"
+                  "name": "ShootNoteFar"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ThreeNoteRight4"
           }
         }
       ]
