@@ -1,0 +1,55 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.286527860092757,
+        "y": 5.766429155563113
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.581296642995829,
+        "y": 6.5015661122423944
+      },
+      "isLocked": false,
+      "linkedName": "FunnyAuto4End"
+    },
+    {
+      "anchor": {
+        "x": 8.286527860092757,
+        "y": 7.436879707803407
+      },
+      "prevControl": {
+        "x": 7.506509884135587,
+        "y": 6.832471283233527
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.85,
+      "rotationDegrees": 41.031516242035885,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
