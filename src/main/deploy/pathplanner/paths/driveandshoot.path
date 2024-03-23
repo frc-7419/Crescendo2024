@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.380045320275827,
-        "y": 5.572214343502761
+        "x": 4.384439764249899,
+        "y": 6.208874260341114
       },
       "isLocked": false,
       "linkedName": "shootingfarposition"
     },
     {
       "anchor": {
-        "x": 5.86,
-        "y": 6.477588570917883
+        "x": 5.538634535602405,
+        "y": 6.20091675368536
       },
       "prevControl": {
-        "x": 4.99589791531435,
-        "y": 5.887664159587578
+        "x": 4.117150678745802,
+        "y": 6.073299725303155
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
   },
   "goalEndState": {
     "velocity": 3.0,
-    "rotation": 22.401670830020045,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
