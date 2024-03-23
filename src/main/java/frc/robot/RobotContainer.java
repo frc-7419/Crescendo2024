@@ -193,12 +193,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteMid",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 60.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
-                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));        
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
+        NamedCommands.registerCommand("ShootNoteDown",
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 33.0 / 360));   // change this     
         NamedCommands.registerCommand("ShootNoteLeft",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("ShootNoteRight",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
-        NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 40.0 / 360));
+        NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 33.0 / 360));
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {

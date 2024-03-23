@@ -3,48 +3,48 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9858875869770753,
-        "y": 5.557362183607978
+        "x": 8.286527860092757,
+        "y": 5.766429155563113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.384439764249899,
-        "y": 6.208874260341114
+        "x": 7.581296642995829,
+        "y": 6.5015661122423944
       },
       "isLocked": false,
-      "linkedName": "shootingfarposition"
+      "linkedName": "FunnyAuto4End"
     },
     {
       "anchor": {
-        "x": 5.538634535602405,
-        "y": 6.20091675368536
+        "x": 8.286527860092757,
+        "y": 7.436879707803407
       },
       "prevControl": {
-        "x": 4.117150678745802,
-        "y": 6.073299725303155
+        "x": 7.506509884135587,
+        "y": 6.832471283233527
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "driveandshootend"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.85,
+      "rotationDegrees": 41.031516242035885,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 3.0,
+    "velocity": 0,
     "rotation": 0.0,
     "rotateFast": false
   },

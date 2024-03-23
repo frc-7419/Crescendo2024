@@ -3,38 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.9858875869770753,
-        "y": 5.557362183607978
+        "x": 5.681420939113065,
+        "y": 1.9163027741662837
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.384439764249899,
-        "y": 6.208874260341114
+        "x": 7.187833420511474,
+        "y": 2.3779821067763613
       },
       "isLocked": false,
-      "linkedName": "shootingfarposition"
+      "linkedName": "FunnyAuto2End"
     },
     {
       "anchor": {
-        "x": 5.538634535602405,
-        "y": 6.20091675368536
+        "x": 8.285405536206554,
+        "y": 2.431551145764722
       },
       "prevControl": {
-        "x": 4.117150678745802,
-        "y": 6.073299725303155
+        "x": 6.831284467653682,
+        "y": 2.348733594006737
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "driveandshootend"
+      "linkedName": "FunnyAuto2.5End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -44,9 +38,9 @@
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 3.0,
+    "velocity": 0,
     "rotation": 0.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,
