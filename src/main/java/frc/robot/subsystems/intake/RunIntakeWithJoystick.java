@@ -9,57 +9,56 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.constants.IntakeConstants;
 
 public class RunIntakeWithJoystick extends Command {
-  private IntakeSubsystem intakeSubsystem;
-  private CommandXboxController joystick;
-  public RunIntakeWithJoystick(IntakeSubsystem intakeSubsystem, CommandXboxController joystick) {
-    this.intakeSubsystem = intakeSubsystem;
-    this.joystick = joystick;
-    addRequirements(intakeSubsystem);
-  }
+    private final IntakeSubsystem intakeSubsystem;
+    private final CommandXboxController joystick;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    intakeSubsystem.coast();
-    intakeSubsystem.coastSerializer();
-    intakeSubsystem.setVoltage(0);
-    intakeSubsystem.setSerializerVoltage(0);
-    intakeSubsystem.setSpeed(0);
-    intakeSubsystem.setSerializerSpeed(0);
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    if(Math.abs(joystick.getRightTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(-IntakeConstants.intakePower);
-      // intakeSubsystem.setSerializerFrontSpeed(1);
-      intakeSubsystem.setSerializerBackSpeed(IntakeConstants.serialPower);
-    }
-    else if(Math.abs(joystick.getLeftTriggerAxis()) > 0.05){ 
-      intakeSubsystem.setSpeed(IntakeConstants.intakePower);
-      // intakeSubsystem.setSerializerFrontSpeed(-1);
-      intakeSubsystem.setSerializerBackSpeed(-IntakeConstants.serialPower);
-    }
-    else{
-      intakeSubsystem.setSerializerSpeed(0);
-      intakeSubsystem.setSpeed(0);
+    public RunIntakeWithJoystick(IntakeSubsystem intakeSubsystem, CommandXboxController joystick) {
+        this.intakeSubsystem = intakeSubsystem;
+        this.joystick = joystick;
+        addRequirements(intakeSubsystem);
     }
 
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        intakeSubsystem.coast();
+        intakeSubsystem.coastSerializer();
+        intakeSubsystem.setVoltage(0);
+        intakeSubsystem.setSerializerVoltage(0);
+        intakeSubsystem.setSpeed(0);
+        intakeSubsystem.setSerializerSpeed(0);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    intakeSubsystem.setVoltage(0);
-    intakeSubsystem.brake();
-    intakeSubsystem.setSerializerVoltage(0);
-    intakeSubsystem.brakeSerializer();
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        if (Math.abs(joystick.getLeftTriggerAxis()) > 0.05) {
+            intakeSubsystem.setSpeed(-IntakeConstants.intakePower);
+            // intakeSubsystem.setSerializerFrontSpeed(1);
+            intakeSubsystem.setSerializerSpeed(-IntakeConstants.serialPower);
+        } else if (Math.abs(joystick.getRightTriggerAxis()) > 0.05) {
+            intakeSubsystem.setSpeed(IntakeConstants.intakePower);
+            // intakeSubsystem.setSerializerFrontSpeed(-1);
+            intakeSubsystem.setSerializerSpeed(IntakeConstants.serialPower);
+        } else {
+            intakeSubsystem.setSerializerSpeed(0);
+            intakeSubsystem.setSpeed(0);
+        }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    }
+
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        intakeSubsystem.setVoltage(0);
+        intakeSubsystem.brake();
+        intakeSubsystem.setSerializerVoltage(0);
+        intakeSubsystem.brakeSerializer();
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 }

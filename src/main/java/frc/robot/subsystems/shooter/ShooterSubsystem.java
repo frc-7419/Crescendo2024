@@ -4,129 +4,153 @@
 
 package frc.robot.subsystems.shooter;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
-  /** Creates a new Shooter. */
-  private CANSparkFlex shooterMotorTop;
-  private CANSparkFlex shooterMotorBottom;
-  private TalonFX shooterWrist;
-  private TrapezoidProfile.Constraints constraints;
-  private TrapezoidProfile.State goal = new TrapezoidProfile.State();
-  // setpoint needs to be set
-  private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+    /**
+     * Creates a new Shooter.
+     */
+    private final CANSparkFlex shooterMotorTop;
+    private final CANSparkFlex shooterMotorBottom;
+    private final RelativeEncoder topShooterEncoder;
+    private final RelativeEncoder bottomShooterEncoder;
 
-  public ShooterSubsystem() {
-    shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
-    shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
-    constraints = ShooterConstants.Constraints;
-    shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
-    shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
-    invertMotors();
-  }
+    private final SparkPIDController topShooterPidController;
+    private final SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806, 0.015777);
 
-  public void invertMotors() {
-    shooterMotorBottom.setInverted(false);
-    shooterMotorTop.setInverted(false);    
-  }
-  
-  public void setTopSpeed(double speed){
-    shooterMotorTop.set(speed);
-  }
+    private final SparkPIDController bottomShooterPidController;
+    private final SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(0.10894, 0.10806, 0.015777);
 
-  public void setBottomSpeed(double speed){
-    shooterMotorBottom.set(speed);
-  }
+    private boolean isRunning;
+    private double topPIDsetpoint;
+    private double bottomPIDsetpoint;
 
-  public void setBothSpeed(double speed){
-    setTopSpeed(speed);
-    setBottomSpeed(-speed);
-  }
+    public ShooterSubsystem() {
+        shooterMotorTop = new CANSparkFlex(CanIds.topShooter.id, MotorType.kBrushless);
+        shooterMotorBottom = new CANSparkFlex(CanIds.bottomShooter.id, MotorType.kBrushless);
 
-  public void setTopVoltage(double voltage){
-    shooterMotorTop.setVoltage(voltage);
-  }
+        topShooterEncoder = shooterMotorTop.getEncoder();
+        bottomShooterEncoder = shooterMotorBottom.getEncoder();
 
-  public void setBottomVoltage(double voltage){
-    shooterMotorBottom.setVoltage(voltage);
-  }
+        invertMotors();
+        isRunning = true;
 
-  public void setBothVoltage(double voltage) {
-    setTopVoltage(voltage);
-    setBottomVoltage(-voltage);
-  }
-  
-  public double getTopVelocity() {
-    return shooterMotorTop.getEncoder().getVelocity();
-  }
+        shooterMotorTop.setSmartCurrentLimit(ShooterConstants.topShooterStallLimit, ShooterConstants.topShooterFreeLimit);
+        topShooterPidController = shooterMotorTop.getPIDController();
+        topShooterPidController.setP(0.00065 * 2);
+        topShooterPidController.setI(0);
+        topShooterPidController.setD(0);
+        topShooterPidController.setIZone(0);
+        topShooterPidController.setOutputRange(-1, 1);
 
-  public double getBottomVelocity() {
-    return shooterMotorBottom.getEncoder().getVelocity();
-  }
+        shooterMotorBottom.setSmartCurrentLimit(ShooterConstants.bottomShooterStallLimit, ShooterConstants.bottomShooterFreeLimit);
+        bottomShooterPidController = shooterMotorBottom.getPIDController();
+        bottomShooterPidController.setP(0.00065 * 2);
+        bottomShooterPidController.setI(0);
+        bottomShooterPidController.setD(0);
+        bottomShooterPidController.setIZone(0);
+        bottomShooterPidController.setOutputRange(-1, 1);
+    }
 
-  public void brake() {
-    shooterMotorTop.setIdleMode(IdleMode.kBrake);
-    shooterMotorBottom.setIdleMode(IdleMode.kBrake);
-  }
+    public void setRPM(double topRPM, double bottomRPM) {
+        topShooterPidController.setFF(0.0003 / 2);
+        bottomShooterPidController.setFF(0.0003 / 2);
 
-  public void coast() {
-    shooterMotorTop.setIdleMode(IdleMode.kCoast);
-    shooterMotorBottom.setIdleMode(IdleMode.kCoast);
-  }
+        System.out.println("changing rpm" + topRPM + bottomRPM);
+        topShooterPidController.setReference(topRPM, ControlType.kVelocity);
+        bottomShooterPidController.setReference(bottomRPM, ControlType.kVelocity);
+    }
 
+    public void invertMotors() {
+        shooterMotorBottom.setInverted(true);
+        shooterMotorTop.setInverted(false);
+    }
 
-  public void setGoal(double goalState) {
-    goal = new TrapezoidProfile.State(goalState, 0);
-  }
+    public void setTopSpeed(double speed) {
+        shooterMotorTop.set(speed);
+    }
 
-  public TrapezoidProfile.State getGoal() {
-    return goal;
-  }
+    public void setBottomSpeed(double speed) {
+        shooterMotorBottom.set(speed);
+    }
 
-  public void setWristSpeed(double speed) {
-    shooterWrist.set(speed);
-  }
+    public void setBothSpeed(double speed) {
+        setTopSpeed(speed);
+        setBottomSpeed(speed);
+    }
 
-  public void setWristVoltage(double voltage) {
-    shooterWrist.setVoltage(voltage);
-  }
+    public double getTopPIDsetpoint() {
+        return this.topPIDsetpoint;
+    }
 
-  public void brakeWrist() {
-    shooterWrist.setNeutralMode(NeutralModeValue.Brake);
-  }
+    public void setTopPIDsetpoint(double setpoint) {
+        this.topPIDsetpoint = setpoint;
+    }
 
-  public void coastWrist() {
-    shooterWrist.setNeutralMode(NeutralModeValue.Coast);
-  }
+    public double getBottomPIDsetpoint() {
+        return this.bottomPIDsetpoint;
+    }
 
-  public void setSetpoint(double setpointState) {
-    setpoint = new TrapezoidProfile.State(setpointState, 0);
-  }
+    public void setBottomPIDsetpoint(double setpoint) {
+        this.bottomPIDsetpoint = setpoint;
+    }
 
-  public TrapezoidProfile.State getSetpoint() {
-    return setpoint;
-  }
+    public void setTopVoltage(double voltage) {
+        shooterMotorTop.setVoltage(voltage);
+    }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
-    SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
-  }
-  public Constraints getConstraints() {
-      return constraints;
-  }
+    public void setBottomVoltage(double voltage) {
+        shooterMotorBottom.setVoltage(voltage);
+    }
+
+    public void setBothVoltage(double voltage) {
+        setTopVoltage(voltage);
+        setBottomVoltage(voltage);
+    }
+
+    public double getTopVelocity() {
+        return shooterMotorTop.getEncoder().getVelocity();
+    }
+
+    public double getBottomVelocity() {
+        return shooterMotorBottom.getEncoder().getVelocity();
+    }
+
+    public void brake() {
+        shooterMotorTop.setIdleMode(IdleMode.kBrake);
+        shooterMotorBottom.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void coast() {
+        shooterMotorTop.setIdleMode(IdleMode.kCoast);
+        shooterMotorBottom.setIdleMode(IdleMode.kCoast);
+    }
+
+    public boolean getToggle() {
+        return isRunning;
+    }
+
+    public void invertToggle() {
+        this.isRunning = !this.isRunning;
+    }
+
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+
+        SmartDashboard.putNumber("Top Shooter Velocity", getTopVelocity());
+        SmartDashboard.putNumber("Bottom Shooter Velocity", getBottomVelocity());
+        SmartDashboard.putBoolean("shooterToggle", isRunning);
+    }
 }
 // 47
