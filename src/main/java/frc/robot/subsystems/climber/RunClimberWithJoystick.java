@@ -40,6 +40,7 @@ public class RunClimberWithJoystick extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+      climber.setVoltage(0);
        climber.brake();
     }
 
