@@ -275,6 +275,7 @@ public class RobotContainer {
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
         operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
+        operator.x().whileTrue(new RaiseShooterWithPID(shooterWrist, 40.0 / 360));
         operator.povRight().whileTrue(new RunCommand(() -> {
             shooterSubsystem.setRPM(2000, 2000);
         }, shooterSubsystem));

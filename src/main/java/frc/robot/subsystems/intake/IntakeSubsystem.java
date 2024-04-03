@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void invertMotors() {
-        serializerBack.setInverted(false);
+        serializerBack.setInverted(true);
         leftIntakeMotor.setInverted(true);
         rightIntakeMotor.setInverted(false);
     }
