@@ -29,7 +29,7 @@ public class RunClimberWithJoystick extends Command {
         if ((Math.abs(joystick.getRightY()) > 0.05)) {
             climber.coast();
             climber.setVoltage(joystick.getRightY() * 3);
-        }\[]
+        }
         else{
           climber.setVoltage(0);
           climber.brake();
