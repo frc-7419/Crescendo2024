@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
             orchestra.addInstrument(motors[i]);
         }
 
-        System.out.println(orchestra.loadMusic("kemusan.chrp"));
+        System.out.println(orchestra.loadMusic("flymetothemoon.chrp"));
         System.out.println("music");
 
         m_visionThread =

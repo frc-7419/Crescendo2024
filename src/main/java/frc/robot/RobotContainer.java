@@ -366,8 +366,8 @@ public class RobotContainer {
         // return threeNoteRight;
         // return threeNoteMiddle;
         // return threeNoteMiddleLeft;                 
-        return fourNoteMiddle;
-        // return fiveNoteMiddle;
+        // return fourNoteMiddle;
+        return fiveNoteMiddle;
         // return new IntakeNote(intakeSubsystem);
         // return Commands.sequence(
         //     new RunShooter(shooterSubsystem, 0.8)
