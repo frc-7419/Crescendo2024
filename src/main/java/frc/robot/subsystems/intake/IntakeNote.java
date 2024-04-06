@@ -24,7 +24,7 @@ public class IntakeNote extends Command {
     @Override
     public void execute() {
         intakeSubsystem.setSpeed(0.85);
-        intakeSubsystem.setSerializerSpeed(0.3);
+        intakeSubsystem.setSerializerSpeed(0.7);
     }
 
     // Called once the command ends or is interrupted.

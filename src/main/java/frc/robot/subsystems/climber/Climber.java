@@ -24,8 +24,8 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
     this.climber = new TalonFX(CanIds.climber.id,"Ryan Biggee" );
-    configs.ForwardSoftLimitEnable = true;
-    configs.ReverseSoftLimitEnable = true;
+    configs.ForwardSoftLimitEnable = false;
+    configs.ReverseSoftLimitEnable = false;
 
     configs.ForwardSoftLimitThreshold  = 30000;
     configs.ReverseSoftLimitThreshold = 500;

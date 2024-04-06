@@ -75,19 +75,19 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "5NoteMiddle1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
                 }
               }
             ]
@@ -111,15 +111,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "5NoteMiddle2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
                 }
               }
             ]
@@ -135,6 +135,12 @@
           "type": "named",
           "data": {
             "name": "ShootNoteMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5NoteGo"
           }
         }
       ]
