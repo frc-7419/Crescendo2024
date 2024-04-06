@@ -3,43 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.487669804043312,
-        "y": 5.56
+        "x": 0.64,
+        "y": 4.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8552326456504766,
-        "y": 5.553033189399713
+        "x": 2.9699038796225743,
+        "y": 0.9072151431339907
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "RightSpeakerStart"
     },
     {
       "anchor": {
-        "x": 2.8746513372656377,
-        "y": 5.557427633373786
+        "x": 8.280054962887704,
+        "y": 2.442835774560438
       },
       "prevControl": {
-        "x": 2.3951910051256005,
-        "y": 5.559235544526792
+        "x": 5.295217970065569,
+        "y": -0.23617167141741646
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "shootingfarposition"
+      "linkedName": "ThreeMidline3End"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.25,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": 0,
+    "velocity": 0,
+    "rotation": 41.570086901873466,
     "rotateFast": false
   },
   "reversed": false,

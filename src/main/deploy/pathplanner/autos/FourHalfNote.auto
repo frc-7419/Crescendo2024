@@ -113,7 +113,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -132,15 +132,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4NoteEnd"
+            "name": "ShootNoteFar"
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "ShootNoteMid"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4HalfNoteEnd"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              }
+            ]
           }
         }
       ]

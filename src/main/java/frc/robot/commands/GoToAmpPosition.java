@@ -16,14 +16,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
-public class GoToShootPosition extends SequentialCommandGroup {
+public class GoToAmpPosition extends SequentialCommandGroup {
     private Pose2d targetPose;
 
-    public GoToShootPosition(CommandSwerveDrivetrain drivetrain) {
+    public GoToAmpPosition(CommandSwerveDrivetrain drivetrain) {
         Optional<Alliance> alliance = DriverStation.getAlliance();
 
         SmartDashboard.putBoolean("alliance present", alliance.isPresent());
-        targetPose = new Pose2d(2.5, 5.5, Rotation2d.fromDegrees(0));
+        targetPose = new Pose2d(1.82, 7.76, Rotation2d.fromDegrees(-90));
 
         if (alliance.isPresent()) {
             if (alliance.get() == Alliance.Red) {

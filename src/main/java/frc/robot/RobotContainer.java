@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.GoToAmpPosition;
 import frc.robot.commands.GoToShootPosition;
 import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
@@ -58,6 +59,7 @@ public class RobotContainer {
     // END-------------------------------------------------------------------------------------------------------------------
 
     // SUBSYSTEMS----------------------------------------------------------------------------------------------------------------------
+    private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
     private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final ShooterWrist shooterWrist = new ShooterWrist();
@@ -102,7 +104,7 @@ public class RobotContainer {
     // END----------------------------------------------------------------------------------------------------------------------
 
     // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
-    private final Command twoNote;
+    // private final Command twoNote;
     private final OneNote oneNote;
     private final Command oneNoteRight;
     private final Command threeNoteMiddleLeft;
@@ -110,9 +112,10 @@ public class RobotContainer {
     private final Command threeNoteMiddle;
     private final Command threeNoteRight;
     private final Command fourNoteMiddle;
+    private final Command fourhalfMiddle;
     private final Command fiveNoteMiddle;
-    private final Command Auton1NoteUpdated;
-    private final Command poleAuto;
+    // private final Command Auton1NoteUpdated;
+    // private final Command poleAuto;
     private final Command funnyAuto;
     private final SwerveRequest.FieldCentricFacingAngle fieldAngle = new SwerveRequest.FieldCentricFacingAngle();
 
@@ -134,20 +137,22 @@ public class RobotContainer {
         oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
         oneNoteRight = new PathPlannerAuto("OneNoteRight");
         threeNoteMiddleLeft = new PathPlannerAuto("ThreeNoteMiddleLeft");
-        twoNote = new PathPlannerAuto("TwoNote");
+        // twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
         fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
-        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
+        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
         Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
-        funnyAuto = new PathPlannerAuto("FunnyAuto");
         poleAuto = new PathPlannerAuto("1m pole");
 
         // middle
 
+
+        // !!! WE ARE USING START POSITION ON PATHPLANNER, NO NEED TO SEED !!! //
+
         // blue
-        drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
 
         // red
         // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
@@ -203,7 +208,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteRight",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 33.0 / 360));
-        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
                     shooterSubsystem.setRPM(3500, 3500);
@@ -274,7 +279,6 @@ public class RobotContainer {
         // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
         operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
-        //this jawn
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
         operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
@@ -304,10 +308,12 @@ public class RobotContainer {
         // .deadlineWith(Commands.sequence(new WaitCommand(3), new
         // RunSerializer(intakeSubsystem))).withTimeout(5)
         // ));
-        driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-        driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
+        // driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
+        // driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
 
-        driver.povRight().whileTrue(new GoToShootPosition(drivetrain));
+        driver.povUp().whileTrue(new GoToShootPosition(drivetrain));
+        driver.povLeft().whileTrue(new GoToAmpPosition(drivetrain));
+
         driver.a().and(driver.povUp()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kForward));
         driver.a().and(driver.povDown()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kReverse));
 
@@ -369,7 +375,7 @@ public class RobotContainer {
         // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
-        // return threeNoteMiddleLeft;                 
+        // return threeNoteMiddleLeft;
         // return fourNoteMiddle;
         // return funnyAuto;
         return fiveNoteMiddle;

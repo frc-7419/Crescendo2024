@@ -2,17 +2,17 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.23,
-      "y": 5.56
+      "x": 0.64,
+      "y": 4.500920163877365
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -43,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5NoteMiddle0"
+                  "pathName": "ThreeMidline1"
                 }
               },
               {
@@ -55,29 +55,28 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RevShooter"
+                  "name": "LowerShooter"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "LowerShooter"
+                  "name": "RevShooter"
                 }
               }
             ]
           }
         },
         {
-          "type": "sequential",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteFar"
-                }
-              }
-            ]
+            "pathName": "ThreeMidline2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteMid"
           }
         },
         {
@@ -87,39 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5NoteMiddle1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteFar"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "5NoteMiddle2"
+                  "pathName": "ThreeMidline3"
                 }
               },
               {
@@ -134,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4NoteEnd"
+            "pathName": "ThreeMidline4"
           }
         },
         {
