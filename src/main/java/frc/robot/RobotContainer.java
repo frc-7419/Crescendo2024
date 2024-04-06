@@ -59,6 +59,7 @@ public class RobotContainer {
     // END-------------------------------------------------------------------------------------------------------------------
 
     // SUBSYSTEMS----------------------------------------------------------------------------------------------------------------------
+    private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
     private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final ShooterWrist shooterWrist = new ShooterWrist();
@@ -209,7 +210,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteRight",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 33.0 / 360));
-        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
                     shooterSubsystem.setRPM(3500, 3500);
@@ -279,7 +280,7 @@ public class RobotContainer {
         // zero
         // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
-        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
         operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
