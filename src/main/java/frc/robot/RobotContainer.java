@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.GoToAmpPosition;
 import frc.robot.commands.GoToShootPosition;
 import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
@@ -102,7 +103,7 @@ public class RobotContainer {
     // END----------------------------------------------------------------------------------------------------------------------
 
     // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
-    private final Command twoNote;
+    // private final Command twoNote;
     private final OneNote oneNote;
     private final Command oneNoteRight;
     private final Command threeNoteMiddleLeft;
@@ -110,9 +111,11 @@ public class RobotContainer {
     private final Command threeNoteMiddle;
     private final Command threeNoteRight;
     private final Command fourNoteMiddle;
+    private final Command fourhalfMiddle;
     private final Command fiveNoteMiddle;
-    private final Command Auton1NoteUpdated;
-    private final Command poleAuto;
+    // private final Command Auton1NoteUpdated;
+    // private final Command poleAuto;
+    private final Command funnyAuto;
     private final SwerveRequest.FieldCentricFacingAngle fieldAngle = new SwerveRequest.FieldCentricFacingAngle();
 
 
@@ -133,19 +136,24 @@ public class RobotContainer {
         oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
         oneNoteRight = new PathPlannerAuto("OneNoteRight");
         threeNoteMiddleLeft = new PathPlannerAuto("ThreeNoteMiddleLeft");
-        twoNote = new PathPlannerAuto("TwoNote");
+        // twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
         fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
-        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
-        Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
-        poleAuto = new PathPlannerAuto("1m pole");
+        fourhalfMiddle = new PathPlannerAuto("FourHalfNote");
+        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
+        // Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
+        // poleAuto = new PathPlannerAuto("1m pole");
+        funnyAuto = new PathPlannerAuto("FunnyAuto");
 
         // middle
 
+
+        // !!! WE ARE USING START POSITION ON PATHPLANNER, NO NEED TO SEED !!! //
+
         // blue
-        drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
 
         // red
         // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
@@ -300,10 +308,12 @@ public class RobotContainer {
         // .deadlineWith(Commands.sequence(new WaitCommand(3), new
         // RunSerializer(intakeSubsystem))).withTimeout(5)
         // ));
-        driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-        driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
+        // driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
+        // driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
 
-        driver.povRight().whileTrue(new GoToShootPosition(drivetrain));
+        driver.povUp().whileTrue(new GoToShootPosition(drivetrain));
+        driver.povLeft().whileTrue(new GoToAmpPosition(drivetrain));
+
         driver.a().and(driver.povUp()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kForward));
         driver.a().and(driver.povDown()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kReverse));
 
@@ -365,9 +375,11 @@ public class RobotContainer {
         // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
-        // return threeNoteMiddleLeft;                 
+        // return threeNoteMiddleLeft;
         // return fourNoteMiddle;
-        return fiveNoteMiddle;
+        // return fiveNoteMiddle;
+        return fourhalfMiddle;
+        // return funnyAuto;
         // return new IntakeNote(intakeSubsystem);
         // return Commands.sequence(
         //     new RunShooter(shooterSubsystem, 0.8)
