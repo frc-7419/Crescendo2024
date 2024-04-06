@@ -142,15 +142,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "4HalfNoteEnd"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4HalfNoteEnd"
                 }
               }
             ]

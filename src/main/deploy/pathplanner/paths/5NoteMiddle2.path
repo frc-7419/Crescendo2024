@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.709468411534116,
-        "y": 5.9168279419469165
+        "x": 2.072354686019913,
+        "y": 5.391005197964812
       },
       "isLocked": false,
       "linkedName": "5NoteMiddle1End"
@@ -20,8 +20,8 @@
         "y": 7.016492665463964
       },
       "prevControl": {
-        "x": 1.3735111046787236,
-        "y": 6.053430172638687
+        "x": 1.382399573915957,
+        "y": 6.572114796651245
       },
       "nextControl": null,
       "isLocked": false,
@@ -56,10 +56,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxVelocity": 3.0,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 90.0
   },
   "goalEndState": {
     "velocity": 0,

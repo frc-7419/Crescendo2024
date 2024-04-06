@@ -381,6 +381,7 @@ public class RobotContainer {
         // return fourNoteMiddle;
         // return funnyAuto;
         return fiveNoteMiddle;
+        // return fourhalfMiddle;
         // return new IntakeNote(intakeSubsystem);
         // return Commands.sequence(
         //     new RunShooter(shooterSubsystem, 0.8)
