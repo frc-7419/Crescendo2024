@@ -143,8 +143,10 @@ public class RobotContainer {
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
         fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
         fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
-        Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
-        poleAuto = new PathPlannerAuto("1m pole");
+        fourhalfMiddle = new PathPlannerAuto("FourHalfNote");
+        funnyAuto = new PathPlannerAuto("FunnyAuto");
+        // Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
+        // poleAuto = new PathPlannerAuto("1m pole");
 
         // middle
 
@@ -278,7 +280,7 @@ public class RobotContainer {
         // zero
         // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
-        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
         operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
