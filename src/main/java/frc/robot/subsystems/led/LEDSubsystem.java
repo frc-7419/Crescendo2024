@@ -55,8 +55,8 @@ public class LEDSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (DriverStation.isDisabled()) {
-            // led.setPattern(disabled);
-            led.setPattern(off); // save power
+            led.setPattern(disabled);
+            // led.setPattern(off); // save power
             SmartDashboard.putString("LED Pattern", "disabled pattern");
         } else if (operatorController.getRightBumper()) {
             Double bs = shooterSubsystem.getBottomPIDsetpoint();

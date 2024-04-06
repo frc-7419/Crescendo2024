@@ -113,6 +113,7 @@ public class RobotContainer {
     private final Command fiveNoteMiddle;
     private final Command Auton1NoteUpdated;
     private final Command poleAuto;
+    private final Command funnyAuto;
     private final SwerveRequest.FieldCentricFacingAngle fieldAngle = new SwerveRequest.FieldCentricFacingAngle();
 
 
@@ -138,8 +139,9 @@ public class RobotContainer {
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
         fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
-        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
+        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
         Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
+        funnyAuto = new PathPlannerAuto("FunnyAuto");
         poleAuto = new PathPlannerAuto("1m pole");
 
         // middle
@@ -193,7 +195,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteMid",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
-                new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 34.0 / 360));
+                new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
         NamedCommands.registerCommand("ShootNoteDown",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 33.0 / 360));   // change this     
         NamedCommands.registerCommand("ShootNoteLeft",
@@ -272,6 +274,7 @@ public class RobotContainer {
         // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
         operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
+        //this jawn
         operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
         operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
@@ -279,8 +282,9 @@ public class RobotContainer {
         operator.povRight().whileTrue(new RunCommand(() -> {
             shooterSubsystem.setRPM(2000, 2000);
         }, shooterSubsystem));
+        //this jawn
         operator.povUp().whileTrue(new RunCommand(() -> {
-                shooterSubsystem.setRPM(950*1.1, 1100*1.1);
+                shooterSubsystem.setRPM(900, 1050);
             }, shooterSubsystem));
         operator.povDown().whileTrue(new RunCommand(() -> {
                 shooterSubsystem.setRPM(2000, 2000);
@@ -367,6 +371,7 @@ public class RobotContainer {
         // return threeNoteMiddle;
         // return threeNoteMiddleLeft;                 
         // return fourNoteMiddle;
+        // return funnyAuto;
         return fiveNoteMiddle;
         // return new IntakeNote(intakeSubsystem);
         // return Commands.sequence(
