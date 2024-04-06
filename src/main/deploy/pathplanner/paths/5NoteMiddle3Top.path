@@ -1,0 +1,89 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.8746513372656377,
+        "y": 5.557427633373786
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.09280592116228,
+        "y": 6.7223401157428695
+      },
+      "isLocked": false,
+      "linkedName": "shootingfarposition"
+    },
+    {
+      "anchor": {
+        "x": 8.281954370588325,
+        "y": 7.466681101927896
+      },
+      "prevControl": {
+        "x": 8.378488800120806,
+        "y": 7.479417524397356
+      },
+      "nextControl": {
+        "x": 6.263994696943477,
+        "y": 7.200438404329234
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.8746513372656377,
+        "y": 5.557427633373786
+      },
+      "prevControl": {
+        "x": 4.838948263655963,
+        "y": 6.868195945222911
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "shootingfarposition"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.35,
+      "rotationDegrees": 19.529810134794037,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RevShooter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": null,
+  "useDefaultConstraints": false
+}
