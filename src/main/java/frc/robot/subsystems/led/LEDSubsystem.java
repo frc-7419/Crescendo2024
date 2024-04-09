@@ -29,10 +29,10 @@ public class LEDSubsystem extends SubsystemBase {
     private final AddressableLEDWrapperPattern green = new SolidColor(RGBtoRBG(Color.kGreen));
     private final AddressableLEDWrapperPattern yellow = new SolidColor(RGBtoRBG(Color.kLightYellow));
     private final AddressableLEDWrapperPattern blinkingRed = new Blinking(RGBtoRBG(Color.kRed), 0.25);
-    private final AddressableLEDWrapperPattern blinkingPurple = new Blinking(RGBtoRBG(Color.kPurple), 0.25);
+    private final AddressableLEDWrapperPattern blinkingPurple = new Blinking(RGBtoRBG(Color.kPurple), 0.1);
     private final AddressableLEDWrapperPattern blinkingGreen = new Blinking(RGBtoRBG(Color.kGreen), 0.25);
     private final AddressableLEDWrapperPattern blinkingYellow = new Blinking(RGBtoRBG(Color.kYellow), 0.25);
-    private final AddressableLEDWrapperPattern blinkingGold = new Blinking(RGBtoRBG(Color.kGold), 1);
+    private final AddressableLEDWrapperPattern blinkingGold = new Blinking(RGBtoRBG(Color.kGold), 0.5);
     private final AddressableLEDWrapperPattern off = new SolidColor(Color.kBlack);
 
     /**
@@ -55,10 +55,10 @@ public class LEDSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         if (DriverStation.isDisabled()) {
-            // led.setPattern(disabled);
-            led.setPattern(off); // save power
+            led.setPattern(disabled);
+            // led.setPattern(off); // save power
             SmartDashboard.putString("LED Pattern", "disabled pattern");
-        } else if (operatorController.getRightBumper()) {
+        } else if (shooterSubsystem.getTopVelocity() > 100) {
             Double bs = shooterSubsystem.getBottomPIDsetpoint();
             Double ts = shooterSubsystem.getTopPIDsetpoint();
             Double difference = (bs + ts) - (shooterSubsystem.getTopVelocity() + shooterSubsystem.getBottomVelocity());

@@ -137,14 +137,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void periodic() {
-        if (visionWrapper.updatePoseEstimate() != null) {
-            EstimatedRobotPose estimatedPose = visionWrapper.updatePoseEstimate()[0];
-            if (estimatedPose != null) {
-                this.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
-            }
-        }
-        SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
-        SmartDashboard.putNumber("Desired Angle", getDesiredAngle().getRadians() * (180 / Math.PI));
+        // if (visionWrapper.updatePoseEstimate() != null) {
+        //     EstimatedRobotPose estimatedPose = visionWrapper.updatePoseEstimate()[0];
+        //     if (estimatedPose != null) {
+        //         this.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
+        //     }
+        // }
+        // SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
+        // SmartDashboard.putNumber("Desired Angle", getDesiredAngle().getRadians() * (180 / Math.PI));
     }
 
     public Rotation2d getDesiredAngle() {

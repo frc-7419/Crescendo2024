@@ -22,17 +22,15 @@ public class ShootNoteFar extends SequentialCommandGroup {
         addCommands(
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
-                                new ParallelDeadlineGroup(
-                                        new RaiseShooterWithPID(shooterWrist, setpoint),
-                                        new WaitCommand(0.5),
+                                new ParallelRaceGroup(                                        new WaitCommand(1),
                                         new RunShooter(shooterSubsystem, 0.6)
                                 ),
                                 new ParallelDeadlineGroup(
                                         new RunSerializer(intakeSubsystem).withTimeout(0.5),
                                         new RunShooter(shooterSubsystem, 0.6)
                                 )
-                        )
-                       
+                        ),
+                        new RaiseShooterWithPID(shooterWrist, setpoint)
                 )
         );
     }

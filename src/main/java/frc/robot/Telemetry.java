@@ -65,6 +65,16 @@ public class Telemetry {
         MaxSpeed = maxSpeed;
     }
 
+    public double getXPose(SwerveDriveState state) {
+        Pose2d pose = state.Pose;
+        return pose.getX();
+    }
+
+    public double getYPose(SwerveDriveState state) {
+        Pose2d pose = state.Pose;
+        return pose.getY();
+    }
+
     /* Accept the swerve drive state and telemeterize it to smartdashboard */
     public void telemeterize(SwerveDriveState state) {
         /* Telemeterize the pose */
