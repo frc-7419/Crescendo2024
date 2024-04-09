@@ -23,7 +23,6 @@ public class ShootNote extends SequentialCommandGroup {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new ParallelRaceGroup(
-                                        new RaiseShooterWithPID(shooterWrist, setpoint),
                                         new WaitCommand(1),
                                         new RunShooter(shooterSubsystem, 0.6)
                                 ),
@@ -31,8 +30,8 @@ public class ShootNote extends SequentialCommandGroup {
                                         new RunSerializer(intakeSubsystem).withTimeout(0.5),
                                         new RunShooter(shooterSubsystem, 0.6)
                                 )
-                        )
-                       
+                        ),
+                        new RaiseShooterWithPID(shooterWrist, setpoint)
                 )
         );
     }

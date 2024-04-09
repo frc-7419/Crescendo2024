@@ -111,6 +111,7 @@ public class RobotContainer {
     private final Command threeNoteLeft;
     private final Command threeNoteMiddle;
     private final Command threeNoteRight;
+    private final Command threeNoteMidline;
     private final Command fourNoteMiddle;
     private final Command fourhalfMiddle;
     private final Command fiveNoteMiddle;
@@ -145,6 +146,7 @@ public class RobotContainer {
         fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
         fourhalfMiddle = new PathPlannerAuto("FourHalfNote");
         funnyAuto = new PathPlannerAuto("FunnyAuto");
+        threeNoteMidline = new PathPlannerAuto("ThreeMidline");
         // Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
         // poleAuto = new PathPlannerAuto("1m pole");
 
@@ -157,7 +159,7 @@ public class RobotContainer {
         // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
 
         // red
-        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
+        // drivetrain.seedFieldRelative(new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
 
         // ****************************************************************************************************** //
 
@@ -200,9 +202,9 @@ public class RobotContainer {
         // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
         NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
         NamedCommands.registerCommand("ShootNoteMid",
-                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 66.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
-                new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
+                new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 36.0 / 360));
         NamedCommands.registerCommand("ShootNoteDown",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 33.0 / 360));   // change this     
         NamedCommands.registerCommand("ShootNoteLeft",
@@ -210,6 +212,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootNoteRight",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 33.0 / 360));
+        NamedCommands.registerCommand("PrepFar", new RaiseShooterWithPID(shooterWrist, 38.0 / 360));
         NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
@@ -218,6 +221,14 @@ public class RobotContainer {
         );
     }
 
+    public Command funnelRotation(){
+        return drivetrain.applyRequest(
+                        () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
+                                .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
+                                .withTargetDirection(new Rotation2d(20))
+                                .withDeadband(RobotConstants.kMaxSpeed * 0.1)
+                                .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1));
+    }
     /**
      * This will configure the drive joystick bindings
      */
@@ -293,7 +304,7 @@ public class RobotContainer {
                 shooterSubsystem.setRPM(900, 1050);
             }, shooterSubsystem));
         operator.povDown().whileTrue(new RunCommand(() -> {
-                shooterSubsystem.setRPM(2000, 2000);
+                shooterSubsystem.setRPM(4000, 4000);
             }, shooterSubsystem));
         operator.povLeft().onTrue(new RunCommand(() -> {        
            shooterSubsystem.setBothVoltage(0);
@@ -328,6 +339,7 @@ public class RobotContainer {
         driver.b().and(driver.povUp()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kForward));
         driver.b().and(driver.povDown()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kReverse));
 
+        driver.rightBumper().whileTrue(funnelRotation());
     }
 
     /**
@@ -350,7 +362,6 @@ public class RobotContainer {
                                 .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                                 .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1));
     }
-
     /**
      * Sets the default commands to run during teleop
      */
@@ -380,9 +391,10 @@ public class RobotContainer {
         // return threeNoteMiddleLeft;
         // return fourNoteMiddle;
         // return funnyAuto;
-        return fiveNoteMiddle;
+        // return fiveNoteMiddle;
         // return fourhalfMiddle;
         // return new IntakeNote(intakeSubsystem);
+        return threeNoteMidline;
         // return Commands.sequence(
         //     new RunShooter(shooterSubsystem, 0.8)
         //         .deadlineWith(new RaiseShooterWithPID(shooterWrist, 58.0 / 360))

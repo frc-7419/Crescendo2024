@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -32,7 +33,9 @@ public class IntakeNote extends Command {
     public void execute() {
         intakeSubsystem.setSpeed(0.85);
         intakeSubsystem.setSerializerSpeed(0.4);
-        operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
+        if(DriverStation.isTeleop()){
+            operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
+        }
     }
 
     // Called once the command ends or is interrupted.
@@ -42,7 +45,9 @@ public class IntakeNote extends Command {
         intakeSubsystem.setSpeed(0);
         intakeSubsystem.brakeSerializer();
         intakeSubsystem.brake();
-        new ParallelCommandGroup(new PulseRumble(driver), new PulseRumble(operator)).schedule();
+        if(DriverStation.isTeleop()){
+            new ParallelCommandGroup(new PulseRumble(driver), new PulseRumble(operator)).schedule();
+        }
     }
 
     // Returns true when the command should end.
