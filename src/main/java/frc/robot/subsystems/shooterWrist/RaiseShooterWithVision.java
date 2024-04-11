@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooterWrist;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -13,6 +14,7 @@ public class RaiseShooterWithVision extends Command {
     private final ShooterWrist shooterWrist;
     private final CommandSwerveDrivetrain drivetrain;
     private final ProfiledPIDController shooterWristPIDController;
+    private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
     private final InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
     private final double feedForward = (2.1 / 12) / 2.67;
     private double feedForwardPower;
@@ -56,15 +58,13 @@ public class RaiseShooterWithVision extends Command {
         double setpoint = interpolatingDoubleTreeMap.get(distance);
         SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
-        shooterWristPIDController.setGoal(setpoint);
-        shooterWrist.setPIDsetpoint(setpoint);
-        // shooterWristPIDController.setGoal(7);
-        feedForwardPower = feedForward * Math.cos(shooterWrist.getPositionInRadians());
-        SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
-        armPower += Math.copySign(feedForwardPower, armPower);
-        SmartDashboard.putNumber("armSetpointPower", armPower);
+        double armError = setpoint - shooterWrist.getPosition();
+        armPower = armPower + armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
         shooterWrist.setPower(armPower * 12);
+
+        SmartDashboard.putNumber("Arm Error", armError);
+        SmartDashboard.putNumber("Arm power with ff", armPower);
     }
 
     // Called once the command ends or is interrupted.
