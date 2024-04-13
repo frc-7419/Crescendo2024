@@ -31,7 +31,7 @@ public class ShootNote extends SequentialCommandGroup {
                                         new RunShooter(shooterSubsystem, 0.6)
                                 )
                         ),
-                        new RaiseShooterWithPID(shooterWrist, setpoint)
+                        new RaiseShooterWithVision(drivetrain, shooterWrist, setpoint)
                 )
         );
     }

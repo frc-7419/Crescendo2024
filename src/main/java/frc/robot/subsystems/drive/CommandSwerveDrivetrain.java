@@ -142,9 +142,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void periodic() {
         doRejectUpdate = false;
     //we need to switch to MT2 btw
-    LimelightHelpers.SetRobotOrientation("limelight", getCurrentPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight-jawn", getCurrentPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     //add all this jawnathons
-      LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+      LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-jawn");
       if(Math.abs(this.getPigeon2().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
       {
         doRejectUpdate = true;
@@ -160,7 +160,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             mt2.pose,
             mt2.timestampSeconds);
       }
-    // LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+      SmartDashboard.putNumber("Robot Yaw", getCurrentPose().getRotation().getDegrees());
+      Translation2d pose = getState().Pose.getTranslation();
+
+      Translation2d speakerPose = getSpeakerPose();
+
+      double distance = pose.getDistance(speakerPose);
+      SmartDashboard.putNumber("Distance to Speaker", distance);
+    // LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-jawn");
       
     // if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
     // {
@@ -178,13 +185,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     //   doRejectUpdate = true;
     // }
 
-    // if(!doRejectUpdate)
+    // if(true)
     // {
     //   this.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
     //   this.addVisionMeasurement(
     //       mt1.pose,
     //       mt1.timestampSeconds);
     // }
+    
     }
 
     public Rotation2d getDesiredAngle() {

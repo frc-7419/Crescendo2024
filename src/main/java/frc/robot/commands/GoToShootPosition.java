@@ -23,7 +23,7 @@ public class GoToShootPosition extends SequentialCommandGroup {
         Optional<Alliance> alliance = DriverStation.getAlliance();
 
         SmartDashboard.putBoolean("alliance present", alliance.isPresent());
-        targetPose = new Pose2d(2.5, 5.5, Rotation2d.fromDegrees(0));
+        targetPose = new Pose2d(1.3, 5.8, Rotation2d.fromDegrees(0));
 
         if (alliance.isPresent()) {
             if (alliance.get() == Alliance.Red) {
@@ -32,7 +32,7 @@ public class GoToShootPosition extends SequentialCommandGroup {
         }
 
         PathConstraints pathConstraints = new PathConstraints(
-                3, 3, Units.degreesToRadians(540), Units.degreesToRadians(720));
+                3, 1.5, Units.degreesToRadians(440), Units.degreesToRadians(220));
         Command pathfindingCommand = AutoBuilder.pathfindToPose(targetPose, pathConstraints, 0, 0);
 
         addCommands(pathfindingCommand);

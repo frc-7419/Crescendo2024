@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooterWrist;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
@@ -13,16 +14,18 @@ public class RaiseShooterWithVision extends Command {
     private final ShooterWrist shooterWrist;
     private final CommandSwerveDrivetrain drivetrain;
     private final ProfiledPIDController shooterWristPIDController;
+        private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
+
     private final InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
-    private final double feedForward = (2.1 / 12) / 2.67;
-    private double feedForwardPower;
+    private double setpoint;
 
     /**
      * Creates a new ShootNotes.
      */
-    public RaiseShooterWithVision(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
+    public RaiseShooterWithVision(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist, double setpoint) {
         this.drivetrain = drivetrain;
         this.shooterWrist = shooterWrist;
+        this.setpoint = setpoint;
         this.shooterWristPIDController
                 = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
         addRequirements(shooterWrist);
@@ -31,17 +34,27 @@ public class RaiseShooterWithVision extends Command {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        interpolatingDoubleTreeMap.put(1.25, 46.06 / 360);
-        interpolatingDoubleTreeMap.put(1.51, 38.1 / 360);
-        interpolatingDoubleTreeMap.put(1.73, 39.1 / 360);
-        interpolatingDoubleTreeMap.put(2.02, 36.2 / 360);
-        interpolatingDoubleTreeMap.put(2.3, 32.55 / 360);
-        interpolatingDoubleTreeMap.put(2.58, 29.75 / 360);
-        interpolatingDoubleTreeMap.put(2.89, 27.44 / 360);
-        interpolatingDoubleTreeMap.put(3.23, 26.69 / 360);
-        shooterWrist.coast();
-        shooterWrist.setPower(0);
-        shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
+        if(setpoint == -1.0) {
+            interpolatingDoubleTreeMap.put(1.128, 60.0 / 360);
+            interpolatingDoubleTreeMap.put(1.97, 0.12);
+            interpolatingDoubleTreeMap.put(2.29, 0.11);
+            interpolatingDoubleTreeMap.put(2.58, 0.1);
+            interpolatingDoubleTreeMap.put(3.32, 0.095);
+            interpolatingDoubleTreeMap.put(3.64, 0.085);
+            shooterWrist.coast();
+            shooterWrist.setPower(0);
+            shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
+            Translation2d pose = drivetrain.getState().Pose.getTranslation();
+
+            Translation2d speakerPose = drivetrain.getSpeakerPose();
+
+            double distance = pose.getDistance(speakerPose);
+            SmartDashboard.putNumber("Distance to Speaker", distance);
+            setpoint = interpolatingDoubleTreeMap.get(distance);
+            shooterWristPIDController.setGoal(setpoint);
+            shooterWristPIDController.reset(shooterWrist.getPosition());
+        }
+        shooterWristPIDController.setGoal(setpoint);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -56,15 +69,13 @@ public class RaiseShooterWithVision extends Command {
         double setpoint = interpolatingDoubleTreeMap.get(distance);
         SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
-        shooterWristPIDController.setGoal(setpoint);
-        shooterWrist.setPIDsetpoint(setpoint);
-        // shooterWristPIDController.setGoal(7);
-        feedForwardPower = feedForward * Math.cos(shooterWrist.getPositionInRadians());
-        SmartDashboard.putNumber("Current Arm Setpoint", shooterWristPIDController.getGoal().position);
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
-        armPower += Math.copySign(feedForwardPower, armPower);
-        SmartDashboard.putNumber("armSetpointPower", armPower);
+        double armError = setpoint - shooterWrist.getPosition();
+        armPower = armPower + armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
         shooterWrist.setPower(armPower * 12);
+
+        SmartDashboard.putNumber("Arm Error", armError);
+        SmartDashboard.putNumber("Arm power with ff", armPower);
     }
 
     // Called once the command ends or is interrupted.
@@ -77,6 +88,7 @@ public class RaiseShooterWithVision extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return shooterWristPIDController.atGoal();
+        return false;
+        // return shooterWristPIDController.atGoal();
     }
 }
