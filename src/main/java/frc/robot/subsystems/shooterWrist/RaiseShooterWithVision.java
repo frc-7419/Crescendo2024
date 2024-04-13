@@ -14,8 +14,7 @@ public class RaiseShooterWithVision extends Command {
     private final ShooterWrist shooterWrist;
     private final CommandSwerveDrivetrain drivetrain;
     private final ProfiledPIDController shooterWristPIDController;
-        private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
-
+    private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
     private final InterpolatingDoubleTreeMap interpolatingDoubleTreeMap = new InterpolatingDoubleTreeMap();
     private double setpoint;
 
