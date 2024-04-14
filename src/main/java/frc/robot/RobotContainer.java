@@ -19,10 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.GoToAmpPosition;
 import frc.robot.commands.GoToShootPosition;
 import frc.robot.commands.OneNote;
 import frc.robot.constants.OperatorConstants;
@@ -58,6 +60,7 @@ public class RobotContainer {
     // END-------------------------------------------------------------------------------------------------------------------
 
     // SUBSYSTEMS----------------------------------------------------------------------------------------------------------------------
+    private final XboxController driverRaw = new XboxController(OperatorConstants.kDriverJoystickPort);
     private final XboxController operatorRaw = new XboxController(OperatorConstants.kOperatorJoystickPort);
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final ShooterWrist shooterWrist = new ShooterWrist();
@@ -102,17 +105,20 @@ public class RobotContainer {
     // END----------------------------------------------------------------------------------------------------------------------
 
     // AUTONOMOUS----------------------------------------------------------------------------------------------------------------------
-    private final Command twoNote;
+    // private final Command twoNote;
     private final OneNote oneNote;
     private final Command oneNoteRight;
     private final Command threeNoteMiddleLeft;
     private final Command threeNoteLeft;
     private final Command threeNoteMiddle;
     private final Command threeNoteRight;
+    private final Command threeNoteMidline;
     private final Command fourNoteMiddle;
+    private final Command fourhalfMiddle;
     private final Command fiveNoteMiddle;
-    private final Command Auton1NoteUpdated;
-    private final Command poleAuto;
+    // private final Command Auton1NoteUpdated;
+    // private final Command poleAuto;
+    private final Command funnyAuto;
     private final SwerveRequest.FieldCentricFacingAngle fieldAngle = new SwerveRequest.FieldCentricFacingAngle();
 
 
@@ -133,22 +139,28 @@ public class RobotContainer {
         oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
         oneNoteRight = new PathPlannerAuto("OneNoteRight");
         threeNoteMiddleLeft = new PathPlannerAuto("ThreeNoteMiddleLeft");
-        twoNote = new PathPlannerAuto("TwoNote");
+        // twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
         threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
-        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddle");
-        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddle");
-        Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
-        poleAuto = new PathPlannerAuto("1m pole");
+        fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
+        fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
+        fourhalfMiddle = new PathPlannerAuto("FourHalfNote");
+        funnyAuto = new PathPlannerAuto("FunnyAuto");
+        threeNoteMidline = new PathPlannerAuto("ThreeMidline");
+        // Auton1NoteUpdated = new PathPlannerAuto("Auton1NoteUpdated");
+        // poleAuto = new PathPlannerAuto("1m pole");
 
         // middle
 
+
+        // !!! WE ARE USING START POSITION ON PATHPLANNER, NO NEED TO SEED !!! //
+
         // blue
-        drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
+        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d(0)));
 
         // red
-        // drivetrain.seedFieldRelative( new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
+        // drivetrain.seedFieldRelative(new Pose2d(new Translation2d(15.25, 5.5), new Rotation2d(Math.PI)));
 
         // ****************************************************************************************************** //
 
@@ -187,28 +199,34 @@ public class RobotContainer {
     private void registerCommands() {
         NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem, 0.7));
         NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
-        NamedCommands.registerCommand("WristToPosition", new RaiseShooterWithPID(shooterWrist, 60.0 / 360));
         // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
-        NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
+        NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist, -1.0));
         NamedCommands.registerCommand("ShootNoteMid",
-                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 60.0 / 360));
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 66.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
-                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 40.0 / 360));
+                new ShootNoteFar(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 36.0 / 360));
         NamedCommands.registerCommand("ShootNoteDown",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 33.0 / 360));   // change this     
         NamedCommands.registerCommand("ShootNoteLeft",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
         NamedCommands.registerCommand("ShootNoteRight",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 62.0 / 360));
-        NamedCommands.registerCommand("LowerShooter", new RaiseShooterWithPID(shooterWrist, 33.0 / 360));
-        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem));
+        NamedCommands.registerCommand("IntakeNote", new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
         NamedCommands.registerCommand("RevShooter",
                 new RunCommand(() -> {
-                    shooterSubsystem.setRPM(2750, 2750);
+                    shooterSubsystem.setRPM(3500, 3500);
                 }, shooterSubsystem)
         );
     }
 
+    public Command funnelRotation(){
+        return drivetrain.applyRequest(
+                        () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
+                                .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
+                                .withTargetDirection(new Rotation2d(20))
+                                .withDeadband(RobotConstants.kMaxSpeed * 0.1)
+                                .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1));
+    }
     /**
      * This will configure the drive joystick bindings
      */
@@ -235,16 +253,8 @@ public class RobotContainer {
 
         driver.leftBumper().onTrue(
                 drivetrain
-                        .runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 5.5), new Rotation2d()))));
+                        .runOnce(() -> drivetrain.seedFieldRelative(new Pose2d(new Translation2d(1.5, 15.5), new Rotation2d()))));
 
-        // driver.rightBumper().whileTrue(
-        // Commands.parallel(
-        // drivetrain.driveAroundPoint(
-        // -driver.getLeftY(),
-        // -driver.getLeftX(),
-        // drivetrain.getFuturePose()),
-        // new PrepShooterForPoint(drivetrain, shooterWrist,
-        // drivetrain.getFuturePose())));
         driver.rightBumper().whileTrue(
                 drivetrain.applyRequest(
                         () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
@@ -254,52 +264,52 @@ public class RobotContainer {
                                 .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)).until(() -> beamBreakSubsystem.frontBeamBreakIsTriggered())
                 );
         driver.x().whileTrue(
-                // Commands.parallel(
                 drivetrain.applyRequest(
                         () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
                                 .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
                                 .withTargetDirection(drivetrain.getDesiredAngle())
                                 .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                                 .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)));
-        // new PrepShooter(drivetrain, shooterWrist, drivetrain.getFuturePose())));
+
 
         if (Utils.isSimulation()) {
             drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-        }
+}
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        // zero
-        // operator.povUp().onTrue(new InstantCommand(shooterWrist::zeroEncoder));
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
-        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem));
-        operator.y().whileTrue(new RaiseShooterWithPID(shooterWrist, 58.0 / 360));
-        operator.b().whileTrue(new RaiseShooterWithPID(shooterWrist, 50.0 / 360));
-        operator.a().whileTrue(new RaiseShooterWithPID(shooterWrist, 34.0/360));
-        operator.povRight().toggleOnTrue(new RunCommand(() -> {
+        operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
+        operator.y().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist, 60.0 / 360));
+
+        // funneling
+        operator.b().whileTrue(
+                new ParallelCommandGroup(
+                        new RaiseShooterWithVision(drivetrain, shooterWrist, 48.0/360),
+                        new RunCommand(() -> {
+                                shooterSubsystem.setRPM(5500, 5500);
+                            }, shooterSubsystem)));
+       
+        operator.x().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist, -1.0));
+
+
+        operator.povRight().whileTrue(new RunCommand(() -> {
             shooterSubsystem.setRPM(2000, 2000);
         }, shooterSubsystem));
+        
         operator.povUp().whileTrue(new RunCommand(() -> {
-                shooterSubsystem.setRPM(900, 1000);
+                shooterSubsystem.setRPM(900, 1050);
             }, shooterSubsystem));
-        operator.povLeft().onTrue(new RunCommand(() -> {
+        operator.povDown().whileTrue(new RunCommand(() -> {
+                shooterSubsystem.setRPM(5600, 5600);
+            }, shooterSubsystem));
+        operator.povLeft().onTrue(new RunCommand(() -> {        
            shooterSubsystem.setBothVoltage(0);
         }).withTimeout(1));
-        // operator.rightBumper().onTrue(new ShootNote(shooterWrist, shooterSubsystem,
-        // intakeSubsystem, 45/360));
+       
 
-        // operator.y().toggleOnTrue(new RunShooterWithPID(shooterSubsystem,800*1.15,
-        // 1200*1.15));
+        driver.povUp().whileTrue(new GoToShootPosition(drivetrain));
+        driver.povLeft().whileTrue(new GoToAmpPosition(drivetrain));
 
-        // operator.b().(new SequentialCommandGroup(
-        // new RunShooterWithPID(shooterSubsystem,800*1.15, 1200*1.15)
-        // .deadlineWith(new RaiseShooterWithPID(shooterWrist, 25.0/360))
-        // .deadlineWith(Commands.sequence(new WaitCommand(3), new
-        // RunSerializer(intakeSubsystem))).withTimeout(5)
-        // ));
-        driver.povDown().onTrue(new InstantCommand(drivetrain::setPoseStateToSpeaker));
-        driver.povLeft().onTrue(new TurnToAmp(drivetrain, vision));
-
-        driver.povRight().whileTrue(new GoToShootPosition(drivetrain));
         driver.a().and(driver.povUp()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kForward));
         driver.a().and(driver.povDown()).whileTrue(drivetrain.runDriveQuasistaticTest(Direction.kReverse));
 
@@ -312,21 +322,24 @@ public class RobotContainer {
         driver.b().and(driver.povUp()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kForward));
         driver.b().and(driver.povDown()).whileTrue(drivetrain.runSteerDynamicTest(Direction.kReverse));
 
+        driver.rightBumper().whileTrue(funnelRotation());
     }
 
     /**
      * Configures the auton chooser
-     * selectionsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\[]
+     * selections
      */
     public void configAutonSelection() {
-        //  autonChooser.setDefaultOption("Auton1NoteUpdated",Auton1NoteUpdated);
-        //  autonChooser.addOption("threeNoteMiddle", threeNoteMiddle);
-        //  autonChooser.addOption("threeNoteLeft", threeNoteLeft);
-        //  autonChooser.addOption("TwoNote(Tested)", twoNote);
+          autonChooser.setDefaultOption("Four Note Middle",fourNoteMiddle);
+          autonChooser.addOption("Three Note Middle", threeNoteMiddle);
+          autonChooser.addOption("Three Note Left", threeNoteLeft);
+          autonChooser.addOption("Three Note Midline", threeNoteMidline);
+          autonChooser.addOption("Five Note Middle", fiveNoteMiddle);
+          SmartDashboard.putData(autonChooser);
     }
 
     public Command autoFaceNote(){
-        // if intakeSubsystem
+        
         return drivetrain.applyRequest(
                         () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
                                 .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
@@ -334,7 +347,6 @@ public class RobotContainer {
                                 .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                                 .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1));
     }
-
     /**
      * Sets the default commands to run during teleop
      */
@@ -342,10 +354,7 @@ public class RobotContainer {
         intakeSubsystem.setDefaultCommand(runIntakeWithJoystick);
         shooterWrist.setDefaultCommand(runShooterWristWithJoystick);
         climber.setDefaultCommand(runClimberWithJoystick);
-        // shooterSubsystem.setDefaultCommand(new RunCommand(() -> {
-        // shooterSubsystem.setRPM(2000, 2000);
-        // }, shooterSubsystem));
-        // shooterSubsystem.setDefaultCommand(RunShoot
+      
     }
 
     /**
@@ -354,24 +363,16 @@ public class RobotContainer {
      * @return selected autonomous command
      */
     public Command getAutonomousCommand() {
-        // return autonChooser.getSelected();
+        return autonChooser.getSelected();
         // return oneNoteRight;
-        // return t1oNote;
         // return threeNoteAuto;
-        // return squareAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
         // return threeNoteMiddleLeft;
-        return fourNoteMiddle;
+        // return fourNoteMiddle;
+        // return funnyAuto;
         // return fiveNoteMiddle;
-        // return new IntakeNote(intakeSubsystem);
-        // return Commands.sequence(
-        //     new RunShooter(shooterSubsystem, 0.8)
-        //         .deadlineWith(new RaiseShooterWithPID(shooterWrist, 58.0 / 360))
-        //         .deadlineWith(Commands.sequence(new WaitCommand(3), new RunSerializer(intakeSubsystem))).withTimeout(5));
-        // return new ShootNote(shooterWrist, shooterSubsystem, drivetrain,
-        // intakeSubsystem, 25.0/360);
-        // return twoNote;
-        // return poleAuto;
+        // return fourhalfMiddle;
+       
     }
 }

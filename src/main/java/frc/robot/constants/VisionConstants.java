@@ -13,7 +13,7 @@ import edu.wpi.first.math.util.Units;
 public final class VisionConstants {
     public static final Transform3d ROBOT_TO_FRONT = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
     public static final Transform3d ROBOT_TO_BACK = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0, 0, 0)); //keshav
-
+    public static final Transform3d CAM_OFFSET = new Transform3d(new Translation3d(Units.inchesToMeters((31.5/2) - 10.5), Units.inchesToMeters((26.5/2)-1.75), Units.inchesToMeters(6)), new Rotation3d(0,Math.PI/6,0));
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
     public static final Vector<N3> STATE_STDS = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));

@@ -7,37 +7,41 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 
-public class RaiseShooterWithPID extends Command {
+public class RaiseShooterWithPIDTuning extends Command {
     private final ShooterWrist shooterWrist;
     private final ProfiledPIDController shooterWristPIDController;
     private final double feedForward = (0.9 / 12) / 2.67;
     private final ArmFeedforward armFeedforward = new ArmFeedforward(0, 0.02809 * 2.5, 0.01 * 1.5);
-    private final double setpoint;
+    private double setpoint;
     private double feedForwardPower;
     private double setpointInDegrees;
 
     /**
      * Creates a new ShootNotes.
      */
-    public RaiseShooterWithPID(ShooterWrist shooterWrist, double setpoint) {
+    public RaiseShooterWithPIDTuning(ShooterWrist shooterWrist, double setpoint) {
         this.shooterWrist = shooterWrist;
         this.setpoint = setpoint;
-        this.shooterWristPIDController = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(20, 1.5));
+        this.shooterWristPIDController = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(20, 2));
         // this.shooterWristPIDController
         //   = new ProfiledPIDController(Rotations.of(1.9).in(Degrees), Rotations.of(0.07).in(Degrees), Rotations.of(0.05).in(Degrees), new TrapezoidProfile.Constraints(Rotations.of(10).in(Degrees),Rotations.of(0.1125).in(Degrees)));
         addRequirements(shooterWrist);
+        SmartDashboard.putNumber("Arm Setpoint", setpoint);
+
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         shooterWrist.coast();
+        setpoint = SmartDashboard.getNumber("Arm Setpoint", setpoint);
+
         shooterWrist.setPower(0);
         shooterWrist.setPIDsetpoint(setpoint);
+
         shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
         shooterWristPIDController.setGoal(setpoint);
         shooterWristPIDController.reset(shooterWrist.getPosition());
-        SmartDashboard.putNumber("Arm Setpoint", setpoint);
     }
 
     // Called every time the scheduler runs while the command is scheduled.

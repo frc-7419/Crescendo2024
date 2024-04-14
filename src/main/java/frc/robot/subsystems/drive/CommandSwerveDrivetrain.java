@@ -14,6 +14,7 @@ import com.team7419.util.SwerveVoltageRequest;
 import com.team7419.util.SysIdSignalLogger;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.LimelightHelpers;
 import frc.robot.constants.FieldConstants;
 import frc.robot.constants.RobotConstants;
 import frc.robot.constants.TunerConstants;
@@ -49,6 +51,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final VisionWrapper visionWrapper;
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
+    private boolean doRejectUpdate;
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
@@ -137,14 +140,59 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
     public void periodic() {
-        if (visionWrapper.updatePoseEstimate() != null) {
-            EstimatedRobotPose estimatedPose = visionWrapper.updatePoseEstimate()[0];
-            if (estimatedPose != null) {
-                this.addVisionMeasurement(estimatedPose.estimatedPose.toPose2d(), estimatedPose.timestampSeconds);
-            }
-        }
-        SmartDashboard.putNumberArray("Future Pose", new Double[]{getFuturePose().getX(), getFuturePose().getY()});
-        SmartDashboard.putNumber("Desired Angle", getDesiredAngle().getRadians() * (180 / Math.PI));
+        doRejectUpdate = false;
+    //we need to switch to MT2 btw
+    LimelightHelpers.SetRobotOrientation("limelight-jawn", getCurrentPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    //add all this jawnathons
+      LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-jawn");
+      if(Math.abs(this.getPigeon2().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+      {
+        doRejectUpdate = true;
+      }
+      if(mt2.tagCount == 0)
+      {
+        doRejectUpdate = true;
+      }
+      if(!doRejectUpdate)
+      {
+        this.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        this.addVisionMeasurement(
+            mt2.pose,
+            mt2.timestampSeconds);
+      }
+      SmartDashboard.putNumber("Robot Yaw", getCurrentPose().getRotation().getDegrees());
+      Translation2d pose = getState().Pose.getTranslation();
+
+      Translation2d speakerPose = getSpeakerPose();
+
+      double distance = pose.getDistance(speakerPose);
+      SmartDashboard.putNumber("Distance to Speaker", distance);
+    // LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-jawn");
+      
+    // if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
+    // {
+    //   if(mt1.rawFiducials[0].ambiguity > .7)
+    //   {
+    //     doRejectUpdate = true;
+    //   }
+    //   if(mt1.rawFiducials[0].distToCamera > 3)
+    //   {
+    //     doRejectUpdate = true;
+    //   }
+    // }
+    // if(mt1.tagCount == 0)
+    // {
+    //   doRejectUpdate = true;
+    // }
+
+    // if(true)
+    // {
+    //   this.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+    //   this.addVisionMeasurement(
+    //       mt1.pose,
+    //       mt1.timestampSeconds);
+    // }
+    
     }
 
     public Rotation2d getDesiredAngle() {

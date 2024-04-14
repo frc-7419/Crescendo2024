@@ -61,7 +61,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PrepFar"
+                  "name": "LowerShooter"
                 }
               }
             ]
@@ -78,6 +78,31 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5NoteMiddle3Top"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteFar"
           }
         },
         {
@@ -113,7 +138,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -132,15 +157,16 @@
           }
         },
         {
-          "type": "path",
+          "type": "sequential",
           "data": {
-            "pathName": "4NoteEnd"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteMid"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteFar"
+                }
+              }
+            ]
           }
         }
       ]

@@ -4,12 +4,16 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
@@ -21,13 +25,23 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
-
+ 
+    Orchestra orchestra = new Orchestra();
+    TalonFX[] motors = { new TalonFX(1, "Ryan Biggee"), new TalonFX(2, "Ryan Biggee"), new TalonFX(3, "Ryan Biggee"), new TalonFX(4, "Ryan Biggee"), new TalonFX(5, "Ryan Biggee"), new TalonFX(6, "Ryan Biggee"), new TalonFX(7, "Ryan Biggee"), new TalonFX(8, "Ryan Biggee")};
     private RobotContainer m_robotContainer;
     Thread m_visionThread;
     @Override
     public void robotInit() {
         m_robotContainer = new RobotContainer();
         m_robotContainer.drivetrain.getDaqThread().setThreadPriority(99);
+
+        for (int i = 0; i < motors.length; ++i) {
+            orchestra.addInstrument(motors[i]);
+        }
+
+        System.out.println(orchestra.loadMusic("flymetothemoon.chrp"));
+        System.out.println("music");
+
         m_visionThread =
 
         new Thread(
@@ -138,6 +152,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         if (m_autonomousCommand != null) m_autonomousCommand.cancel();
+        // orchestra.play();
     }
 
     @Override

@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.23,
-      "y": 5.56
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -41,15 +35,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "5NoteMiddle0"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5NoteMiddle0"
                 }
               },
               {
@@ -61,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PrepFar"
+                  "name": "LowerShooter"
                 }
               }
             ]
@@ -81,7 +75,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -113,7 +107,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -141,6 +135,12 @@
           "type": "named",
           "data": {
             "name": "ShootNoteMid"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5NoteGo"
           }
         }
       ]
