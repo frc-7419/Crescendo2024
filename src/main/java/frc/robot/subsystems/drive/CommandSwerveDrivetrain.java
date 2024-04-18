@@ -55,6 +55,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
+        this.getPigeon2().setYaw(0);
         visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
@@ -64,6 +65,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
+        this.getPigeon2().setYaw(0);
         visionWrapper = new VisionWrapper();
         configurePathPlanner();
         
@@ -141,7 +143,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void periodic() {
         doRejectUpdate = false;
-    //we need to switch to MT2 btw
+    // // //we need to switch to MT2 btw
     LimelightHelpers.SetRobotOrientation("limelight-jawn", getCurrentPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     //add all this jawnathons
       LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-jawn");
@@ -185,7 +187,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     //   doRejectUpdate = true;
     // }
 
-    // if(true)
+    // if(!doRejectUpdate)
     // {
     //   this.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
     //   this.addVisionMeasurement(

@@ -142,7 +142,7 @@ public class RobotContainer {
         // twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
         threeNoteMiddle = new PathPlannerAuto("ThreeNoteMiddle");
-        threeNoteRight = new PathPlannerAuto("ThreeNoteRight");
+        threeNoteRight = new PathPlannerAuto("FourNoteRight");
         fourNoteMiddle = new PathPlannerAuto("FourNoteMiddleOp");
         fiveNoteMiddle = new PathPlannerAuto("FiveNoteMiddleOp");
         fourhalfMiddle = new PathPlannerAuto("FourHalfNote");
@@ -200,7 +200,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("RunIntake", new RunIntake(intakeSubsystem, 0.7));
         NamedCommands.registerCommand("RunShooter", new RunShooter(shooterSubsystem, 0.7));
         // NamedCommands.registerCommand("LowerShooter", new LowerShooter(shooterWrist));
-        NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist, -1.0));
+        NamedCommands.registerCommand("Auto Shoot", new RaiseShooterWithVision(drivetrain, shooterWrist));
         NamedCommands.registerCommand("ShootNoteMid",
                 new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 66.0 / 360));
         NamedCommands.registerCommand("ShootNoteFar",
@@ -279,17 +279,17 @@ public class RobotContainer {
 
         operator.rightBumper().whileTrue(new RunShooter(shooterSubsystem, 1.0));
         operator.leftBumper().onTrue(new IntakeNote(intakeSubsystem, driverRaw, operatorRaw));
-        operator.y().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist, 60.0 / 360));
+        operator.y().whileTrue(new RaiseShooter(drivetrain, shooterWrist, 60.0 / 360));
 
         // funneling
         operator.b().whileTrue(
                 new ParallelCommandGroup(
-                        new RaiseShooterWithVision(drivetrain, shooterWrist, 48.0/360),
+                        new RaiseShooter(drivetrain, shooterWrist, 56.0/360),
                         new RunCommand(() -> {
-                                shooterSubsystem.setRPM(5500, 5500);
+                                shooterSubsystem.setRPM(5850, 5850);
                             }, shooterSubsystem)));
        
-        operator.x().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist, -1.0));
+        operator.x().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
 
 
         operator.povRight().whileTrue(new RunCommand(() -> {
@@ -299,9 +299,7 @@ public class RobotContainer {
         operator.povUp().whileTrue(new RunCommand(() -> {
                 shooterSubsystem.setRPM(900, 1050);
             }, shooterSubsystem));
-        operator.povDown().whileTrue(new RunCommand(() -> {
-                shooterSubsystem.setRPM(5600, 5600);
-            }, shooterSubsystem));
+       
         operator.povLeft().onTrue(new RunCommand(() -> {        
            shooterSubsystem.setBothVoltage(0);
         }).withTimeout(1));
@@ -363,13 +361,13 @@ public class RobotContainer {
      * @return selected autonomous command
      */
     public Command getAutonomousCommand() {
-        return autonChooser.getSelected();
+        // return autonChooser.getSelected();
         // return oneNoteRight;
         // return threeNoteAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;
         // return threeNoteMiddleLeft;
-        // return fourNoteMiddle;
+        return fourNoteMiddle;
         // return funnyAuto;
         // return fiveNoteMiddle;
         // return fourhalfMiddle;

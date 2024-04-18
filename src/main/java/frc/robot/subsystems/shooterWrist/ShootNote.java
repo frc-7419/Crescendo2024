@@ -23,16 +23,17 @@ public class ShootNote extends SequentialCommandGroup {
                 new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
                                 new ParallelRaceGroup(
-                                        new WaitCommand(1),
-                                        new RunShooter(shooterSubsystem, 0.6)
+                                        new WaitCommand(1.5),
+                                        new RunShooter(shooterSubsystem, 0.9)
                                 ),
                                 new ParallelDeadlineGroup(
                                         new RunSerializer(intakeSubsystem).withTimeout(0.5),
-                                        new RunShooter(shooterSubsystem, 0.6)
+                                        new RunShooter(shooterSubsystem, 0.8)
                                 )
                         ),
-                        new RaiseShooterWithVision(drivetrain, shooterWrist, setpoint)
+                        new RaiseShooter(drivetrain, shooterWrist, setpoint)
                 )
         );
     }
 }
+                              
