@@ -26,7 +26,7 @@ public class RaiseShooter extends Command {
         this.shooterWrist = shooterWrist;
         this.setpoint = setpoint;
         this.shooterWristPIDController
-                = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
+                = new ProfiledPIDController(1.95, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.115));
         addRequirements(shooterWrist);
     }
 

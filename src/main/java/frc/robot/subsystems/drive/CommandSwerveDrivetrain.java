@@ -55,7 +55,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        this.getPigeon2().setYaw(0);
+        // this.getPigeon2().setYaw(0);
         visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
@@ -65,7 +65,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
-        this.getPigeon2().setYaw(0);
+        // this.getPigeon2().setYaw(0);
         visionWrapper = new VisionWrapper();
         configurePathPlanner();
         
@@ -143,57 +143,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void periodic() {
         doRejectUpdate = false;
-    // // //we need to switch to MT2 btw
-    LimelightHelpers.SetRobotOrientation("limelight-jawn", getCurrentPose().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    //add all this jawnathons
-      LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-jawn");
-      if(Math.abs(this.getPigeon2().getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-      {
-        doRejectUpdate = true;
-      }
-      if(mt2.tagCount == 0)
-      {
-        doRejectUpdate = true;
-      }
-      if(!doRejectUpdate)
-      {
-        this.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-        this.addVisionMeasurement(
-            mt2.pose,
-            mt2.timestampSeconds);
-      }
-      SmartDashboard.putNumber("Robot Yaw", getCurrentPose().getRotation().getDegrees());
-      Translation2d pose = getState().Pose.getTranslation();
-
-      Translation2d speakerPose = getSpeakerPose();
-
-      double distance = pose.getDistance(speakerPose);
-      SmartDashboard.putNumber("Distance to Speaker", distance);
-    // LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-jawn");
-      
-    // if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
-    // {
-    //   if(mt1.rawFiducials[0].ambiguity > .7)
-    //   {
-    //     doRejectUpdate = true;
-    //   }
-    //   if(mt1.rawFiducials[0].distToCamera > 3)
-    //   {
-    //     doRejectUpdate = true;
-    //   }
-    // }
-    // if(mt1.tagCount == 0)
-    // {
-    //   doRejectUpdate = true;
-    // }
-
-    // if(!doRejectUpdate)
-    // {
-    //   this.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
-    //   this.addVisionMeasurement(
-    //       mt1.pose,
-    //       mt1.timestampSeconds);
-    // }
+    // // //we need to switch hanging z
     
     }
 

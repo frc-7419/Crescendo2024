@@ -44,8 +44,6 @@ public class RaiseShooterWithVision extends Command {
             shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
         
             shooterWristPIDController.reset(shooterWrist.getPosition());
-        
-       
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -59,7 +57,7 @@ public class RaiseShooterWithVision extends Command {
         SmartDashboard.putNumber("Distance to Speaker", distance);
         double setpoint = interpolatingDoubleTreeMap.get(distance);
         SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
-        shooterWristPIDController.setGoal(setpoint);
+        shooterWristPIDController.setP(setpoint);
 
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
         double armError = setpoint - shooterWrist.getPosition();
