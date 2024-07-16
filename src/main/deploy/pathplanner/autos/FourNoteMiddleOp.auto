@@ -126,15 +126,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4NoteEnd"
+            "name": "ShootNoteFar"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootNoteMid"
+            "pathName": "4NoteEnd"
           }
         }
       ]

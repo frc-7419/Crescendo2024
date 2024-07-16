@@ -291,12 +291,12 @@ public class RobotContainer {
         operator.a().whileTrue(new RaiseShooter(drivetrain, shooterWrist, 39.0 / 360));
 
         // funneling
-        operator.b().whileTrue(
-                new ParallelCommandGroup(
-                        new RaiseShooter(drivetrain, shooterWrist, 59.0/360),
-                        new RunCommand(() -> {
-                                shooterSubsystem.setRPM(4900, 4900);
-                            }, shooterSubsystem)));
+        // operator.b().whileTrue(
+        //         new ParallelCommandGroup(
+        //                 new RaiseShooter(drivetrain, shooterWrist, 59.0/360),
+        //                 new RunCommand(() -> {
+        //                         shooterSubsystem.setRPM(4900, 4900);
+        //                     }, shooterSubsystem)));
        
         operator.x().whileTrue(new RaiseShooterWithVision(drivetrain, shooterWrist));
 

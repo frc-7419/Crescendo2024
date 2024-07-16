@@ -72,6 +72,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         if (Utils.isSimulation()) {
             startSimThread();
         }
+        
     }
 
     private void configurePathPlanner() {
