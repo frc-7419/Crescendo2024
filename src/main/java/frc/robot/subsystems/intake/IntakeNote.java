@@ -20,6 +20,7 @@ public class IntakeNote extends Command {
     private final Timer endTimer;
     // private final double VOLTAGE_THRESHOLD = 0.5; // need to adjust based on the voltage readings [OUTDATED - LOOK IN INTAKE SUBSYSTEM]
     private final double MAX_INTAKE_TIME = 2.0; 
+    private boolean init;
     private boolean notePhaseOne;
     private boolean done;
 
@@ -37,13 +38,13 @@ public class IntakeNote extends Command {
     @Override
     public void initialize() {
         intakeSubsystem.coast();
-        intakeSubsystem.updateBaselineCurrentDraw();
         notePhaseOne = false;
         done = false;
         endTimer.reset();
         thresholdTimer.reset();
         thresholdTimer.start();
         timeoutTimer.reset();
+        init = false;
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -54,16 +55,20 @@ public class IntakeNote extends Command {
         if(DriverStation.isTeleop()){
             operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
         }
+        if(thresholdTimer.hasElapsed(0.5) && (init == false)){
+            intakeSubsystem.updateBaselineCurrentDraw();
+            init = true;
+        }
         if(intakeSubsystem.noteDetectedByCurrent() && thresholdTimer.hasElapsed(0.5)){
             notePhaseOne = true;
             timeoutTimer.start();
         }
         if(notePhaseOne && !intakeSubsystem.noteDetectedByCurrent()) {
             intakeSubsystem.setSpeed(0);
-            intakeSubsystem.setSerializerSpeed(0.3);
+            intakeSubsystem.setSerializerSpeed(0.5);
             endTimer.start();
         }
-        if(endTimer.hasElapsed(0.2)){
+        if(endTimer.hasElapsed(0.3)){
             done = true;
         }
     }
