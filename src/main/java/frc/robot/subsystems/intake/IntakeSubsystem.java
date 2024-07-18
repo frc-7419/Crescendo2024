@@ -20,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final BeamBreakSubsystem beamBreakSubsystem;
     private double baselineCurrentDraw;
-    private static final double CURRENT_THRESHOLD = 2.0;  //needs to be adjusted by testing
+    private static final double CURRENT_THRESHOLD = 11.0;  //needs to be adjusted by testing
 
     public IntakeSubsystem(BeamBreakSubsystem beamBreakSubsystem) {
         leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
@@ -91,12 +91,12 @@ public class IntakeSubsystem extends SubsystemBase {
         return leftIntakeMotor.get();
     }
     public boolean noteDetectedByCurrent() {
-        double currentDraw = serializerBack.getOutputCurrent();
+        double currentDraw = leftIntakeMotor.getOutputCurrent();
         return Math.abs(currentDraw - baselineCurrentDraw) > CURRENT_THRESHOLD;
     }
 
     public void updateBaselineCurrentDraw() {
-        baselineCurrentDraw = serializerBack.getOutputCurrent();
+        baselineCurrentDraw = leftIntakeMotor.getOutputCurrent();
     }
     @Override
     public void periodic() {
@@ -104,7 +104,7 @@ public class IntakeSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("RightIntakeSpeed", rightIntakeMotor.get());
         // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
         SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
-        SmartDashboard.putNumber("Current Draw", serializerBack.getOutputCurrent());
+        SmartDashboard.putNumber("Current Draw", leftIntakeMotor.getOutputCurrent());
 
         SmartDashboard.putBoolean("Has Note", frontBeamBreakIsTriggered());
     }
