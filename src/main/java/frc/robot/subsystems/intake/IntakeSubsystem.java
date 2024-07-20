@@ -20,7 +20,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private final BeamBreakSubsystem beamBreakSubsystem;
     private double baselineCurrentDraw;
-    private static final double CURRENT_THRESHOLD = 5.0;  //needs to be adjusted by testing
+    private static final double CURRENT_THRESHOLD = 11.0;  //needs to be adjusted by testing
 
     public IntakeSubsystem(BeamBreakSubsystem beamBreakSubsystem) {
         leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
