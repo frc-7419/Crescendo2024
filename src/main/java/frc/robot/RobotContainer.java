@@ -275,7 +275,7 @@ public class RobotContainer {
                 drivetrain.applyRequest(
                         () -> fieldAngle.withVelocityX(-driver.getLeftY() * RobotConstants.kMaxSpeed)
                                 .withVelocityY(-driver.getLeftX() * RobotConstants.kMaxSpeed)
-                                .withTargetDirection(drivetrain.getDesiredAngle())
+                                .withTargetDirection(new Rotation2d(0))
                                 .withDeadband(RobotConstants.kMaxSpeed * 0.1)
                                 .withRotationalDeadband(RobotConstants.kMaxAngularRate * 0.1)));
 
