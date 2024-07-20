@@ -38,6 +38,7 @@ public class IntakeNote extends Command {
     @Override
     public void initialize() {
         intakeSubsystem.coast();
+        intakeSubsystem.updateBaselineCurrentDraw();
         notePhaseOne = false;
         done = false;
         endTimer.reset();
@@ -65,10 +66,10 @@ public class IntakeNote extends Command {
         }
         if(notePhaseOne && !intakeSubsystem.noteDetectedByCurrent()) {
             intakeSubsystem.setSpeed(0);
-            intakeSubsystem.setSerializerSpeed(0.5);
+            intakeSubsystem.setSerializerSpeed(0.3);
             endTimer.start();
         }
-        if(endTimer.hasElapsed(0.3)){
+        if(endTimer.hasElapsed(0.2)){
             done = true;
         }
     }
