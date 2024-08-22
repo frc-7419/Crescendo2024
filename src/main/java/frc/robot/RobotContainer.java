@@ -112,6 +112,7 @@ public class RobotContainer {
     // private final Command twoNote;
     private final OneNote oneNote;
     private final Command oneNoteRight;
+    private final Command oneNoteLeft;
     private final Command threeNoteMiddleLeft;
     private final Command threeNoteLeft;
     private final Command threeNoteMiddle;
@@ -142,6 +143,7 @@ public class RobotContainer {
  
         oneNote = new OneNote(shooterSubsystem, shooterWrist, intakeSubsystem, drivetrain);
         oneNoteRight = new PathPlannerAuto("OneNoteRight");
+        oneNoteLeft = new PathPlannerAuto("OneNoteLeft");
         threeNoteMiddleLeft = new PathPlannerAuto("ThreeNoteMiddleLeft");
         // twoNote = new PathPlannerAuto("TwoNote");
         threeNoteLeft = new PathPlannerAuto("ThreeNoteLeft");
@@ -306,11 +308,12 @@ public class RobotContainer {
         }, shooterSubsystem));
         
         operator.povUp().whileTrue(new RunCommand(() -> {
-                shooterSubsystem.setRPM(900, 1050);
+                shooterSubsystem.setRPM(1050, 1200);
             }, shooterSubsystem));
        
         operator.povLeft().onTrue(new RunCommand(() -> {        
            shooterSubsystem.setBothVoltage(0);
+           shooterSubsystem.brake();
         }).withTimeout(1));
        
 
@@ -380,6 +383,8 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // return autonChooser.getSelected();
         // return oneNoteRight;
+        // return oneNoteLeft;
+        // return oneNote;
         // return threeNoteAuto;
         // return threeNoteRight;
         // return threeNoteMiddle;

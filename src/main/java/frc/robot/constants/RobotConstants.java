@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public final class RobotConstants {
     public static final double TalonFXTicksPerRotation = 2048;
-    public static final double kMaxSpeed = 5.5;// 5.5 meters per second desired top speed
+    public static final double kMaxSpeed = 4;// 5.5 meters per second desired top speed
     public static final double kMaxAngularRate = 1 * Math.PI; // 3/4 of a rotation per second max angular velocity
     public static final double kTrackWidth = 0.6858; // meters
 

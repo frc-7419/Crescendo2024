@@ -5,15 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.RunIntake;
+import frc.robot.subsystems.intake.RunSerializer;
 import frc.robot.subsystems.shooter.RunShooter;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.shooterWrist.RaiseShooter;
 import frc.robot.subsystems.shooterWrist.RaiseShooterWithVision;
+import frc.robot.subsystems.shooterWrist.ShootNote;
 import frc.robot.subsystems.shooterWrist.ShooterWrist;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -25,9 +30,15 @@ public class OneNote extends SequentialCommandGroup {
      */
     public OneNote(ShooterSubsystem shooterSubsystem, ShooterWrist shooterWrist, IntakeSubsystem intakeSubsystem, CommandSwerveDrivetrain drivetrain) {
         addCommands(
-                new RaiseShooter(drivetrain, shooterWrist, 60.0/360),
-                new RunShooter(shooterSubsystem, 1)
-                        .deadlineWith(Commands.sequence(new WaitCommand(3), new RunIntake(intakeSubsystem, 1))).withTimeout(5)
+            new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    new WaitCommand(2),
+                    new RunCommand(() -> {
+                        shooterSubsystem.setRPM(3500, 3500);
+                    }, shooterSubsystem)
+                ),
+                new ShootNote(shooterWrist, shooterSubsystem, drivetrain, intakeSubsystem, 66.0 / 360)
+            )
         );
     }
 }

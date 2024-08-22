@@ -48,15 +48,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "OneNoteRight"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntake"
                 }
               }
             ]

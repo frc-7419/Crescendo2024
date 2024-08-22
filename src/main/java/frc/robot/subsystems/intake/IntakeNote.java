@@ -54,7 +54,7 @@ public class IntakeNote extends Command {
         if(DriverStation.isTeleop()){
             operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
         }
-        if(intakeSubsystem.noteDetectedByCurrent() && thresholdTimer.hasElapsed(0.5)){
+        if(intakeSubsystem.noteDetectedByCurrent() && thresholdTimer.hasElapsed(1)){
             notePhaseOne = true;
             timeoutTimer.start();
         }
@@ -71,6 +71,7 @@ public class IntakeNote extends Command {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        System.out.println("Stopped. Interrupt: " + interrupted);
         intakeSubsystem.setSerializerSpeed(0);
         intakeSubsystem.setSpeed(0);
         intakeSubsystem.brakeSerializer();
