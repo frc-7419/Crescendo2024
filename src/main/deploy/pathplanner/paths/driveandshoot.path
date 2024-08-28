@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.8746513372656377,
-        "y": 5.557427633373786
+        "x": 2.8441688792209487,
+        "y": 5.56
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.006476481524901,
-        "y": 5.972313333145186
+        "x": 3.975994023480212,
+        "y": 5.9748856997713995
       },
       "isLocked": false,
       "linkedName": "shootingfarposition"

@@ -31,16 +31,9 @@
           }
         },
         {
-          "type": "sequential",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteMid"
-                }
-              }
-            ]
+            "name": "ShootNoteMid"
           }
         },
         {
@@ -48,15 +41,46 @@
           "data": {
             "commands": [
               {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
                 "type": "path",
                 "data": {
-                  "pathName": "OneNoteRight"
+                  "pathName": "ThreeNoteRight2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ThreeNoteRight4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteMid"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ThreeNoteRight5"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntake"
+                  "name": "IntakeNote"
                 }
               }
             ]

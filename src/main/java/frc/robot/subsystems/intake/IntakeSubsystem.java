@@ -7,6 +7,7 @@ package frc.robot.subsystems.intake;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.DeviceIDs.CanIds;
@@ -18,6 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax serializerBack;
 
     private final BeamBreakSubsystem beamBreakSubsystem;
+    private double baselineCurrentDraw;
+    private static final double CURRENT_THRESHOLD = 17.0;  //needs to be adjusted by testing
 
     public IntakeSubsystem(BeamBreakSubsystem beamBreakSubsystem) {
         leftIntakeMotor = new CANSparkMax(CanIds.leftIntakeMotor.id, MotorType.kBrushless);
@@ -26,6 +29,7 @@ public class IntakeSubsystem extends SubsystemBase {
         this.beamBreakSubsystem = beamBreakSubsystem;
         serializerBack = new CANSparkMax(CanIds.serializerBack.id, MotorType.kBrushless);
         invertMotors();
+        baselineCurrentDraw = serializerBack.getOutputCurrent();
     }
 
     public boolean frontBeamBreakIsTriggered() {
@@ -86,14 +90,21 @@ public class IntakeSubsystem extends SubsystemBase {
     public double getVelocity() {
         return leftIntakeMotor.get();
     }
+    public boolean noteDetectedByCurrent() {
+        double currentDraw = leftIntakeMotor.getOutputCurrent();
+        return Math.abs(currentDraw - baselineCurrentDraw) > CURRENT_THRESHOLD;
+    }
 
+    public void updateBaselineCurrentDraw() {
+        baselineCurrentDraw = leftIntakeMotor.getOutputCurrent();
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("LeftIntakeSpeed", leftIntakeMotor.get());
         SmartDashboard.putNumber("RightIntakeSpeed", rightIntakeMotor.get());
         // SmartDashboard.putNumber("SerializerSpeed", serializerFront.get());
         SmartDashboard.putNumber("SerializerSpeed", serializerBack.get());
-        SmartDashboard.putNumber("Current Draw", serializerBack.getOutputCurrent());
+        SmartDashboard.putNumber("Current Draw", leftIntakeMotor.getOutputCurrent());
 
         SmartDashboard.putBoolean("Has Note", frontBeamBreakIsTriggered());
     }

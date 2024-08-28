@@ -49,19 +49,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "RevShooter"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PrepFar"
                 }
               }
             ]
@@ -74,7 +68,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoteFar"
+                  "name": "ShootNoteMidFar"
                 }
               }
             ]
@@ -93,7 +87,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               }
             ]
@@ -125,22 +119,22 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakeNote"
+                  "name": "RunIntake"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4NoteEnd"
+            "name": "ShootNoteFar"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootNoteMid"
+            "pathName": "4NoteEnd"
           }
         }
       ]

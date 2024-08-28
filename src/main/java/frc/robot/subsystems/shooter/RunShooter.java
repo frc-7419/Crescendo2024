@@ -40,6 +40,7 @@ public class RunShooter extends Command {
     public void end(boolean interrupted) {
         if (!DriverStation.isAutonomousEnabled()) {
             shooterSubsystem.setBothSpeed(0);
+            shooterSubsystem.brake();
         }
     }
 

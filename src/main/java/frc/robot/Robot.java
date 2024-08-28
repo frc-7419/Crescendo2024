@@ -42,76 +42,76 @@ public class Robot extends TimedRobot {
         System.out.println(orchestra.loadMusic("flymetothemoon.chrp"));
         System.out.println("music");
 
-        m_visionThread =
+    //     m_visionThread =
 
-        new Thread(
+    //     new Thread(
 
-            () -> {
+    //         () -> {
 
-              // Get the UsbCamera from CameraServer
+    //           // Get the UsbCamera from CameraServer
 
-              UsbCamera camera = CameraServer.startAutomaticCapture();
+    //           UsbCamera camera = CameraServer.startAutomaticCapture();
 
-              // Set the resolution
+    //           // Set the resolution
 
-              camera.setResolution(640, 480);
-
-
-              // Get a CvSink. This will capture Mats from the camera
-
-              CvSink cvSink = CameraServer.getVideo();
-
-              // Setup a CvSource. This will send images back to the Dashboard
-
-              CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    //           camera.setResolution(640, 480);
 
 
-              // Mats are very memory expensive. Lets reuse this Mat.
+    //           // Get a CvSink. This will capture Mats from the camera
 
-              Mat mat = new Mat();
+    //           CvSink cvSink = CameraServer.getVideo();
+
+    //           // Setup a CvSource. This will send images back to the Dashboard
+
+    //           CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
 
 
-              // This cannot be 'true'. The program will never exit if it is. This
+    //           // Mats are very memory expensive. Lets reuse this Mat.
 
-              // lets the robot stop this thread when restarting robot code or
+    //           Mat mat = new Mat();
 
-              // deploying.
 
-              while (!Thread.interrupted()) {
+    //           // This cannot be 'true'. The program will never exit if it is. This
 
-                // Tell the CvSink to grab a frame from the camera and put it
+    //           // lets the robot stop this thread when restarting robot code or
 
-                // in the source mat.  If there is an error notify the output.
+    //           // deploying.
 
-                if (cvSink.grabFrame(mat) == 0) {
+    //           while (!Thread.interrupted()) {
 
-                  // Send the output the error.
+    //             // Tell the CvSink to grab a frame from the camera and put it
 
-                  outputStream.notifyError(cvSink.getError());
+    //             // in the source mat.  If there is an error notify the output.
 
-                  // skip the rest of the current iteration
+    //             if (cvSink.grabFrame(mat) == 0) {
 
-                  continue;
+    //               // Send the output the error.
 
-                }
+    //               outputStream.notifyError(cvSink.getError());
 
-                // Put a rectangle on the image
+    //               // skip the rest of the current iteration
 
-                Imgproc.rectangle(
+    //               continue;
 
-                    mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+    //             }
 
-                // Give the output stream a new image to display
+    //             // Put a rectangle on the image
 
-                outputStream.putFrame(mat);
+    //             Imgproc.rectangle(
 
-              }
+    //                 mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
 
-            });
+    //             // Give the output stream a new image to display
 
-    m_visionThread.setDaemon(true);
+    //             outputStream.putFrame(mat);
 
-    m_visionThread.start();
+    //           }
+
+    //         });
+
+    // m_visionThread.setDaemon(true);
+
+    // m_visionThread.start();
         SignalLogger.start();
     }
 

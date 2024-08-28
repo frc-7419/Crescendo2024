@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.constants.RobotConstants.ShooterConstants;
 import frc.robot.subsystems.drive.CommandSwerveDrivetrain;
 
-public class RaiseShooterWithVision extends Command {
+public class RaiseShooter extends Command {
     private final ShooterWrist shooterWrist;
     private final CommandSwerveDrivetrain drivetrain;
     private final ProfiledPIDController shooterWristPIDController;
@@ -21,43 +21,39 @@ public class RaiseShooterWithVision extends Command {
     /**
      * Creates a new ShootNotes.
      */
-    public RaiseShooterWithVision(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist) {
+    public RaiseShooter(CommandSwerveDrivetrain drivetrain, ShooterWrist shooterWrist, double setpoint) {
         this.drivetrain = drivetrain;
         this.shooterWrist = shooterWrist;
+        this.setpoint = setpoint;
         this.shooterWristPIDController
-                = new ProfiledPIDController(1.9, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.1125));
+                = new ProfiledPIDController(1.95, 0.07, 0.05, new TrapezoidProfile.Constraints(10, 0.115));
         addRequirements(shooterWrist);
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-    
-            interpolatingDoubleTreeMap.put(1.128, 60.0 / 360);
-            interpolatingDoubleTreeMap.put(1.97, 0.12);
-            interpolatingDoubleTreeMap.put(2.29, 0.11);
-            interpolatingDoubleTreeMap.put(2.58, 0.1);
-            interpolatingDoubleTreeMap.put(3.32, 0.095);
-            interpolatingDoubleTreeMap.put(3.64, 0.085);
+       
             shooterWrist.coast();
             shooterWrist.setPower(0);
             shooterWristPIDController.setTolerance(ShooterConstants.SetpointThreshold);
-        
             shooterWristPIDController.reset(shooterWrist.getPosition());
+            shooterWristPIDController.setGoal(setpoint);
+        
+       
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        Translation2d pose = drivetrain.getState().Pose.getTranslation();
+        // Translation2d pose = drivetrain.getState().Pose.getTranslation();
 
-        Translation2d speakerPose = drivetrain.getSpeakerPose();
+        // Translation2d speakerPose = drivetrain.getSpeakerPose();
 
-        double distance = pose.getDistance(speakerPose);
-        SmartDashboard.putNumber("Distance to Speaker", distance);
-        double setpoint = interpolatingDoubleTreeMap.get(distance);
-        SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
-        shooterWristPIDController.setP(setpoint);
+        // double distance = pose.getDistance(speakerPose);
+        // SmartDashboard.putNumber("Distance to Speaker", distance);
+        // double setpoint = interpolatingDoubleTreeMap.get(distance);
+        // SmartDashboard.putNumber("Shooter Auto Angle", setpoint);
 
         double armPower = shooterWristPIDController.calculate(shooterWrist.getPosition());
         double armError = setpoint - shooterWrist.getPosition();
