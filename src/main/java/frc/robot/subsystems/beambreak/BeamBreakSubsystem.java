@@ -14,7 +14,7 @@ public class BeamBreakSubsystem extends SubsystemBase {
 
     public BeamBreakSubsystem() {
         beamBreakFront = new DigitalInput(2);
-        beamBreakBack = new DigitalInput(0);
+        beamBreakBack = new DigitalInput(7);
     }
 
     public boolean frontBeamBreakIsTriggered() {

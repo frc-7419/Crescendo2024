@@ -88,7 +88,7 @@ public class IntakeNote extends Command {
     @Override
     public boolean isFinished() {
         // with beam break
-        // return intakeSubsystem.frontBeamBreakIsTriggered();
-        return done || timeoutTimer.hasElapsed(MAX_INTAKE_TIME);
+        return intakeSubsystem.frontBeamBreakIsTriggered();
+        // return done || timeoutTimer.hasElapsed(MAX_INTAKE_TIME);
     }
 }
