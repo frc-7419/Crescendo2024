@@ -4,10 +4,14 @@
 
 package frc.robot.subsystems.shooterWrist;
 
+import com.team7419.util.MathUtil;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.constants.RobotConstants.IntakeWristConstants;
+import frc.robot.constants.RobotConstants.ShooterConstants;
 
 public class RunShooterWristWithJoystick extends Command {
     /**
@@ -40,17 +44,30 @@ public class RunShooterWristWithJoystick extends Command {
     public void execute() {
         if (Math.abs(joystick.getLeftY()) > 0.05) {
             shooterWrist.coast();
-            double armJoystickPower = maxPower * -joystick.getLeftY() * 8;
+            double armJoystickPower = maxPower * -joystick.getLeftY() * 6;
             double feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocityInRadians());
-            double powerWithFeedforward = armJoystickPower + feedForwardPower;
-            SmartDashboard.putNumber("powerWithFeedforward", powerWithFeedforward);
+            double powerWithFeedforward;
+            
+            if(armJoystickPower < 0){
+                armJoystickPower = MathUtil.mappingClamp(armJoystickPower, -6, 0, -1, 0);
+            }
+
+            if(shooterWrist.getPosition() <= IntakeWristConstants.lowerLimit){
+                powerWithFeedforward = Math.max(0, armJoystickPower) + feedForwardPower;
+            }else if((shooterWrist.getPosition() >= IntakeWristConstants.upperLimit - 0.06) && (armJoystickPower > 0)){
+                powerWithFeedforward = Math.max(0, (armJoystickPower - MathUtil.mappingClamp((shooterWrist.getPosition() - IntakeWristConstants.upperLimit), -0.06, 0.005, 0.0, armJoystickPower ))) + feedForwardPower;
+            }else{
+                powerWithFeedforward = armJoystickPower + feedForwardPower;
+            } 
+            
             shooterWrist.setPower(powerWithFeedforward);
+            SmartDashboard.putNumber("powerWithFeedforward", powerWithFeedforward);
             //SmartDashboard.putNumber("armJoystickPower", armPower);
             SmartDashboard.putNumber("armFeedForward", powerWithFeedforward);
 
         } else {
             double feedForwardPower = armFeedforward.calculate(shooterWrist.getPositionInRadians(), shooterWrist.getVelocity());
-            shooterWrist.setPower(0);
+            shooterWrist.setPower(feedForwardPower * 8);
             shooterWrist.brake();
             SmartDashboard.putNumber("armFeedForward", feedForwardPower);
         }
