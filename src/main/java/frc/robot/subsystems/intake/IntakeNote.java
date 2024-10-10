@@ -52,7 +52,7 @@ public class IntakeNote extends Command {
         intakeSubsystem.setSpeed(0.85);
         intakeSubsystem.setSerializerSpeed(0.4);
         if(DriverStation.isTeleop()){
-            operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
+            //operator.setRumble(XboxController.RumbleType.kLeftRumble, 0.1);
         }
         if(intakeSubsystem.noteDetectedByCurrent() && thresholdTimer.hasElapsed(1)){
             notePhaseOne = true;
@@ -79,9 +79,9 @@ public class IntakeNote extends Command {
         thresholdTimer.stop();
         timeoutTimer.stop();
         endTimer.stop();
-        if(DriverStation.isTeleop()){
-            new ParallelCommandGroup(new PulseRumble(driver), new PulseRumble(operator)).schedule();
-        }   
+        // if(DriverStation.isTeleop()){
+        //     new ParallelCommandGroup(new PulseRumble(driver), new PulseRumble(operator)).schedule();
+        // }   
     }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 
     // Returns true when the command should end.

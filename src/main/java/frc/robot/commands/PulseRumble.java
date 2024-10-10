@@ -26,8 +26,8 @@ public class PulseRumble extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    controller.setRumble(XboxController.RumbleType.kLeftRumble, 1);
-    controller.setRumble(XboxController.RumbleType.kRightRumble, 1);
+    // controller.setRumble(XboxController.RumbleType.kLeftRumble, 1);
+    // controller.setRumble(XboxController.RumbleType.kRightRumble, 1);
 
   }
 
