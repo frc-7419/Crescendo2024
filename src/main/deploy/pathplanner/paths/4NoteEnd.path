@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.88,
-        "y": 6.99
+        "x": 2.909673784031583,
+        "y": 6.970767358511173
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.31904988301383,
-        "y": 6.018405896868248
+        "x": 2.3487236670454132,
+        "y": 5.999173255379421
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "5NoteMiddle2End"
     },
     {
       "anchor": {
