@@ -20,7 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
@@ -178,7 +178,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private SysIdRoutine driveRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(null, null, null, SysIdSignalLogger.logState()), 
         new SysIdRoutine.Mechanism(
-            (Voltage volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
+            (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
             null, 
             this));
     
@@ -187,14 +187,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private SysIdRoutine steerRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(null, null, null, SysIdSignalLogger.logState()), 
         new SysIdRoutine.Mechanism(
-            (Voltage volts) -> setControl(steerVoltageRequest.withVoltage(volts.in(Volts))) ,
+            (Measure<Voltage> volts) -> setControl(steerVoltageRequest.withVoltage(volts.in(Volts))) ,
             null, 
             this));
 
     private SysIdRoutine slipRoutine = new SysIdRoutine(
         new SysIdRoutine.Config(Volts.of(0.25).per(Seconds.of(1)), null, null, SysIdSignalLogger.logState()), 
         new SysIdRoutine.Mechanism(
-            (Voltage volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
+            (Measure<Voltage> volts) -> setControl(driveVoltageRequest.withVoltage(volts.in(Volts))) ,
             null, 
             this));
     
