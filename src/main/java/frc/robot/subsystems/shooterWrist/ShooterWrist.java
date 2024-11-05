@@ -11,17 +11,21 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.MutVoltage;
+import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.VoltageUnit;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.ArmConstants;
 import frc.robot.constants.DeviceIDs.CanIds;
 
-import static edu.wpi.first.units.MutableMeasure.mutable;
+import static edu.wpi.first.units.MutableMeasure;
 import static edu.wpi.first.units.Units.*;
 
 
@@ -31,9 +35,9 @@ public class ShooterWrist extends SubsystemBase {
      */
     private final TalonFX armMotor;
     private final DutyCycleEncoder encoder = new DutyCycleEncoder(5);
-    private final MutableMeasure<Voltage> appliedVoltage = mutable(Volts.of(0));
+    private final MutVoltage appliedVoltage = Volts.mutable(0);
     private final VoltageOut voltageOut;
-    Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
+    // Velocity<Angle> RotationsPerMinute = Rotations.per(Minute);
     private double PIDsetpoint;
 
     /*
