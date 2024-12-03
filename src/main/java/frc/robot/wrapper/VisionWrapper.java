@@ -54,6 +54,10 @@ public class VisionWrapper extends SubsystemBase {
         return out;
     }
 
+    public Optional<EstimatedRobotPose> getEstimatedPose() {
+        return frontPoseEstimator.update();
+    }
+
     public double headingToTag(final int id) {
         PhotonPipelineResult[] results = latestResults();
         PhotonTrackedTarget best = null;

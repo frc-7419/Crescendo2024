@@ -145,9 +145,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void periodic() {
         doRejectUpdate = false;
         // Update pose based on vision measurements
-        if (visionWrapper.hasValidPose()) {
-            var visionPose = visionWrapper.getEstimatedPose();
-            this.m_odometry.addVisionMeasurement(visionPose.pose, visionPose.timestampSeconds);
+        var visionPose = visionWrapper.getEstimatedPose();
+        if (visionPose.isPresent()) {
+            this.m_odometry.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), visionPose.get().timestampSeconds);
         }
     }
 
