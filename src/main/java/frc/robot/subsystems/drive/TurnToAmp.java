@@ -10,6 +10,8 @@ import frc.robot.constants.RobotConstants;
 import frc.robot.constants.VisionConstants;
 import frc.robot.wrapper.VisionWrapper;
 import org.photonvision.EstimatedRobotPose;
+import edu.wpi.first.math.geometry.Pose2d;
+import frc.robot.wrapper.LimelightHelpers;
 
 public class TurnToAmp extends Command {
     private final CommandSwerveDrivetrain drivetrain;
@@ -37,6 +39,7 @@ public class TurnToAmp extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        Pose2d pose = LimelightHelpers.getPoseFromLimelight("limelight");
         EstimatedRobotPose[] estimates = vision.updatePoseEstimate();
         boolean tagSeen = false;
 

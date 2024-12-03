@@ -1109,4 +1109,22 @@ public class LimelightHelpers {
 
         return results;
     }
+
+    public static Pose2d getPoseFromLimelight(String limelightName) {
+        double tx = getTX(limelightName);
+        double ty = getTY(limelightName);
+        double ta = getTA(limelightName);
+        double tl = getLatency_Pipeline(limelightName);
+
+        // Assuming tx and ty are in degrees and need to be converted to radians
+        double txRadians = Math.toRadians(tx);
+        double tyRadians = Math.toRadians(ty);
+
+        // Calculate the pose based on tx, ty, ta, and tl
+        // This is a simplified example, you may need to adjust based on your specific requirements
+        Translation2d translation = new Translation2d(txRadians, tyRadians);
+        Rotation2d rotation = new Rotation2d(ta);
+
+        return new Pose2d(translation, rotation);
+    }
 }
