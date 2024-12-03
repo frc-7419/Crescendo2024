@@ -144,8 +144,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void periodic() {
         doRejectUpdate = false;
-    // // //we need to switch hanging z
-    
+        // Update pose based on vision measurements
+        if (visionWrapper.hasValidPose()) {
+            var visionPose = visionWrapper.getEstimatedPose();
+            this.m_odometry.addVisionMeasurement(visionPose.pose, visionPose.timestampSeconds);
+        }
     }
 
     public Rotation2d getDesiredAngle() {
