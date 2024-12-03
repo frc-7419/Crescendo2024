@@ -48,7 +48,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     private static final double kSimLoopPeriod = 0.005; // 5 ms
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
-    private final VisionWrapper visionWrapper;
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
     private boolean doRejectUpdate;
@@ -56,7 +55,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         // this.getPigeon2().setYaw(0);
-        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
@@ -66,7 +64,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         // this.getPigeon2().setYaw(0);
-        visionWrapper = new VisionWrapper();
         configurePathPlanner();
         
         if (Utils.isSimulation()) {
@@ -138,6 +135,38 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         this.m_odometry.resetPosition(new Rotation2d(0), m_modulePositions, new Pose2d(1.5, 5.5, new Rotation2d(0)));
     }
 
+    public void updatePoseEstimate(){
+        boolean useMegaTag2 = true;
+        
+        if(useMegaTag2){
+            LimelightHelpers.SetRobotOrientation("limelight-tag",m_odometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-tag");
+            if(!(Math.abs(getPigeon2().getRate()) > 720 || mt2.tagCount == 0)){
+                this.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+                this.addVisionMeasurement(mt2.pose, mt2.timestampSeconds);
+            }
+        }else{
+            LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight-tag");
+            boolean doRejectUpdate = false;
+
+            if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1){
+                if(mt1.rawFiducials[0].ambiguity > .7){
+                    doRejectUpdate = true;
+                } if(mt1.rawFiducials[0].distToCamera > 3){
+                    doRejectUpdate = true;
+                }
+            }
+            if (mt1.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+
+            if(!doRejectUpdate){
+                this.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+                this.addVisionMeasurement(mt1.pose, mt1.timestampSeconds);
+            }
+        }
+    }
+
     public Pose2d getCurrentPose() {
         return this.getState().Pose;
     }
@@ -145,10 +174,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public void periodic() {
         doRejectUpdate = false;
         // Update pose based on vision measurements
-        var visionPose = visionWrapper.getEstimatedPose();
-        if (visionPose.isPresent()) {
-            this.m_odometry.addVisionMeasurement(visionPose.get().estimatedPose.toPose2d(), visionPose.get().timestampSeconds);
-        }
+        updatePoseEstimate();
     }
 
     public Rotation2d getDesiredAngle() {
