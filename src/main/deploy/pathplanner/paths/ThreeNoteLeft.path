@@ -1,5 +1,5 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "waypoints": [
     {
       "anchor": {
@@ -110,41 +110,37 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 0.0,
+      "rotationDegrees": 52.2
+    },
+    {
       "waypointRelativePos": 0.65,
-      "rotationDegrees": 0.0,
-      "rotateFast": true
+      "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": true
+      "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 2.0,
-      "rotationDegrees": -138.01,
-      "rotateFast": true
+      "rotationDegrees": -138.01
     },
     {
       "waypointRelativePos": 4.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.0,
-      "rotationDegrees": 52.2,
-      "rotateFast": true
+      "rotationDegrees": 0.0
     },
     {
       "waypointRelativePos": 6.0,
-      "rotationDegrees": 52.2,
-      "rotateFast": true
+      "rotationDegrees": 52.2
     }
   ],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "ShootFirstNote",
       "waypointRelativePos": 0.55,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "deadline",
         "data": {
@@ -168,6 +164,7 @@
     {
       "name": "IntakeSecondNote",
       "waypointRelativePos": 0.55,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -185,6 +182,7 @@
     {
       "name": "ShootSecondNote",
       "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -195,6 +193,7 @@
     {
       "name": "IntakeThirdNote",
       "waypointRelativePos": 4.4,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -212,6 +211,7 @@
     {
       "name": "ShootThirdNote",
       "waypointRelativePos": 6.0,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -237,18 +237,19 @@
     "maxVelocity": 1.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
-    "rotateFast": false
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
-  "previewStartingState": {
-    "rotation": 0,
-    "velocity": 0
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": false
 }
